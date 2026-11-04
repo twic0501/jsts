@@ -175,8 +175,8 @@
     "passed": true
   },
   "presentation": {
-    "date": "2026-11-04T18:39:19.835Z",
-    "slideCount": 26,
+    "date": "2026-11-04T19:03:12.935Z",
+    "slideCount": 27,
     "editable": true,
     "renderer": "@oai/artifact-tool",
     "fontPolicy": {
@@ -187,14 +187,14 @@
     },
     "geometryOutOfBounds": 0,
     "pronounCheckPassed": true,
-    "sha256": "efc86470001496d48e061b7224dc40e7892f90bf377d3e2004f7f8ec954c2877",
+    "sha256": "d229cb90140768d4fcf1bf59d14e1ca53a55fac9961d5b0cee765dc3c8772486",
     "validation": "JavaScript ZIP/OOXML and author geometry;not Python tools,not native PowerPoint UI",
     "review": "Rendered slides require visual inspection before delivery",
     "pptxReimportPassed": true,
-    "pdfPages": 26,
-    "nativeTables": 11,
+    "pdfPages": 27,
+    "nativeTables": 12,
     "pdfKind": "Rendered slide pages;editable source is PPTX",
-    "visualReview": "All26slide layouts reviewed;cover image embedded after fixing path-only image placeholder"
+    "visualReview": "All27slide layouts reviewed;cover image embedded after fixing path-only image placeholder"
   },
   "hosting": {
     "target": "Nginx443 -> Node8080 -> Next3001 -> Mongo27017/model local",
@@ -204,5 +204,14 @@
   "review": {
     "selfChecked": true,
     "independentReview": false
+  },
+  "subsequentPublicDemo": {
+    "evidence": "docs/evidence/public-demo.json",
+    "publicVerified": true,
+    "publicApiVerified": true,
+    "browserVerified": true,
+    "ragVerified": true,
+    "burstVerified": true,
+    "durableProductionHosting": false
   }
 }

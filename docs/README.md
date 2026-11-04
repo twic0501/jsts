@@ -28,4 +28,7 @@ Cập nhật ngày 04/11/2026 theo mã nguồn mốc 0.7.0. Văn bản mô tả 
 React/Vite + Next.js + MongoDB + IndexedDB. Các model chạy cục bộ bằng JavaScript/TypeScript; không có dịch vụ Python. Tìm kiếm ở vector384D, PCA dùng để hiển thị3D, RAG đọc abstract/tiêu đề. Chưa có full-PDF RAG, tài khoản/RBAC/sync hoặc nghiệm thu5.000–20.000 bài. Kiểm HTTPS443 cục bộ khác với có tên miền public và chứng chỉ CA được cấp thật.
 
 
-Bản trình bày chốt có26slide ởpresentation, kèmPPTXchỉnhsửa vàPDFđểxem. Kiểm mới: load120/120, soak45/45trong180s, burst2×200+10×429, offlineRAG200; Nginx443TLS1.3/auth401/200 đạt. Chưa có publicdomain.
+Bản trình bày chốt có27slide ởpresentation, kèmPPTXchỉnhsửa vàPDFđểxem. Kiểm mới: load120/120, soak45/45trong180s, burst2×200+10×429, offlineRAG200; Nginx443TLS1.3/auth401/200 đạt. Chưa có publicdomain.
+
+
+Bổ sung kiểm public demo: [19-public-demo.md](19-public-demo.md), URLHTTPS cóBasicAuth, API/Mongo vàsách3D đã được kiểm quaInternet. Đây làQuickTunnel tạm thời, chưa thay hostingproduction.

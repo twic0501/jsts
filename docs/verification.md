@@ -1,3 +1,7 @@
+## Bổ sung public demo
+
+Bản demo đầy đủ đã được truy cập quaInternet vớiTLSpublicCA, BasicAuth, Mongo/API vàsách3D. Kiểm8requestpublic trả3HTTP200và5HTTP429, healthphục hồi200. Đây làQuickTunnel tạm, chưa phải hostingproduction ổnđịnh. Xem [19-public-demo.md](19-public-demo.md) và [evidence/public-demo.json](evidence/public-demo.json). Bản trình bày cập nhật27slide.
+
 # Cập nhật hồ sơ và kiểm vận hành
 
 Bằng chứng mới ở [15-testing-resilience.md](15-testing-resilience.md) và [evidence/project-update.json](evidence/project-update.json):116unit vàtypecheck chạy lại đạt;load120/120,soak45/45trong180s,burst2HTTP200+10HTTP429;backendRAGlibrary khi chặnfetchngoài trả200;NodeTLS443 vàNginx443/TLS1.3/auth401/200 đạtlocal. Bản trình bày26slide cóPPTX/PDF. Cataloghiện201hàm cótên và1148khởi tạobiến, khôngcòngiớihạnđộdài/200dòng cũ. Chưapublicdomain; sốliệu dướiđâythuộc mốc0.7 trước cậpn hật hồsơ.

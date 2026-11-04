@@ -1,6 +1,6 @@
 # Hosting một máy chủ, HTTPS cổng 443
 
-Tài liệu thao tác: docs/16-hosting-https.md. Đây là cấu hình mẫu để rà soát trước triển khai, chưa phải bằng chứng đã có dịch vụ public. Source ứng dụng vẫn JS/TS; Nginxfile, systemd và YAML là cấu hình hạ tầng.
+Tài liệu thao tác: docs/16-hosting-https.md. Đây là cấu hình mẫu để rà soát trước triển khai, chưa phải bằng chứng đã có dịch vụ public. Source ứng dụng vẫn JS/TS; nginx.conf, systemd và YAML là cấu hình hạ tầng.
 
 - nginx.conf: HTTPS443, chứng chỉ CA qua DNS-01, Basic Auth cho bản demo, nén, giới hạn body/rate; không có listener80.
 - paper-magic-api.service: Next.js chỉ nghe 127.0.0.1:3001, chạy bằng user riêng.
@@ -12,3 +12,6 @@ Không mở public 3001/8080/27017. Chỉ TCP443 phục vụ web; SSH quản tr�
 
 
 Nginx1.30.6 đã được kiểm syntax và chạyloopback443 bằngcertlocal:401khi thiếuđăngnhập và200cho web/API cóđăngnhập. Cấu hìnhLinux/systemd/MongoTLS/certCA cần đượckiểm tại hostthật trướcpublic.
+
+
+Đã có bản publicdemo tạm quaCloudflare, BasicAuthcredential ở.localkhôngđăngGit. HướngVPSbềnvững giữ nguyên; luồngdemo vàkếtquả thật xemdocs/19-public-demo.md.

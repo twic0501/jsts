@@ -47,7 +47,7 @@ Mở http://127.0.0.1:5173. pnpm serve ở terminal khác phục vụ bản buil
 
 ## Kiểm chứng
 
-Mốc ứng dụng:116 unit / 9 file,21 E2E; phiên cập nhật hồ sơ đã chạy lạiunit/typecheck. Kiểm tải riêng:120requestsearch/concurrency8 đạt200,45requesttrong180sđạt200,burst12trả2×200và10×429,healthsauđó200. Kết quảcacheấm không thay kiểm sinh văn bản mới hoặc tải20kbài. Nginx1.30.6/TLS1.3 trên443loopback kiểm401/200 thành công; chưa có chứng chỉ/domainpublic.
+Mốc ứng dụng:116 unit / 9 file,21 E2E; phiên cập nhật hồ sơ đã chạy lạiunit/typecheck. Kiểm tải riêng:120requestsearch/concurrency8 đạt200,45requesttrong180sđạt200,burst12trả2×200và10×429,healthsauđó200. Kết quảcacheấm không thay kiểm sinh văn bản mới hoặc tải20kbài. Nginx1.30.6/TLS1.3 trên443loopback kiểm401/200 thành công; chưa có chứng chỉ/domainproduction ổn định; demo public tạm có bằng chứng riêng bên dưới.
 
 ~~~text
 node --env-file-if-exists=.env scripts/test-resilience.mjs
@@ -55,3 +55,9 @@ node scripts/test-https.mjs
 ~~~
 
 Rawreport và giải thích chỉ số ởdocs/evidence vàdocs/15-testing-resilience.md. Modelweights, Mongo data, env, TLSkey vànode_modules không nằm trongGit; scriptsetup tạo lại tài nguyên. AIlogphát triển nằm từngmodule, promptRAGthật nằm.local/rag-prompts.json (khôngpublic). UploadGitHub không tự tạo hostingInternet.
+
+## Demo trên Internet
+
+Bản demo HTTPS có bảo vệ đăng nhập: https://representative-obtained-championships-amendment.trycloudflare.com
+
+Ứng dụng đầy đủ đã kiểm qua URL public, gồmMongoDB/API và sách3D. Đây làCloudflareQuickTunnel tạm thời: cầnmáynguồn vàcácprocess cònchạy, URLthayđổi khi khởiđộngtunnelmới. Credential không đăngGit, lưuprivateởmáynguồn. Chi tiếtvàkếtquảtải: [19-public-demo.md](docs/19-public-demo.md).

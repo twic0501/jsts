@@ -83,3 +83,8 @@ node scripts/test-nginx.mjs
 test-resilience cần cổng3102trống, Mongo đãseed và modelđãcài. TLS script cầnOpenSSL và443trống; chỉ bindloopback. test-nginx cần binaryNginx được tải riêng trong.local, không có trongGit. Backend offline được kiểm bằngAPI thật ở processriêng; browseroffline phải chờ trạng thái sẵn sàng, không chỉ chờ serviceworkercontroller.
 
 Tiêu chí cải thiện tiếp: benchmark câu hỏi có nhãn đúng/sai độc lập, Recall@k/nDCG, đánh giá entailment, sinh văn bản dài hạn, evictioncache và kiểm nhiều thiết bị. Chưa ghi các chỉ số này thành kết quả đã đạt.
+
+
+## Kiểm bổ sung qua Internet
+
+Qua URLdemo đãbảovệ,8requestđồngthờitrả3HTTP200và5HTTP429; khôngcóstatusngoài200/429; sau10giâyhealthpublictrả200. Browser mởđúngU-Net, sáchopen,12node, errors=[], khôngtrànngang. Điều kiệnwarmquery; khôngphảitải sinh văn bản mới. TLSpublic1.3đượcCAxácnhận. Rawreport:[public-demo.json](evidence/public-demo.json).

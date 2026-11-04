@@ -1,0 +1,164 @@
+{
+  "verifiedAt": "2026-11-04T18:57:55.720Z",
+  "url": "https://representative-obtained-championships-amendment.trycloudflare.com",
+  "kind": "Authenticated temporary public demo",
+  "durableProductionHosting": false,
+  "origin": "Full local stack: Nginx443 -> Node8080 -> Next3001 -> MongoDB and local model",
+  "publicApi": {
+    "date": "2026-11-04T18:54:24.057Z",
+    "url": "https://representative-obtained-championships-amendment.trycloudflare.com",
+    "kind": "Temporary authenticated Cloudflare Quick Tunnel;origin remains on this computer;not durable production hosting",
+    "tlsVerification": "Default CA verification at public endpoint;cloudflared trusts explicit local origin CA",
+    "checks": [
+      {
+        "path": "/",
+        "authenticated": false,
+        "status": 401,
+        "ms": 1015,
+        "bytes": 172,
+        "html": false
+      },
+      {
+        "path": "/",
+        "authenticated": true,
+        "status": 200,
+        "ms": 230,
+        "bytes": 689,
+        "html": true
+      },
+      {
+        "path": "/api/v1/health",
+        "authenticated": true,
+        "status": 200,
+        "ms": 371,
+        "bytes": 408,
+        "storage": "mongodb",
+        "html": false
+      },
+      {
+        "path": "/api/v3/research",
+        "authenticated": true,
+        "status": 200,
+        "ms": 9352,
+        "bytes": 957783,
+        "storage": "mongodb",
+        "topPaperId": "1505.04597",
+        "mode": "extractive",
+        "html": false
+      }
+    ],
+    "passed": true
+  },
+  "browser": {
+    "date": "2026-11-04T18:55:44.439Z",
+    "url": "https://representative-obtained-championships-amendment.trycloudflare.com",
+    "https": true,
+    "auth": "Browser HTTP credentials from ignored local file;not included in report",
+    "errors": [],
+    "selected": "1505.04597",
+    "state": "open",
+    "nodes": "12",
+    "overflow": false,
+    "storageText": "MongoDB cục bộ"
+  },
+  "load": {
+    "date": "2026-11-04T18:56:36.825Z",
+    "url": "https://representative-obtained-championships-amendment.trycloudflare.com",
+    "concurrency": 8,
+    "samples": [
+      {
+        "status": 429,
+        "ms": 252.5468,
+        "bytes": 162
+      },
+      {
+        "status": 200,
+        "ms": 443.3431,
+        "bytes": 957783
+      },
+      {
+        "status": 429,
+        "ms": 239.12310000000002,
+        "bytes": 162
+      },
+      {
+        "status": 200,
+        "ms": 376.60560000000004,
+        "bytes": 957783
+      },
+      {
+        "status": 429,
+        "ms": 239.4613,
+        "bytes": 162
+      },
+      {
+        "status": 429,
+        "ms": 243.28539999999998,
+        "bytes": 162
+      },
+      {
+        "status": 200,
+        "ms": 520.4143,
+        "bytes": 957783
+      },
+      {
+        "status": 429,
+        "ms": 236.361,
+        "bytes": 162
+      }
+    ],
+    "success200": 3,
+    "controlled429": 5,
+    "unexpected": 0,
+    "recoveryStatus": 200,
+    "conditions": "Small authenticated burst through public edge and Nginx;warm same query;not a capacity or fresh-generation benchmark",
+    "passed": true
+  },
+  "credentialsPublished": false,
+  "limitations": [
+    "URL ends when cloudflared stops and changes on restart.",
+    "Origin computer, MongoDB, Next, Node and Nginx must remain running.",
+    "No uptime guarantee;not a permanent production domain."
+  ],
+  "source": "https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/",
+  "publicTls": {
+    "status": 200,
+    "port": 443,
+    "tls": "TLSv1.3",
+    "authorized": true,
+    "certificateSubject": {
+      "CN": "trycloudflare.com"
+    }
+  },
+  "publicRag": {
+    "date": "2026-11-04T19:01:14.622Z",
+    "status": 200,
+    "elapsedMs": 26056,
+    "storage": "mongodb",
+    "mode": "grounded-generation",
+    "plan": {
+      "original": "Tìm phương pháp xác định vùng bệnh trong ảnh y tế",
+      "intent": "Detect diseased regions in medical images",
+      "queries": [
+        "medical image segmentation deep learning",
+        "lesion detection neural networks"
+      ],
+      "method": "local-llm"
+    },
+    "claims": [
+      {
+        "text": "U-Net provides a robust framework for biomedical image segmentation, enabling accurate diagnosis of neuronal structures.  Deep learning models, such as SABL, RegNet, and others, improve fracture detection in wrist X-ray images.  STU-Net offers scalable and transferable medical image segmentation models.",
+        "evidenceIds": [
+          "E1",
+          "E2",
+          "E3"
+        ]
+      }
+    ],
+    "evidenceCount": 6,
+    "topPaperId": "2111.07355",
+    "ranking": "hybrid-e5-bm25-rrf-rerank",
+    "warnings": [],
+    "passed": true
+  }
+}

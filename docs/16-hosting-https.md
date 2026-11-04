@@ -119,4 +119,9 @@ Từmáybênngoài, kiểm443/TLStrust,401/200/422/429, tìm vàmởsách, đọ
 
 Trướccậpn hật: backupMongo vàconfig, giữreleasecommit, cài frozenlock, chạytest/build trongthưmụcreleasemới, chuyểnservice vàkiểmhealth. Nếu lỗi thì quaylại source/build trước và chỉrestoreDB theo kếhoạch tươngthích. Khôngxóa dữliệuđểchữa healthfail. Gia hạncert vàlịchbackup cần đượcgiámsátngoàiluồngAI.
 
-Tìnhtrạnghiện tại: source/config/tài liệu đãchuẩnbị; NodeHTTPS443 vàNginx443 đãkiểmloopback, TLS1.3 vàBasicAuth401/200. **Chưacótênmiềnpublic/chứngchỉCA/hostthật đượcnghiệmthu trongphiên này.** UploadGitHubkhôngtựđộngtạo hosting.
+Tìnhtrạnghiện tại: source/config/tài liệu đãchuẩnbị; NodeHTTPS443 vàNginx443 đãkiểmloopback, TLS1.3 vàBasicAuth401/200. **Chưa có tên miền production ổn định/VPS được nghiệm thu; demo public tạm thời được bổ sung ở mục dưới.** UploadGitHubkhôngtựđộngtạo hosting.
+
+
+## Bổ sung sau kiểm local
+
+Đã mở và kiểm một bản demoHTTPS quaCloudflareQuickTunnel, Nginxorigin vẫn dùngTLS vàBasicAuth. [19-public-demo.md](19-public-demo.md) ghiURL, luồngthật, kếtquảAPI/browser/publicburst vàgiớihạn tạmthời. Không gọiđây làVPSproduction hoặc tênmiềnổnđịnh.
