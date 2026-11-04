@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-04T11:27:33.804Z",
+  "version": "nginx version: nginx/1.30.6",
+  "configurationCheck": true,
+  "port": 443,
+  "untrustedPublicCertificate": false,
+  "certificate": "Local self-signed test CA only;does not prove public deployment",
+  "denied": {
+    "status": 401,
+    "tls": "TLSv1.3",
+    "authorized": true,
+    "hsts": "max-age=31536000"
+  },
+  "web": {
+    "status": 200,
+    "tls": "TLSv1.3",
+    "authorized": true,
+    "hsts": "max-age=31536000"
+  },
+  "api": {
+    "status": 200,
+    "tls": "TLSv1.3",
+    "authorized": true,
+    "hsts": "max-age=31536000"
+  },
+  "passed": true
+}

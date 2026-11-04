@@ -1,0 +1,15 @@
+import fs from'node:fs/promises';
+import path from'node:path';
+import{createHash}from'node:crypto';
+const entries=[
+ {folder:'packages/core',files:['src/contracts.ts','src/math.ts','src/search.ts','src/vector.ts','src/semantic.ts','src/index.ts'],work:'Schema strict, semantic cosine384D, deterministic PCA3D, snapshot validation và toán số phức.'},
+ {folder:'apps/api',files:['lib/repository.ts','lib/http.ts','lib/embedding.ts','lib/embedding-runtime.mjs','lib/embedding-worker.mjs','app/api/v1/health/route.ts','app/api/v1/search/route.ts','app/api/v1/papers/route.ts','app/api/v1/papers/[paperId]/route.ts','app/api/v1/papers/[paperId]/neighbors/route.ts','app/api/v1/graph/route.ts'],work:'Next.js API semantic, model JS trong Node worker, Mongo binary vectors, model integrity.'},
+ {folder:'apps/web',files:['src/App.tsx','src/storage.ts','src/main.tsx','src/styles.css'],work:'React/Vite UI, tìm kiếm, filter, thông tin, bookmark IDB và offline.'},
+ {folder:'apps/web/src/scene',files:['create-book-scene.ts','MagicBook.tsx','enchanting-table.ts'],work:'Bàn phù phép voxel nguyên gốc, sách và glyph dùng toán/số phức; map PCA có picking/filter/query point.'},
+ {folder:'apps/web/src/semantic',files:['client.ts','embedding.worker.ts'],work:'Inference E5 Q8 offline trong browser worker JS/WASM, không Python hay cloud.'}
+];
+for(const entry of entries){const outputFiles=[];for(const file of entry.files){const content=await fs.readFile(path.join(entry.folder,file));outputFiles.push({path:entry.folder+'/'+file,sha256:createHash('sha256').update(content).digest('hex')})}
+ const log={timestamp:new Date().toISOString(),phase:'semantic-0.2.0',module:entry.folder,assistantModel:null,modelMetadataReason:'Exact model version was not exposed in tool runtime; not fabricated.',humanRequests:['bây giờ làm luôn full cơ bản trước đi','giống cái bàn phù phép trong minecraft','be dùng nextjs','chỉ JS/TS, 3D tạo từ toán học, docs hàm và biến'],interpretedContract:entry.work,outputFiles,corrections:['Use actual multilingual E5 384D; never label lexical fallback semantic.','Pin model revision and verify SHA256.','Reuse PCA projection for query, rank only on original vector.','Fix dev serving of local WASM module, stale query selection, geometry buffer resizing, mobile information overlap.','Disable separate transformer cache so SW controls model version.'],verification:{typecheck:'passed-3-workspaces',unit:'58/58-passed',e2e:'8/8-passed-on-production-build',build:'Vite-and-Next-passed',realModelSmoke:'6-cases-offline-MRR0.778-recallAt3-5of6',report:'docs/verification.md'},review:{selfChecked:true,independentReview:false},runtimePrompting:{status:'embedding-prefix-only',prefixes:['query: ','passage: '],reason:'Real embedding inference; no generative LLM yet. No fabricated chat prompt logs.'}};
+ await fs.appendFile(path.join(entry.folder,'ai-development-log.jsonl'),JSON.stringify(log)+'\n');
+}
+console.log('Appended 5 module development logs with actual file hashes and verification references.');

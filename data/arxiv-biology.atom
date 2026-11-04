@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/Ko3Y7s3g7MUvY4RNqZjixX0JpVA</id>
+  <title>arXiv Query: search_query=cat:q-bio.BM AND all:learning&amp;id_list=&amp;start=0&amp;max_results=6</title>
+  <updated>2026-11-04T11:37:19Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=cat:q-bio.BM+AND+all:learning&amp;start=0&amp;max_results=6&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>6</opensearch:itemsPerPage>
+  <opensearch:totalResults>1975</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2306.11715v2</id>
+    <title>Multi-Fidelity Active Learning with GFlowNets</title>
+    <updated>2024-09-01T11:15:16Z</updated>
+    <link href="https://arxiv.org/abs/2306.11715v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2306.11715v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In the last decades, the capacity to generate large amounts of data in science and engineering applications has been growing steadily. Meanwhile, machine learning has progressed to become a suitable tool to process and utilise the available data. Nonetheless, many relevant scientific and engineering problems present challenges where current machine learning methods cannot yet efficiently leverage the available data and resources. For example, in scientific discovery, we are often faced with the problem of exploring very large, structured and high-dimensional spaces. Moreover, the high fidelity, black-box objective function is often very expensive to evaluate. Progress in machine learning methods that can efficiently tackle such challenges would help accelerate currently crucial areas such as drug and materials discovery. In this paper, we propose a multi-fidelity active learning algorithm with GFlowNets as a sampler, to efficiently discover diverse, high-scoring candidates where multiple approximations of the black-box function are available at lower fidelity and cost. Our evaluation on molecular discovery tasks shows that multi-fidelity active learning with GFlowNets can discover high-scoring candidates at a fraction of the budget of its single-fidelity counterpart while maintaining diversity, unlike RL-based alternatives. These results open new avenues for multi-fidelity active learning to accelerate scientific discovery and engineering design.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="q-bio.BM" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2023-06-20T17:43:42Z</published>
+    <arxiv:comment>Published in Transactions on Machine Learning Research (TMLR) 07/2024 https://openreview.net/forum?id=dLaazW9zuF</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <arxiv:journal_ref>Transactions on Machine Learning Research (TMLR) 07/2024 https://openreview.net/forum?id=dLaazW9zuF</arxiv:journal_ref>
+    <author>
+      <name>Alex Hernandez-Garcia</name>
+    </author>
+    <author>
+      <name>Nikita Saxena</name>
+    </author>
+    <author>
+      <name>Moksh Jain</name>
+    </author>
+    <author>
+      <name>Cheng-Hao Liu</name>
+    </author>
+    <author>
+      <name>Yoshua Bengio</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2309.16519v4</id>
+    <title>AtomSurf : Surface Representation for Learning on Protein Structures</title>
+    <updated>2025-10-22T14:23:58Z</updated>
+    <link href="https://arxiv.org/abs/2309.16519v4" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2309.16519v4" rel="related" type="application/pdf" title="pdf"/>
+    <summary>While there has been significant progress in evaluating and comparing different representations for learning on protein data, the role of surface-based learning approaches remains not well-understood. In particular, there is a lack of direct and fair benchmark comparison between the best available surface-based learning methods against alternative representations such as graphs. Moreover, the few existing surface-based approaches either use surface information in isolation or, at best, perform global pooling between surface and graph-based architectures.
+  In this work, we fill this gap by first adapting a state-of-the-art surface encoder for protein learning tasks. We then perform a direct and fair comparison of the resulting method against alternative approaches within the Atom3D benchmark, highlighting the limitations of pure surface-based learning. Finally, we propose an integrated approach, which allows learned feature sharing between graphs and surface representations on the level of nodes and vertices across all layers.
+  We demonstrate that the resulting architecture achieves state-of-the-art results on all tasks in the Atom3D benchmark, while adhering to the strict benchmark protocol, as well as more broadly on binding site identification and binding pocket classification. Furthermore, we use coarsened surfaces and optimize our approach for efficiency, making our tool competitive in training and inference time with existing techniques. Code can be found online: https://github.com/Vincentx15/atomsurf</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="q-bio.BM" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2023-09-28T15:25:17Z</published>
+    <arxiv:comment>Published as a conference paper at The Thirteenth International Conference on Learning Representations (ICLR 2025). The official open-access version is available at https://openreview.net/forum?id=ARQIJXFcTH</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <arxiv:journal_ref>The Thirteenth International Conference on Learning Representations (ICLR), 2025</arxiv:journal_ref>
+    <author>
+      <name>Vincent Mallet</name>
+    </author>
+    <author>
+      <name>Souhaib Attaiki</name>
+    </author>
+    <author>
+      <name>Yangyang Miao</name>
+    </author>
+    <author>
+      <name>Bruno Correia</name>
+    </author>
+    <author>
+      <name>Maks Ovsjanikov</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2007.06252v2</id>
+    <title>Intrinsic-Extrinsic Convolution and Pooling for Learning on 3D Protein Structures</title>
+    <updated>2021-04-19T17:27:56Z</updated>
+    <link href="https://arxiv.org/abs/2007.06252v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2007.06252v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Proteins perform a large variety of functions in living organisms, thus playing a key role in biology. As of now, available learning algorithms to process protein data do not consider several particularities of such data and/or do not scale well for large protein conformations. To fill this gap, we propose two new learning operations enabling deep 3D analysis of large-scale protein data. First, we introduce a novel convolution operator which considers both, the intrinsic (invariant under protein folding) as well as extrinsic (invariant under bonding) structure, by using $n$-D convolutions defined on both the Euclidean distance, as well as multiple geodesic distances between atoms in a multi-graph. Second, we enable a multi-scale protein analysis by introducing hierarchical pooling operators, exploiting the fact that proteins are a recombination of a finite set of amino acids, which can be pooled using shared pooling matrices. Lastly, we evaluate the accuracy of our algorithms on several large-scale data sets for common protein analysis tasks, where we outperform state-of-the-art methods.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="q-bio.BM" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="stat.ML" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2020-07-13T09:02:40Z</published>
+    <arxiv:comment>International Conference on Learning Representations (ICLR) 2021</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Pedro Hermosilla</name>
+    </author>
+    <author>
+      <name>Marco Schäfer</name>
+    </author>
+    <author>
+      <name>Matěj Lang</name>
+    </author>
+    <author>
+      <name>Gloria Fackelmann</name>
+    </author>
+    <author>
+      <name>Pere Pau Vázquez</name>
+    </author>
+    <author>
+      <name>Barbora Kozlíková</name>
+    </author>
+    <author>
+      <name>Michael Krone</name>
+    </author>
+    <author>
+      <name>Tobias Ritschel</name>
+    </author>
+    <author>
+      <name>Timo Ropinski</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2202.05146v4</id>
+    <title>EquiBind: Geometric Deep Learning for Drug Binding Structure Prediction</title>
+    <updated>2022-06-04T22:53:23Z</updated>
+    <link href="https://arxiv.org/abs/2202.05146v4" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2202.05146v4" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Predicting how a drug-like molecule binds to a specific protein target is a core problem in drug discovery. An extremely fast computational binding method would enable key applications such as fast virtual screening or drug engineering. Existing methods are computationally expensive as they rely on heavy candidate sampling coupled with scoring, ranking, and fine-tuning steps. We challenge this paradigm with EquiBind, an SE(3)-equivariant geometric deep learning model performing direct-shot prediction of both i) the receptor binding location (blind docking) and ii) the ligand's bound pose and orientation. EquiBind achieves significant speed-ups and better quality compared to traditional and recent baselines. Further, we show extra improvements when coupling it with existing fine-tuning techniques at the cost of increased running time. Finally, we propose a novel and fast fine-tuning model that adjusts torsion angles of a ligand's rotatable bonds based on closed-form global minima of the von Mises angular distance to a given input atomic point cloud, avoiding previous expensive differential evolution strategies for energy minimization.</summary>
+    <category term="q-bio.BM" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2022-02-07T16:26:05Z</published>
+    <arxiv:comment>39th International Conference on Machine Learning (ICML 2022). Also accepted at ICLR 2022 GTRL and at ICLR 2022 MLDD as spotlight</arxiv:comment>
+    <arxiv:primary_category term="q-bio.BM"/>
+    <arxiv:journal_ref>39th International Conference on Machine Learning (ICML 2022)</arxiv:journal_ref>
+    <author>
+      <name>Hannes Stärk</name>
+    </author>
+    <author>
+      <name>Octavian-Eugen Ganea</name>
+    </author>
+    <author>
+      <name>Lagnajit Pattanaik</name>
+    </author>
+    <author>
+      <name>Regina Barzilay</name>
+    </author>
+    <author>
+      <name>Tommi Jaakkola</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2512.02303v1</id>
+    <title>Training Dynamics of Learning 3D-Rotational Equivariance</title>
+    <updated>2025-12-02T00:48:09Z</updated>
+    <link href="https://arxiv.org/abs/2512.02303v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2512.02303v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>While data augmentation is widely used to train symmetry-agnostic models, it remains unclear how quickly and effectively they learn to respect symmetries. We investigate this by deriving a principled measure of equivariance error that, for convex losses, calculates the percent of total loss attributable to imperfections in learned symmetry. We focus our empirical investigation to 3D-rotation equivariance on high-dimensional molecular tasks (flow matching, force field prediction, denoising voxels) and find that models reduce equivariance error quickly to $\leq$2\% held-out loss within 1k-10k training steps, a result robust to model and dataset size. This happens because learning 3D-rotational equivariance is an easier learning task, with a smoother and better-conditioned loss landscape, than the main prediction task. For 3D rotations, the loss penalty for non-equivariant models is small throughout training, so they may achieve lower test loss than equivariant models per GPU-hour unless the equivariant ``efficiency gap'' is narrowed. We also experimentally and theoretically investigate the relationships between relative equivariance error, learning gradients, and model parameters.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="q-bio.BM" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-12-02T00:48:09Z</published>
+    <arxiv:comment>Accepted to Transactions on Machine Learning Research (TMLR)</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Max W. Shen</name>
+    </author>
+    <author>
+      <name>Ewa Nowara</name>
+    </author>
+    <author>
+      <name>Michael Maser</name>
+    </author>
+    <author>
+      <name>Kyunghyun Cho</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1902.08661v2</id>
+    <title>Learning protein sequence embeddings using information from structure</title>
+    <updated>2019-10-16T17:09:32Z</updated>
+    <link href="https://arxiv.org/abs/1902.08661v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1902.08661v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Inferring the structural properties of a protein from its amino acid sequence is a challenging yet important problem in biology. Structures are not known for the vast majority of protein sequences, but structure is critical for understanding function. Existing approaches for detecting structural similarity between proteins from sequence are unable to recognize and exploit structural patterns when sequences have diverged too far, limiting our ability to transfer knowledge between structurally related proteins. We newly approach this problem through the lens of representation learning. We introduce a framework that maps any protein sequence to a sequence of vector embeddings --- one per amino acid position --- that encode structural information. We train bidirectional long short-term memory (LSTM) models on protein sequences with a two-part feedback mechanism that incorporates information from (i) global structural similarity between proteins and (ii) pairwise residue contact maps for individual proteins. To enable learning from structural similarity information, we define a novel similarity measure between arbitrary-length sequences of vector embeddings based on a soft symmetric alignment (SSA) between them. Our method is able to learn useful position-specific embeddings despite lacking direct observations of position-level correspondence between sequences. We show empirically that our multi-task framework outperforms other sequence-based methods and even a top-performing structure-based alignment method when predicting structural similarity, our goal. Finally, we demonstrate that our learned embeddings can be transferred to other protein sequence problems, improving the state-of-the-art in transmembrane domain prediction.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="q-bio.BM" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="stat.ML" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2019-02-22T20:17:52Z</published>
+    <arxiv:comment>17 pages, 3 figures, 8 tables, proceedings of ICLR 2019</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <arxiv:journal_ref>International Conference on Learning Representations, 2019</arxiv:journal_ref>
+    <author>
+      <name>Tristan Bepler</name>
+    </author>
+    <author>
+      <name>Bonnie Berger</name>
+    </author>
+  </entry>
+</feed>

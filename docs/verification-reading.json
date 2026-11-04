@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-04T10:07:19.032Z",
+  "scope": "Reading presentation only; API, schema, model, dependencies unchanged",
+  "unit": {
+    "passed": 97,
+    "total": 97,
+    "files": 8
+  },
+  "e2e": {
+    "passed": 17,
+    "total": 17,
+    "duration": "1.2m",
+    "baseURL": "http://127.0.0.1:8080",
+    "browser": "Edge Chromium"
+  },
+  "typecheck": "All 3 workspaces passed",
+  "build": "Web tsc+Vite passed;SW regenerated",
+  "visual": {
+    "timestamp": "2026-11-04T10:04:24.003Z",
+    "errors": [],
+    "overflow": false,
+    "pdf": "https://arxiv.org/pdf/1505.04597",
+    "paper": "1505.04597",
+    "pageCount": "Trang 3–4 / 6Bài tiếp theo",
+    "screenshots": [
+      "dossier-book",
+      "dossier-abstract-pages",
+      "dossier-desktop",
+      "dossier-fulltext",
+      "dossier-mobile",
+      "dossier-mobile-fulltext"
+    ]
+  },
+  "fullPdfInBook": false,
+  "networkBenchmarkRepeated": false,
+  "review": "self review;no independent review",
+  "report": "docs/verification.md",
+  "catalog": {
+    "namedFunctions": 162,
+    "shortVariableInitializers": 793
+  }
+}

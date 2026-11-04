@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/CkdrcgK2YtNNX4IIZyeHVNrP4GI</id>
+  <title>arXiv Query: search_query=cat:quant-ph AND all:learning&amp;id_list=&amp;start=0&amp;max_results=6</title>
+  <updated>2026-11-04T11:37:28Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=cat:quant-ph+AND+all:learning&amp;start=0&amp;max_results=6&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>6</opensearch:itemsPerPage>
+  <opensearch:totalResults>8725</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2602.11092v2</id>
+    <title>MerLin: A Discovery Engine for Photonic and Hybrid Quantum Machine Learning</title>
+    <updated>2026-04-17T23:13:30Z</updated>
+    <link href="https://arxiv.org/abs/2602.11092v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2602.11092v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Identifying where quantum models may offer practical benefits in near term quantum machine learning (QML) requires moving beyond isolated algorithmic proposals toward systematic and empirical exploration across models, datasets, and hardware constraints. We introduce MerLin, an open-source framework designed as a discovery engine for photonic and hybrid quantum machine learning. MerLin integrates optimized strong simulation of linear optical circuits into standard PyTorch and scikit learn workflows, enabling end-to-end differentiable training of quantum layers.
+  MerLin is designed around systematic benchmarking and reproducibility. As an initial contribution, we reproduce eighteen state-of-the-art photonic and hybrid QML works spanning kernel methods, reservoir computing, convolutional and recurrent architectures, generative models, and modern training paradigms. These reproductions are released as reusable, modular experiments that can be directly extended and adapted, establishing a shared experimental baseline consistent with empirical benchmarking methodologies widely adopted in modern artificial intelligence.
+  By embedding photonic quantum models within established machine learning ecosystems, MerLin allows practitioners to leverage existing tooling for ablation studies, cross-modality comparisons, and hybrid classical-quantum workflows. The framework already implements hardware-aware features, allowing tests on available quantum hardware while enabling exploration beyond its current capabilities, positioning MerLin as a forward-looking co-design tool linking algorithms, benchmarks, and hardware.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.PL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="quant-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-02-11T18:00:01Z</published>
+    <arxiv:comment>Accepted to IJCNN SS07 Quantum Machine Learning Algorithms and Applications, IEE WCCI 2026</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <arxiv:journal_ref>IJCNN SS07 Quantum Machine Learning Algorithms and Applications, IEEE WCCI 2026</arxiv:journal_ref>
+    <author>
+      <name>Cassandre Notton</name>
+    </author>
+    <author>
+      <name>Benjamin Stott</name>
+    </author>
+    <author>
+      <name>Philippe Schoeb</name>
+    </author>
+    <author>
+      <name>Anthony Walsh</name>
+    </author>
+    <author>
+      <name>Grégoire Leboucher</name>
+    </author>
+    <author>
+      <name>Vincent Espitalier</name>
+    </author>
+    <author>
+      <name>Vassilis Apostolou</name>
+    </author>
+    <author>
+      <name>Louis-Félix Vigneux</name>
+    </author>
+    <author>
+      <name>Alexia Salavrakos</name>
+    </author>
+    <author>
+      <name>Jean Senellart</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2110.03861v3</id>
+    <title>QTN-VQC: An End-to-End Learning framework for Quantum Neural Networks</title>
+    <updated>2021-11-22T23:25:39Z</updated>
+    <link href="https://arxiv.org/abs/2110.03861v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2110.03861v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The advent of noisy intermediate-scale quantum (NISQ) computers raises a crucial challenge to design quantum neural networks for fully quantum learning tasks. To bridge the gap, this work proposes an end-to-end learning framework named QTN-VQC, by introducing a trainable quantum tensor network (QTN) for quantum embedding on a variational quantum circuit (VQC). The architecture of QTN is composed of a parametric tensor-train network for feature extraction and a tensor product encoding for quantum embedding. We highlight the QTN for quantum embedding in terms of two perspectives: (1) we theoretically characterize QTN by analyzing its representation power of input features; (2) QTN enables an end-to-end parametric model pipeline, namely QTN-VQC, from the generation of quantum embedding to the output measurement. Our experiments on the MNIST dataset demonstrate the advantages of QTN for quantum embedding over other quantum embedding approaches.</summary>
+    <category term="quant-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.NE" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2021-10-06T14:44:51Z</published>
+    <arxiv:comment>Preprint. A Non-archival and preliminary venue was presented in NeurIPS 2021, Quantum Tensor Networks in Machine Learning Workshop</arxiv:comment>
+    <arxiv:primary_category term="quant-ph"/>
+    <arxiv:journal_ref>Quantum Tensor Networks in Machine Learning Workshop, NeurIPS 2021</arxiv:journal_ref>
+    <author>
+      <name>Jun Qi</name>
+    </author>
+    <author>
+      <name>Chao-Han Huck Yang</name>
+    </author>
+    <author>
+      <name>Pin-Yu Chen</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2510.23237v1</id>
+    <title>Robust Iterative Learning Hidden Quantum Markov Models</title>
+    <updated>2025-10-27T11:48:44Z</updated>
+    <link href="https://arxiv.org/abs/2510.23237v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2510.23237v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Hidden Quantum Markov Models (HQMMs) extend classical Hidden Markov Models to the quantum domain, offering a powerful probabilistic framework for modeling sequential data with quantum coherence. However, existing HQMM learning algorithms are highly sensitive to data corruption and lack mechanisms to ensure robustness under adversarial perturbations. In this work, we introduce the Adversarially Corrupted HQMM (AC-HQMM), which formalizes robustness analysis by allowing a controlled fraction of observation sequences to be adversarially corrupted. To learn AC-HQMMs, we propose the Robust Iterative Learning Algorithm (RILA), a derivative-free method that integrates a Remove Corrupted Rows by Entropy Filtering (RCR-EF) module with an iterative stochastic resampling procedure for physically valid Kraus operator updates. RILA incorporates L1-penalized likelihood objectives to enhance stability, resist overfitting, and remain effective under non-differentiable conditions. Across multiple HQMM and HMM benchmarks, RILA demonstrates superior convergence stability, corruption resilience, and preservation of physical validity compared to existing algorithms, establishing a principled and efficient approach for robust quantum sequential learning.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="quant-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="stat.CO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="stat.ME" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="stat.ML" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-10-27T11:48:44Z</published>
+    <arxiv:comment>Quantum Computing, Bayesian Inference, Spatiotemporal Analysis, Robust Learning</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Ning Ning</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2501.15893v2</id>
+    <title>Benchmarking Quantum Reinforcement Learning</title>
+    <updated>2025-05-21T12:00:49Z</updated>
+    <link href="https://arxiv.org/abs/2501.15893v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2501.15893v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Benchmarking and establishing proper statistical validation metrics for reinforcement learning (RL) remain ongoing challenges, where no consensus has been established yet. The emergence of quantum computing and its potential applications in quantum reinforcement learning (QRL) further complicate benchmarking efforts. To enable valid performance comparisons and to streamline current research in this area, we propose a novel benchmarking methodology, which is based on a statistical estimator for sample complexity and a definition of statistical outperformance. Furthermore, considering QRL, our methodology casts doubt on some previous claims regarding its superiority. We conducted experiments on a novel benchmarking environment with flexible levels of complexity. While we still identify possible advantages, our findings are more nuanced overall. We discuss the potential limitations of these results and explore their implications for empirical research on quantum advantage in QRL.</summary>
+    <category term="quant-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-01-27T09:40:18Z</published>
+    <arxiv:comment>Accepted to the 42nd International Conference on Machine Learning (ICML 2025), Vancouver, British Columbia, Canada. 31 pages, 20 figures, 3 tables</arxiv:comment>
+    <arxiv:primary_category term="quant-ph"/>
+    <arxiv:journal_ref>Proceedings of the 42nd International Conference on Machine Learning, PMLR 267:43934-43964, 2025</arxiv:journal_ref>
+    <author>
+      <name>Nico Meyer</name>
+    </author>
+    <author>
+      <name>Christian Ufrecht</name>
+    </author>
+    <author>
+      <name>George Yammine</name>
+    </author>
+    <author>
+      <name>Georgios Kontes</name>
+    </author>
+    <author>
+      <name>Christopher Mutschler</name>
+    </author>
+    <author>
+      <name>Daniel D. Scherer</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2411.00230v3</id>
+    <title>Reinforcement learning with learned gadgets to tackle hard quantum problems on real hardware</title>
+    <updated>2026-03-18T11:44:03Z</updated>
+    <link href="https://arxiv.org/abs/2411.00230v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2411.00230v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Quantum computing offers exciting opportunities for simulating complex quantum systems and optimizing large scale combinatorial problems, but its practical use is limited by device noise and constrained connectivity. Designing quantum circuits, which are fundamental to quantum algorithms, is therefore a central challenge in current quantum hardware. Existing reinforcement learning based methods for circuit design lose accuracy when restricted to hardware native gates and device level compilation. Here, we introduce gadget reinforcement learning (GRL), which combines learning with program synthesis to automatically construct composite gates that expand the action space while respecting hardware constraints. We show that this approach improves accuracy, hardware compatibility, and scalability for transverse-field Ising and quantum chemistry problems, reaching systems of up to ten qubits within realistic computational budgets. This framework demonstrates how learned, reusable circuit building blocks can guide the co-design of algorithms and hardware for quantum processors.</summary>
+    <category term="quant-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-10-31T22:02:32Z</published>
+    <arxiv:comment>28 page: Gadget reinforcement learning</arxiv:comment>
+    <arxiv:primary_category term="quant-ph"/>
+    <arxiv:journal_ref>Communications Physics 9, 44 (2026)</arxiv:journal_ref>
+    <author>
+      <name>Akash Kundu</name>
+    </author>
+    <author>
+      <name>Leopoldo Sarra</name>
+    </author>
+    <arxiv:doi>10.1038/s42005-025-02475-6</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1038/s42005-025-02475-6" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2306.09912v4</id>
+    <title>Towards Quantum Federated Learning</title>
+    <updated>2024-08-19T17:58:55Z</updated>
+    <link href="https://arxiv.org/abs/2306.09912v4" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2306.09912v4" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Quantum Federated Learning (QFL) is an emerging interdisciplinary field that merges the principles of Quantum Computing (QC) and Federated Learning (FL), with the goal of leveraging quantum technologies to enhance privacy, security, and efficiency in the learning process. Currently, there is no comprehensive survey for this interdisciplinary field. This review offers a thorough, holistic examination of QFL. We aim to provide a comprehensive understanding of the principles, techniques, and emerging applications of QFL. We discuss the current state of research in this rapidly evolving field, identify challenges and opportunities associated with integrating these technologies, and outline future directions and open research questions. We propose a unique taxonomy of QFL techniques, categorized according to their characteristics and the quantum techniques employed. As the field of QFL continues to progress, we can anticipate further breakthroughs and applications across various industries, driving innovation and addressing challenges related to data privacy, security, and resource optimization. This review serves as a first-of-its-kind comprehensive guide for researchers and practitioners interested in understanding and advancing the field of QFL.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="quant-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2023-06-16T15:40:21Z</published>
+    <arxiv:comment>Survey of quantum federated learning (QFL)</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Chao Ren</name>
+    </author>
+    <author>
+      <name>Rudai Yan</name>
+    </author>
+    <author>
+      <name>Huihui Zhu</name>
+    </author>
+    <author>
+      <name>Han Yu</name>
+    </author>
+    <author>
+      <name>Minrui Xu</name>
+    </author>
+    <author>
+      <name>Yuan Shen</name>
+    </author>
+    <author>
+      <name>Yan Xu</name>
+    </author>
+    <author>
+      <name>Ming Xiao</name>
+    </author>
+    <author>
+      <name>Zhao Yang Dong</name>
+    </author>
+    <author>
+      <name>Mikael Skoglund</name>
+    </author>
+    <author>
+      <name>Dusit Niyato</name>
+    </author>
+    <author>
+      <name>Leong Chuan Kwek</name>
+    </author>
+  </entry>
+</feed>

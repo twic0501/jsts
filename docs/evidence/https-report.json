@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-04T11:17:00.580Z",
+  "host": "127.0.0.1",
+  "port": 443,
+  "certificate": "Local self-signed test certificate trusted only by this test client;not public CA",
+  "page": {
+    "status": 200,
+    "protocol": "TLSv1.3",
+    "authorized": true,
+    "hsts": "max-age=31536000",
+    "bytes": 689
+  },
+  "api": {
+    "status": 200,
+    "protocol": "TLSv1.3",
+    "authorized": true,
+    "hsts": "max-age=31536000",
+    "bytes": 408
+  },
+  "untrustedRejected": true,
+  "publicDomainVerified": false,
+  "passed": true
+}

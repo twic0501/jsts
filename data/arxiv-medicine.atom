@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/moMYT2qc36JTEoQZ5ZdmOktbFns</id>
+  <title>arXiv Query: search_query=cat:physics.med-ph AND all:imaging&amp;id_list=&amp;start=0&amp;max_results=6</title>
+  <updated>2026-11-04T11:37:25Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=cat:physics.med-ph+AND+all:imaging&amp;start=0&amp;max_results=6&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>6</opensearch:itemsPerPage>
+  <opensearch:totalResults>4832</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2402.04299v1</id>
+    <title>Translating the future: Image-to-image translation for the prediction of future brain metabolism</title>
+    <updated>2024-02-06T16:02:51Z</updated>
+    <link href="https://arxiv.org/abs/2402.04299v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2402.04299v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Alzheimer's disease (AD) is a progressive neurodegenerative disorder leading to cognitive decline. [$^{18}$F]-Fluorodeoxyglucose positron emission tomography ([$^{18}$F]-FDG PET) is used to monitor brain metabolism, aiding in the diagnosis and assessment of AD over time. However, the feasibility of multi-time point [$^{18}$F]-FDG PET scans for diagnosis is limited due to radiation exposure, cost, and patient burden. To address this, we have developed a predictive image-to-image translation (I2I) model to forecast future [$^{18}$F]-FDG PET scans using baseline and year-one data. The proposed model employs a convolutional neural network architecture with long-short term memory and was trained on [$^{18}$F]-FDG PET data from 161 individuals from the Alzheimer's Disease Neuroimaging Initiative. Our I2I network showed high accuracy in predicting year-two [18F]-FDG PET scans, with a mean absolute error of 0.031 and a structural similarity index of 0.961. Furthermore, the model successfully predicted PET scans up to seven years post-baseline. Notably, the predicted [$^{18}$F]-FDG PET signal in an AD-susceptible meta-region was highly accurate for individuals with mild cognitive impairment across years. In contrast, a linear model was sufficient for predicting brain metabolism in cognitively normal and dementia subjects. In conclusion, both the I2I network and the linear model could offer valuable prognostic insights, guiding early intervention strategies to preemptively address anticipated declines in brain metabolism and potentially to monitor treatment effects.</summary>
+    <category term="eess.IV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="physics.med-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="q-bio.NC" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-02-06T16:02:51Z</published>
+    <arxiv:comment>Accepted to SPIE Medical Imaging 2024</arxiv:comment>
+    <arxiv:primary_category term="eess.IV"/>
+    <arxiv:journal_ref>Medical Imaging 2024: Clinical and Biomedical Imaging</arxiv:journal_ref>
+    <author>
+      <name>Elena Doering</name>
+      <arxiv:affiliation>for the Alzheimer's Disease Neuroimaging Initiative</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Merle C. Hönig</name>
+      <arxiv:affiliation>for the Alzheimer's Disease Neuroimaging Initiative</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Tobias Deußer</name>
+      <arxiv:affiliation>for the Alzheimer's Disease Neuroimaging Initiative</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Gerard N. Bischof</name>
+      <arxiv:affiliation>for the Alzheimer's Disease Neuroimaging Initiative</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Thilo van Eimeren</name>
+      <arxiv:affiliation>for the Alzheimer's Disease Neuroimaging Initiative</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Alexander Drzezga</name>
+      <arxiv:affiliation>for the Alzheimer's Disease Neuroimaging Initiative</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Lotta M. Ellingsen</name>
+      <arxiv:affiliation>for the Alzheimer's Disease Neuroimaging Initiative</arxiv:affiliation>
+    </author>
+    <arxiv:doi>10.1117/12.3005667</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1117/12.3005667" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1804.10812v2</id>
+    <title>Imaging of Fiber-Like Structures in Digital Breast Tomosynthesis</title>
+    <updated>2019-04-07T16:54:51Z</updated>
+    <link href="https://arxiv.org/abs/1804.10812v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1804.10812v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Fiber-like features are an important aspect of breast imaging. Vessels and ducts are present in all breast images, and spiculations radiating from a mass can indicate malignancy. Accordingly, fiber objects are one of the three types of signals used in the American College of Radiology digital mammography (ACR-DM) accreditation phantom. This work focuses on the image properties of fiber-like structures in digital breast tomosynthesis (DBT) and how image reconstruction can affect their appearance. The impact of DBT image reconstruction algorithm and regularization strength on the conspicuity of fiber-like signals of various orientations is investigated in simulation. A metric is developed to characterize this orientation dependence and allow for quantitative comparison of algorithms and associated parameters in the context of imaging fiber signals. The imaging properties of fibers, characterized in simulation, are then demonstrated in detail with physical DBT data of the ACR-DM phantom. The characterization of imaging of fiber signals is used to explain features of an actual clinical DBT case. For the algorithms investigated, at low regularization setting, the results show a striking variation in conspicuity as a function of orientation in the viewing plane. In particular, the conspicuity of fibers nearly aligned with the plane of the X-ray source trajectory is decreased relative to more obliquely oriented fibers. Increasing regularization strength mitigates this orientation dependence at the cost of increasing depth blur of these structures.</summary>
+    <category term="physics.med-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2018-04-28T14:57:53Z</published>
+    <arxiv:comment>This version has been updated with changes made during the peer-review process. The manuscript has now been published in the SPIE Journal of Medical Imaging</arxiv:comment>
+    <arxiv:primary_category term="physics.med-ph"/>
+    <arxiv:journal_ref>SPIE Journal of Medical Imaging 6 (2019) 031404</arxiv:journal_ref>
+    <author>
+      <name>Sean D. Rose</name>
+    </author>
+    <author>
+      <name>Emil Y. Sidky</name>
+    </author>
+    <author>
+      <name>Ingrid Reiser</name>
+    </author>
+    <author>
+      <name>Xiaochuan Pan</name>
+    </author>
+    <arxiv:doi>10.1117/1.JMI.6.3.031404</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1117/1.JMI.6.3.031404" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2004.07064v1</id>
+    <title>Fully Automated Myocardial Strain Estimation from CMR Tagged Images using a Deep Learning Framework in the UK Biobank</title>
+    <updated>2020-04-15T12:49:15Z</updated>
+    <link href="https://arxiv.org/abs/2004.07064v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2004.07064v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Purpose: To demonstrate the feasibility and performance of a fully automated deep learning framework to estimate myocardial strain from short-axis cardiac magnetic resonance tagged images. Methods and Materials: In this retrospective cross-sectional study, 4508 cases from the UK Biobank were split randomly into 3244 training and 812 validation cases, and 452 test cases. Ground truth myocardial landmarks were defined and tracked by manual initialization and correction of deformable image registration using previously validated software with five readers. The fully automatic framework consisted of 1) a convolutional neural network (CNN) for localization, and 2) a combination of a recurrent neural network (RNN) and a CNN to detect and track the myocardial landmarks through the image sequence for each slice. Radial and circumferential strain were then calculated from the motion of the landmarks and averaged on a slice basis. Results: Within the test set, myocardial end-systolic circumferential Green strain errors were -0.001 +/- 0.025, -0.001 +/- 0.021, and 0.004 +/- 0.035 in basal, mid, and apical slices respectively (mean +/- std. dev. of differences between predicted and manual strain). The framework reproduced significant reductions in circumferential strain in diabetics, hypertensives, and participants with previous heart attack. Typical processing time was ~260 frames (~13 slices) per second on an NVIDIA Tesla K40 with 12GB RAM, compared with 6-8 minutes per slice for the manual analysis. Conclusions: The fully automated RNNCNN framework for analysis of myocardial strain enabled unbiased strain evaluation in a high-throughput workflow, with similar ability to distinguish impairment due to diabetes, hypertension, and previous heart attack.</summary>
+    <category term="eess.IV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="physics.med-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2020-04-15T12:49:15Z</published>
+    <arxiv:comment>accepted in Radiology Cardiothoracic Imaging</arxiv:comment>
+    <arxiv:primary_category term="eess.IV"/>
+    <arxiv:journal_ref>Radiology: Cardiothoracic Imaging 2020; 2(1):e190032</arxiv:journal_ref>
+    <author>
+      <name>Edward Ferdian</name>
+    </author>
+    <author>
+      <name>Avan Suinesiaputra</name>
+    </author>
+    <author>
+      <name>Kenneth Fung</name>
+    </author>
+    <author>
+      <name>Nay Aung</name>
+    </author>
+    <author>
+      <name>Elena Lukaschuk</name>
+    </author>
+    <author>
+      <name>Ahmet Barutcu</name>
+    </author>
+    <author>
+      <name>Edd Maclean</name>
+    </author>
+    <author>
+      <name>Jose Paiva</name>
+    </author>
+    <author>
+      <name>Stefan K. Piechnik</name>
+    </author>
+    <author>
+      <name>Stefan Neubauer</name>
+    </author>
+    <author>
+      <name>Steffen E Petersen</name>
+    </author>
+    <author>
+      <name>Alistair A. Young</name>
+    </author>
+    <arxiv:doi>10.1148/ryct.2020190032</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1148/ryct.2020190032" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2011.05146v2</id>
+    <title>X-ray phase-contrast imaging: a broad overview of some fundamentals</title>
+    <updated>2021-05-22T11:49:35Z</updated>
+    <link href="https://arxiv.org/abs/2011.05146v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2011.05146v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We outline some basics of imaging using both fully-coherent and partially-coherent X-ray beams, with an emphasis on phase-contrast imaging. We open with some of the basic notions of X-ray imaging, including the vacuum wave equations and the physical meaning of the intensity and phase of complex scalar fields. The projection approximation is introduced, together with the concepts of attenuation contrast and phase contrast. We also outline the multi-slice approach to X-ray propagation through thick samples or optical elements, together with the Fresnel scaling theorem. Having introduced the fundamentals, we then consider several aspects of the forward problem, of modelling the formation of phase-contrast X-ray images. Several topics related to this forward problem are considered, including the transport-of-intensity equation, arbitrary linear imaging systems, shift-invariant linear imaging systems, the transfer-function formalism, blurring induced by finite source size, the space-frequency model for partially-coherent fields, and the Fokker-Planck equation for paraxial X-ray imaging. Having considered these means for modelling the formation of X-ray phase-contrast images, we then consider aspects of the associated inverse problem of phase retrieval. This concerns how one may decode phase-contrast images to gain information regarding the sample-induced attenuation and phase shift.</summary>
+    <category term="eess.IV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="physics.app-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="physics.med-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="physics.optics" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2020-11-08T11:22:05Z</published>
+    <arxiv:comment>Some minor corrections have been made to some of the equations in the preceding version. To appear in Advances in Imaging and Electron Physics. arXiv admin note: text overlap with arXiv:1902.00364</arxiv:comment>
+    <arxiv:primary_category term="eess.IV"/>
+    <arxiv:journal_ref>Advances in Imaging and Electron Physics, Volume 218, Pages 63-158 (2021)</arxiv:journal_ref>
+    <author>
+      <name>David M. Paganin</name>
+    </author>
+    <author>
+      <name>Daniele Pelliccia</name>
+    </author>
+    <arxiv:doi>10.1016/bs.aiep.2021.04.002</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1016/bs.aiep.2021.04.002" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2610.32396v1</id>
+    <title>Interactive image diagnosis using test-time backpropagation from the auxiliary task</title>
+    <updated>2026-10-23T09:21:18Z</updated>
+    <link href="https://arxiv.org/abs/2610.32396v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2610.32396v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Multi-task deep learning has been developed to ensure explainability in computer-aided diagnosis (CAD) systems. These systems simultaneously predict interpretable characteristics of findings in auxiliary tasks to help radiologists assess the reliability of the diagnostic prediction. However, the CAD's opinion would not be referred to when the auxiliary task prediction deviates from the radiologist's expectation. To further leverage CAD's knowledge in the above situation, we proposed a multi-task gradient assist (MGA) method that brings interactivity to multi-task models without additional training. MGA allows radiologists to give feedback to the CAD and ask for additional diagnostic suggestions. Using two datasets of mammography and CT, we show that MGA successfully improves diagnostic accuracy upon feedback on various auxiliary tasks. Compared to an existing method using forward propagation only, MGA performs more robustly and can be combined to further improve accuracy. Our method paves a promising way for integrating artificial intelligence into image diagnosis.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="physics.med-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-10-23T09:21:18Z</published>
+    <arxiv:comment>8 pages, accepted to SPIE Medical Imaging 2025</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <arxiv:journal_ref>Proc. SPIE 13407, Medical Imaging 2025: Computer-Aided Diagnosis, 134070Y (4 Apr 2025)</arxiv:journal_ref>
+    <author>
+      <name>Takuro Shimaya</name>
+    </author>
+    <arxiv:doi>10.1117/12.3040160</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1117/12.3040160" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2111.07355v3</id>
+    <title>Fracture Detection in Wrist X-ray Images Using Deep Learning-Based Object Detection Models</title>
+    <updated>2022-02-08T18:03:37Z</updated>
+    <link href="https://arxiv.org/abs/2111.07355v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2111.07355v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Hospitals, especially their emergency services, receive a high number of wrist fracture cases. For correct diagnosis and proper treatment of these, images obtained from various medical equipment must be viewed by physicians, along with the patients medical records and physical examination. The aim of this study is to perform fracture detection by use of deep learning on wrist Xray images to support physicians in the diagnosis of these fractures, particularly in the emergency services. Using SABL, RegNet, RetinaNet, PAA, Libra R_CNN, FSAF, Faster R_CNN, Dynamic R_CNN and DCN deep learning based object detection models with various backbones, 20 different fracture detection procedures were performed on Gazi University Hospitals dataset of wrist Xray images. To further improve these procedures, five different ensemble models were developed and then used to reform an ensemble model to develop a unique detection model, wrist fracture detection_combo (WFD_C). From 26 different models for fracture detection, the highest detection result obtained was 0.8639 average precision (AP50) in the WFD-C model. Huawei Turkey R&amp;D Center supports this study within the scope of the ongoing cooperation project coded 071813 between Gazi University, Huawei and Medskor. Code is available at https://github.com/fatihuysal88/wrist-d</summary>
+    <category term="eess.IV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="physics.med-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2021-11-14T14:21:24Z</published>
+    <arxiv:comment>This paper is accepted at Sensors, MDPI, 2022, 22, 1285. Section: "Sensing and Imaging"</arxiv:comment>
+    <arxiv:primary_category term="eess.IV"/>
+    <arxiv:journal_ref>Sensors, MDPI, 2022, 22, 1285. Section: "Sensing and Imaging"</arxiv:journal_ref>
+    <author>
+      <name>Fırat Hardalaç</name>
+    </author>
+    <author>
+      <name>Fatih Uysal</name>
+    </author>
+    <author>
+      <name>Ozan Peker</name>
+    </author>
+    <author>
+      <name>Murat Çiçeklidağ</name>
+    </author>
+    <author>
+      <name>Tolga Tolunay</name>
+    </author>
+    <author>
+      <name>Nil Tokgöz</name>
+    </author>
+    <author>
+      <name>Uğurhan Kutbay</name>
+    </author>
+    <author>
+      <name>Boran Demirciler</name>
+    </author>
+    <author>
+      <name>Fatih Mert</name>
+    </author>
+    <arxiv:doi>10.3390/s22031285</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.3390/s22031285" title="doi"/>
+  </entry>
+</feed>

@@ -1,0 +1,812 @@
+{
+  "version": "arxiv-starter-2026-11-04-v1",
+  "title": "Thư viện khởi đầu · arXiv",
+  "fetchedAt": "2026-11-04T04:37:28.438Z",
+  "papers": [
+    {
+      "id": "2103.00020",
+      "title": "Learning Transferable Visual Models From Natural Language Supervision",
+      "abstract": "State-of-the-art computer vision systems are trained to predict a fixed set of predetermined object categories. This restricted form of supervision limits their generality and usability since additional labeled data is needed to specify any other visual concept. Learning directly from raw text about images is a promising alternative which leverages a much broader source of supervision. We demonstrate that the simple pre-training task of predicting which caption goes with which image is an efficient and scalable way to learn SOTA image representations from scratch on a dataset of 400 million (image, text) pairs collected from the internet. After pre-training, natural language is used to reference learned visual concepts (or describe new ones) enabling zero-shot transfer of the model to downstream tasks. We study the performance of this approach by benchmarking on over 30 different existing computer vision datasets, spanning tasks such as OCR, action recognition in videos, geo-localization, and many types of fine-grained object classification. The model transfers non-trivially to most tasks and is often competitive with a fully supervised baseline without the need for any dataset specific training. For instance, we match the accuracy of the original ResNet-50 on ImageNet zero-shot without needing to use any of the 1.28 million training examples it was trained on. We release our code and pre-trained model weights at https://github.com/OpenAI/CLIP.",
+      "authors": [
+        "Alec Radford",
+        "Jong Wook Kim",
+        "Chris Hallacy",
+        "Aditya Ramesh",
+        "Gabriel Goh",
+        "Sandhini Agarwal",
+        "Girish Sastry",
+        "Amanda Askell",
+        "Pamela Mishkin",
+        "Jack Clark",
+        "Gretchen Krueger",
+        "Ilya Sutskever"
+      ],
+      "year": 2021,
+      "group": "ai",
+      "categories": [
+        "cs.CV",
+        "cs.LG"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2103.00020",
+      "tags": [
+        "cs.CV",
+        "cs.LG"
+      ],
+      "summary": "Kết nối hình ảnh và ngôn ngữ bằng biểu diễn học chung."
+    },
+    {
+      "id": "1512.03385",
+      "title": "Deep Residual Learning for Image Recognition",
+      "abstract": "Deeper neural networks are more difficult to train. We present a residual learning framework to ease the training of networks that are substantially deeper than those used previously. We explicitly reformulate the layers as learning residual functions with reference to the layer inputs, instead of learning unreferenced functions. We provide comprehensive empirical evidence showing that these residual networks are easier to optimize, and can gain accuracy from considerably increased depth. On the ImageNet dataset we evaluate residual nets with a depth of up to 152 layers---8x deeper than VGG nets but still having lower complexity. An ensemble of these residual nets achieves 3.57% error on the ImageNet test set. This result won the 1st place on the ILSVRC 2015 classification task. We also present analysis on CIFAR-10 with 100 and 1000 layers. The depth of representations is of central importance for many visual recognition tasks. Solely due to our extremely deep representations, we obtain a 28% relative improvement on the COCO object detection dataset. Deep residual nets are foundations of our submissions to ILSVRC & COCO 2015 competitions, where we also won the 1st places on the tasks of ImageNet detection, ImageNet localization, COCO detection, and COCO segmentation.",
+      "authors": [
+        "Kaiming He",
+        "Xiangyu Zhang",
+        "Shaoqing Ren",
+        "Jian Sun"
+      ],
+      "year": 2015,
+      "group": "ai",
+      "categories": [
+        "cs.CV"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/1512.03385",
+      "tags": [
+        "cs.CV"
+      ],
+      "summary": "Mạng residual giúp huấn luyện mô hình nhận diện ảnh sâu hơn."
+    },
+    {
+      "id": "1706.03762",
+      "title": "Attention Is All You Need",
+      "abstract": "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.",
+      "authors": [
+        "Ashish Vaswani",
+        "Noam Shazeer",
+        "Niki Parmar",
+        "Jakob Uszkoreit",
+        "Llion Jones",
+        "Aidan N. Gomez",
+        "Lukasz Kaiser",
+        "Illia Polosukhin"
+      ],
+      "year": 2017,
+      "group": "ai",
+      "categories": [
+        "cs.CL",
+        "cs.LG"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/1706.03762",
+      "tags": [
+        "cs.CL",
+        "cs.LG"
+      ],
+      "summary": "Kiến trúc Transformer dùng attention để xử lý chuỗi và dịch máy."
+    },
+    {
+      "id": "2005.14165",
+      "title": "Language Models are Few-Shot Learners",
+      "abstract": "Recent work has demonstrated substantial gains on many NLP tasks and benchmarks by pre-training on a large corpus of text followed by fine-tuning on a specific task. While typically task-agnostic in architecture, this method still requires task-specific fine-tuning datasets of thousands or tens of thousands of examples. By contrast, humans can generally perform a new language task from only a few examples or from simple instructions - something which current NLP systems still largely struggle to do. Here we show that scaling up language models greatly improves task-agnostic, few-shot performance, sometimes even reaching competitiveness with prior state-of-the-art fine-tuning approaches. Specifically, we train GPT-3, an autoregressive language model with 175 billion parameters, 10x more than any previous non-sparse language model, and test its performance in the few-shot setting. For all tasks, GPT-3 is applied without any gradient updates or fine-tuning, with tasks and few-shot demonstrations specified purely via text interaction with the model. GPT-3 achieves strong performance on many NLP datasets, including translation, question-answering, and cloze tasks, as well as several tasks that require on-the-fly reasoning or domain adaptation, such as unscrambling words, using a novel word in a sentence, or performing 3-digit arithmetic. At the same time, we also identify some datasets where GPT-3's few-shot learning still struggles, as well as some datasets where GPT-3 faces methodological issues related to training on large web corpora. Finally, we find that GPT-3 can generate samples of news articles which human evaluators have difficulty distinguishing from articles written by humans. We discuss broader societal impacts of this finding and of GPT-3 in general.",
+      "authors": [
+        "Tom B. Brown",
+        "Benjamin Mann",
+        "Nick Ryder",
+        "Melanie Subbiah",
+        "Jared Kaplan",
+        "Prafulla Dhariwal",
+        "Arvind Neelakantan",
+        "Pranav Shyam",
+        "Girish Sastry",
+        "Amanda Askell",
+        "Sandhini Agarwal",
+        "Ariel Herbert-Voss",
+        "Gretchen Krueger",
+        "Tom Henighan",
+        "Rewon Child",
+        "Aditya Ramesh",
+        "Daniel M. Ziegler",
+        "Jeffrey Wu",
+        "Clemens Winter",
+        "Christopher Hesse",
+        "Mark Chen",
+        "Eric Sigler",
+        "Mateusz Litwin",
+        "Scott Gray",
+        "Benjamin Chess",
+        "Jack Clark",
+        "Christopher Berner",
+        "Sam McCandlish",
+        "Alec Radford",
+        "Ilya Sutskever",
+        "Dario Amodei"
+      ],
+      "year": 2020,
+      "group": "ai",
+      "categories": [
+        "cs.CL"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2005.14165",
+      "tags": [
+        "cs.CL"
+      ],
+      "summary": "Mô hình ngôn ngữ quy mô lớn học tác vụ từ một vài ví dụ."
+    },
+    {
+      "id": "1810.04805",
+      "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      "abstract": "We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models, BERT is designed to pre-train deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. As a result, the pre-trained BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task-specific architecture modifications. BERT is conceptually simple and empirically powerful. It obtains new state-of-the-art results on eleven natural language processing tasks, including pushing the GLUE score to 80.5% (7.7% point absolute improvement), MultiNLI accuracy to 86.7% (4.6% absolute improvement), SQuAD v1.1 question answering Test F1 to 93.2 (1.5 point absolute improvement) and SQuAD v2.0 Test F1 to 83.1 (5.1 point absolute improvement).",
+      "authors": [
+        "Jacob Devlin",
+        "Ming-Wei Chang",
+        "Kenton Lee",
+        "Kristina Toutanova"
+      ],
+      "year": 2018,
+      "group": "ai",
+      "categories": [
+        "cs.CL"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/1810.04805",
+      "tags": [
+        "cs.CL"
+      ],
+      "summary": "BERT học biểu diễn ngôn ngữ hai chiều để hiểu văn bản."
+    },
+    {
+      "id": "2006.11239",
+      "title": "Denoising Diffusion Probabilistic Models",
+      "abstract": "We present high quality image synthesis results using diffusion probabilistic models, a class of latent variable models inspired by considerations from nonequilibrium thermodynamics. Our best results are obtained by training on a weighted variational bound designed according to a novel connection between diffusion probabilistic models and denoising score matching with Langevin dynamics, and our models naturally admit a progressive lossy decompression scheme that can be interpreted as a generalization of autoregressive decoding. On the unconditional CIFAR10 dataset, we obtain an Inception score of 9.46 and a state-of-the-art FID score of 3.17. On 256x256 LSUN, we obtain sample quality similar to ProgressiveGAN. Our implementation is available at https://github.com/hojonathanho/diffusion",
+      "authors": [
+        "Jonathan Ho",
+        "Ajay Jain",
+        "Pieter Abbeel"
+      ],
+      "year": 2020,
+      "group": "ai",
+      "categories": [
+        "cs.LG",
+        "stat.ML"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2006.11239",
+      "tags": [
+        "cs.LG",
+        "stat.ML"
+      ],
+      "summary": "Mô hình diffusion học tái tạo hình ảnh qua quá trình khử nhiễu."
+    },
+    {
+      "id": "1406.2661",
+      "title": "Generative Adversarial Networks",
+      "abstract": "We propose a new framework for estimating generative models via an adversarial process, in which we simultaneously train two models: a generative model G that captures the data distribution, and a discriminative model D that estimates the probability that a sample came from the training data rather than G. The training procedure for G is to maximize the probability of D making a mistake. This framework corresponds to a minimax two-player game. In the space of arbitrary functions G and D, a unique solution exists, with G recovering the training data distribution and D equal to 1/2 everywhere. In the case where G and D are defined by multilayer perceptrons, the entire system can be trained with backpropagation. There is no need for any Markov chains or unrolled approximate inference networks during either training or generation of samples. Experiments demonstrate the potential of the framework through qualitative and quantitative evaluation of the generated samples.",
+      "authors": [
+        "Ian J. Goodfellow",
+        "Jean Pouget-Abadie",
+        "Mehdi Mirza",
+        "Bing Xu",
+        "David Warde-Farley",
+        "Sherjil Ozair",
+        "Aaron Courville",
+        "Yoshua Bengio"
+      ],
+      "year": 2014,
+      "group": "ai",
+      "categories": [
+        "stat.ML",
+        "cs.LG"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/1406.2661",
+      "tags": [
+        "stat.ML",
+        "cs.LG"
+      ],
+      "summary": "Hai mạng đối kháng học cách tạo dữ liệu mới."
+    },
+    {
+      "id": "1602.07360",
+      "title": "SqueezeNet: AlexNet-level accuracy with 50x fewer parameters and <0.5MB model size",
+      "abstract": "Recent research on deep neural networks has focused primarily on improving accuracy. For a given accuracy level, it is typically possible to identify multiple DNN architectures that achieve that accuracy level. With equivalent accuracy, smaller DNN architectures offer at least three advantages: (1) Smaller DNNs require less communication across servers during distributed training. (2) Smaller DNNs require less bandwidth to export a new model from the cloud to an autonomous car. (3) Smaller DNNs are more feasible to deploy on FPGAs and other hardware with limited memory. To provide all of these advantages, we propose a small DNN architecture called SqueezeNet. SqueezeNet achieves AlexNet-level accuracy on ImageNet with 50x fewer parameters. Additionally, with model compression techniques we are able to compress SqueezeNet to less than 0.5MB (510x smaller than AlexNet). The SqueezeNet architecture is available for download here: https://github.com/DeepScale/SqueezeNet",
+      "authors": [
+        "Forrest N. Iandola",
+        "Song Han",
+        "Matthew W. Moskewicz",
+        "Khalid Ashraf",
+        "William J. Dally",
+        "Kurt Keutzer"
+      ],
+      "year": 2016,
+      "group": "ai",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/1602.07360",
+      "tags": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "summary": "SqueezeNet giảm số tham số cho mô hình nhận diện ảnh gọn nhẹ."
+    },
+    {
+      "id": "1505.04597",
+      "title": "U-Net: Convolutional Networks for Biomedical Image Segmentation",
+      "abstract": "There is large consent that successful training of deep networks requires many thousand annotated training samples. In this paper, we present a network and training strategy that relies on the strong use of data augmentation to use the available annotated samples more efficiently. The architecture consists of a contracting path to capture context and a symmetric expanding path that enables precise localization. We show that such a network can be trained end-to-end from very few images and outperforms the prior best method (a sliding-window convolutional network) on the ISBI challenge for segmentation of neuronal structures in electron microscopic stacks. Using the same network trained on transmitted light microscopy images (phase contrast and DIC) we won the ISBI cell tracking challenge 2015 in these categories by a large margin. Moreover, the network is fast. Segmentation of a 512x512 image takes less than a second on a recent GPU. The full implementation (based on Caffe) and the trained networks are available at http://lmb.informatik.uni-freiburg.de/people/ronneber/u-net .",
+      "authors": [
+        "Olaf Ronneberger",
+        "Philipp Fischer",
+        "Thomas Brox"
+      ],
+      "year": 2015,
+      "group": "medicine",
+      "categories": [
+        "cs.CV"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/1505.04597",
+      "tags": [
+        "cs.CV"
+      ],
+      "summary": "U-Net phân đoạn ảnh y sinh với kiến trúc encoder–decoder."
+    },
+    {
+      "id": "2010.11929",
+      "title": "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+      "abstract": "While the Transformer architecture has become the de-facto standard for natural language processing tasks, its applications to computer vision remain limited. In vision, attention is either applied in conjunction with convolutional networks, or used to replace certain components of convolutional networks while keeping their overall structure in place. We show that this reliance on CNNs is not necessary and a pure transformer applied directly to sequences of image patches can perform very well on image classification tasks. When pre-trained on large amounts of data and transferred to multiple mid-sized or small image recognition benchmarks (ImageNet, CIFAR-100, VTAB, etc.), Vision Transformer (ViT) attains excellent results compared to state-of-the-art convolutional networks while requiring substantially fewer computational resources to train.",
+      "authors": [
+        "Alexey Dosovitskiy",
+        "Lucas Beyer",
+        "Alexander Kolesnikov",
+        "Dirk Weissenborn",
+        "Xiaohua Zhai",
+        "Thomas Unterthiner",
+        "Mostafa Dehghani",
+        "Matthias Minderer",
+        "Georg Heigold",
+        "Sylvain Gelly",
+        "Jakob Uszkoreit",
+        "Neil Houlsby"
+      ],
+      "year": 2020,
+      "group": "ai",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2010.11929",
+      "tags": [
+        "cs.CV",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "summary": "Áp dụng Transformer cho bài toán nhận diện hình ảnh."
+    },
+    {
+      "id": "2106.09685",
+      "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+      "abstract": "An important paradigm of natural language processing consists of large-scale pre-training on general domain data and adaptation to particular tasks or domains. As we pre-train larger models, full fine-tuning, which retrains all model parameters, becomes less feasible. Using GPT-3 175B as an example -- deploying independent instances of fine-tuned models, each with 175B parameters, is prohibitively expensive. We propose Low-Rank Adaptation, or LoRA, which freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture, greatly reducing the number of trainable parameters for downstream tasks. Compared to GPT-3 175B fine-tuned with Adam, LoRA can reduce the number of trainable parameters by 10,000 times and the GPU memory requirement by 3 times. LoRA performs on-par or better than fine-tuning in model quality on RoBERTa, DeBERTa, GPT-2, and GPT-3, despite having fewer trainable parameters, a higher training throughput, and, unlike adapters, no additional inference latency. We also provide an empirical investigation into rank-deficiency in language model adaptation, which sheds light on the efficacy of LoRA. We release a package that facilitates the integration of LoRA with PyTorch models and provide our implementations and model checkpoints for RoBERTa, DeBERTa, and GPT-2 at https://github.com/microsoft/LoRA.",
+      "authors": [
+        "Edward J. Hu",
+        "Yelong Shen",
+        "Phillip Wallis",
+        "Zeyuan Allen-Zhu",
+        "Yuanzhi Li",
+        "Shean Wang",
+        "Lu Wang",
+        "Weizhu Chen"
+      ],
+      "year": 2021,
+      "group": "ai",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2106.09685",
+      "tags": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "summary": "LoRA điều chỉnh mô hình ngôn ngữ bằng các ma trận hạng thấp để giảm chi phí huấn luyện."
+    },
+    {
+      "id": "1803.09010",
+      "title": "Datasheets for Datasets",
+      "abstract": "The machine learning community currently has no standardized process for documenting datasets, which can lead to severe consequences in high-stakes domains. To address this gap, we propose datasheets for datasets. In the electronics industry, every component, no matter how simple or complex, is accompanied with a datasheet that describes its operating characteristics, test results, recommended uses, and other information. By analogy, we propose that every dataset be accompanied with a datasheet that documents its motivation, composition, collection process, recommended uses, and so on. Datasheets for datasets will facilitate better communication between dataset creators and dataset consumers, and encourage the machine learning community to prioritize transparency and accountability.",
+      "authors": [
+        "Timnit Gebru",
+        "Jamie Morgenstern",
+        "Briana Vecchione",
+        "Jennifer Wortman Vaughan",
+        "Hanna Wallach",
+        "Hal Daumé",
+        "Kate Crawford"
+      ],
+      "year": 2018,
+      "group": "ai",
+      "categories": [
+        "cs.DB",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/1803.09010",
+      "tags": [
+        "cs.DB",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "summary": "Đề xuất tài liệu mô tả tập dữ liệu để tăng tính minh bạch và khả năng tái sử dụng."
+    },
+    {
+      "id": "2306.11715",
+      "title": "Multi-Fidelity Active Learning with GFlowNets",
+      "abstract": "In the last decades, the capacity to generate large amounts of data in science and engineering applications has been growing steadily. Meanwhile, machine learning has progressed to become a suitable tool to process and utilise the available data. Nonetheless, many relevant scientific and engineering problems present challenges where current machine learning methods cannot yet efficiently leverage the available data and resources. For example, in scientific discovery, we are often faced with the problem of exploring very large, structured and high-dimensional spaces. Moreover, the high fidelity, black-box objective function is often very expensive to evaluate. Progress in machine learning methods that can efficiently tackle such challenges would help accelerate currently crucial areas such as drug and materials discovery. In this paper, we propose a multi-fidelity active learning algorithm with GFlowNets as a sampler, to efficiently discover diverse, high-scoring candidates where multiple approximations of the black-box function are available at lower fidelity and cost. Our evaluation on molecular discovery tasks shows that multi-fidelity active learning with GFlowNets can discover high-scoring candidates at a fraction of the budget of its single-fidelity counterpart while maintaining diversity, unlike RL-based alternatives. These results open new avenues for multi-fidelity active learning to accelerate scientific discovery and engineering design.",
+      "authors": [
+        "Alex Hernandez-Garcia",
+        "Nikita Saxena",
+        "Moksh Jain",
+        "Cheng-Hao Liu",
+        "Yoshua Bengio"
+      ],
+      "year": 2023,
+      "group": "biology",
+      "categories": [
+        "cs.LG",
+        "q-bio.BM"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2306.11715",
+      "tags": [
+        "cs.LG",
+        "q-bio.BM"
+      ],
+      "summary": "Nghiên cứu sinh học và mô hình tính toán cho dữ liệu sinh học."
+    },
+    {
+      "id": "2309.16519",
+      "title": "AtomSurf : Surface Representation for Learning on Protein Structures",
+      "abstract": "While there has been significant progress in evaluating and comparing different representations for learning on protein data, the role of surface-based learning approaches remains not well-understood. In particular, there is a lack of direct and fair benchmark comparison between the best available surface-based learning methods against alternative representations such as graphs. Moreover, the few existing surface-based approaches either use surface information in isolation or, at best, perform global pooling between surface and graph-based architectures. In this work, we fill this gap by first adapting a state-of-the-art surface encoder for protein learning tasks. We then perform a direct and fair comparison of the resulting method against alternative approaches within the Atom3D benchmark, highlighting the limitations of pure surface-based learning. Finally, we propose an integrated approach, which allows learned feature sharing between graphs and surface representations on the level of nodes and vertices across all layers. We demonstrate that the resulting architecture achieves state-of-the-art results on all tasks in the Atom3D benchmark, while adhering to the strict benchmark protocol, as well as more broadly on binding site identification and binding pocket classification. Furthermore, we use coarsened surfaces and optimize our approach for efficiency, making our tool competitive in training and inference time with existing techniques. Code can be found online: https://github.com/Vincentx15/atomsurf",
+      "authors": [
+        "Vincent Mallet",
+        "Souhaib Attaiki",
+        "Yangyang Miao",
+        "Bruno Correia",
+        "Maks Ovsjanikov"
+      ],
+      "year": 2023,
+      "group": "biology",
+      "categories": [
+        "cs.LG",
+        "q-bio.BM"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2309.16519",
+      "tags": [
+        "cs.LG",
+        "q-bio.BM"
+      ],
+      "summary": "Nghiên cứu sinh học và mô hình tính toán cho dữ liệu sinh học."
+    },
+    {
+      "id": "2007.06252",
+      "title": "Intrinsic-Extrinsic Convolution and Pooling for Learning on 3D Protein Structures",
+      "abstract": "Proteins perform a large variety of functions in living organisms, thus playing a key role in biology. As of now, available learning algorithms to process protein data do not consider several particularities of such data and/or do not scale well for large protein conformations. To fill this gap, we propose two new learning operations enabling deep 3D analysis of large-scale protein data. First, we introduce a novel convolution operator which considers both, the intrinsic (invariant under protein folding) as well as extrinsic (invariant under bonding) structure, by using $n$-D convolutions defined on both the Euclidean distance, as well as multiple geodesic distances between atoms in a multi-graph. Second, we enable a multi-scale protein analysis by introducing hierarchical pooling operators, exploiting the fact that proteins are a recombination of a finite set of amino acids, which can be pooled using shared pooling matrices. Lastly, we evaluate the accuracy of our algorithms on several large-scale data sets for common protein analysis tasks, where we outperform state-of-the-art methods.",
+      "authors": [
+        "Pedro Hermosilla",
+        "Marco Schäfer",
+        "Matěj Lang",
+        "Gloria Fackelmann",
+        "Pere Pau Vázquez",
+        "Barbora Kozlíková",
+        "Michael Krone",
+        "Tobias Ritschel",
+        "Timo Ropinski"
+      ],
+      "year": 2020,
+      "group": "biology",
+      "categories": [
+        "cs.LG",
+        "q-bio.BM",
+        "stat.ML"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2007.06252",
+      "tags": [
+        "cs.LG",
+        "q-bio.BM",
+        "stat.ML"
+      ],
+      "summary": "Nghiên cứu sinh học và mô hình tính toán cho dữ liệu sinh học."
+    },
+    {
+      "id": "2202.05146",
+      "title": "EquiBind: Geometric Deep Learning for Drug Binding Structure Prediction",
+      "abstract": "Predicting how a drug-like molecule binds to a specific protein target is a core problem in drug discovery. An extremely fast computational binding method would enable key applications such as fast virtual screening or drug engineering. Existing methods are computationally expensive as they rely on heavy candidate sampling coupled with scoring, ranking, and fine-tuning steps. We challenge this paradigm with EquiBind, an SE(3)-equivariant geometric deep learning model performing direct-shot prediction of both i) the receptor binding location (blind docking) and ii) the ligand's bound pose and orientation. EquiBind achieves significant speed-ups and better quality compared to traditional and recent baselines. Further, we show extra improvements when coupling it with existing fine-tuning techniques at the cost of increased running time. Finally, we propose a novel and fast fine-tuning model that adjusts torsion angles of a ligand's rotatable bonds based on closed-form global minima of the von Mises angular distance to a given input atomic point cloud, avoiding previous expensive differential evolution strategies for energy minimization.",
+      "authors": [
+        "Hannes Stärk",
+        "Octavian-Eugen Ganea",
+        "Lagnajit Pattanaik",
+        "Regina Barzilay",
+        "Tommi Jaakkola"
+      ],
+      "year": 2022,
+      "group": "biology",
+      "categories": [
+        "q-bio.BM",
+        "cs.LG"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2202.05146",
+      "tags": [
+        "q-bio.BM",
+        "cs.LG"
+      ],
+      "summary": "Nghiên cứu sinh học và mô hình tính toán cho dữ liệu sinh học."
+    },
+    {
+      "id": "2512.02303",
+      "title": "Training Dynamics of Learning 3D-Rotational Equivariance",
+      "abstract": "While data augmentation is widely used to train symmetry-agnostic models, it remains unclear how quickly and effectively they learn to respect symmetries. We investigate this by deriving a principled measure of equivariance error that, for convex losses, calculates the percent of total loss attributable to imperfections in learned symmetry. We focus our empirical investigation to 3D-rotation equivariance on high-dimensional molecular tasks (flow matching, force field prediction, denoising voxels) and find that models reduce equivariance error quickly to $\\leq$2\\% held-out loss within 1k-10k training steps, a result robust to model and dataset size. This happens because learning 3D-rotational equivariance is an easier learning task, with a smoother and better-conditioned loss landscape, than the main prediction task. For 3D rotations, the loss penalty for non-equivariant models is small throughout training, so they may achieve lower test loss than equivariant models per GPU-hour unless the equivariant ``efficiency gap'' is narrowed. We also experimentally and theoretically investigate the relationships between relative equivariance error, learning gradients, and model parameters.",
+      "authors": [
+        "Max W. Shen",
+        "Ewa Nowara",
+        "Michael Maser",
+        "Kyunghyun Cho"
+      ],
+      "year": 2025,
+      "group": "biology",
+      "categories": [
+        "cs.LG",
+        "q-bio.BM"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2512.02303",
+      "tags": [
+        "cs.LG",
+        "q-bio.BM"
+      ],
+      "summary": "Nghiên cứu sinh học và mô hình tính toán cho dữ liệu sinh học."
+    },
+    {
+      "id": "1902.08661",
+      "title": "Learning protein sequence embeddings using information from structure",
+      "abstract": "Inferring the structural properties of a protein from its amino acid sequence is a challenging yet important problem in biology. Structures are not known for the vast majority of protein sequences, but structure is critical for understanding function. Existing approaches for detecting structural similarity between proteins from sequence are unable to recognize and exploit structural patterns when sequences have diverged too far, limiting our ability to transfer knowledge between structurally related proteins. We newly approach this problem through the lens of representation learning. We introduce a framework that maps any protein sequence to a sequence of vector embeddings --- one per amino acid position --- that encode structural information. We train bidirectional long short-term memory (LSTM) models on protein sequences with a two-part feedback mechanism that incorporates information from (i) global structural similarity between proteins and (ii) pairwise residue contact maps for individual proteins. To enable learning from structural similarity information, we define a novel similarity measure between arbitrary-length sequences of vector embeddings based on a soft symmetric alignment (SSA) between them. Our method is able to learn useful position-specific embeddings despite lacking direct observations of position-level correspondence between sequences. We show empirically that our multi-task framework outperforms other sequence-based methods and even a top-performing structure-based alignment method when predicting structural similarity, our goal. Finally, we demonstrate that our learned embeddings can be transferred to other protein sequence problems, improving the state-of-the-art in transmembrane domain prediction.",
+      "authors": [
+        "Tristan Bepler",
+        "Bonnie Berger"
+      ],
+      "year": 2019,
+      "group": "biology",
+      "categories": [
+        "cs.LG",
+        "q-bio.BM",
+        "stat.ML"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/1902.08661",
+      "tags": [
+        "cs.LG",
+        "q-bio.BM",
+        "stat.ML"
+      ],
+      "summary": "Nghiên cứu sinh học và mô hình tính toán cho dữ liệu sinh học."
+    },
+    {
+      "id": "2402.04299",
+      "title": "Translating the future: Image-to-image translation for the prediction of future brain metabolism",
+      "abstract": "Alzheimer's disease (AD) is a progressive neurodegenerative disorder leading to cognitive decline. [$^{18}$F]-Fluorodeoxyglucose positron emission tomography ([$^{18}$F]-FDG PET) is used to monitor brain metabolism, aiding in the diagnosis and assessment of AD over time. However, the feasibility of multi-time point [$^{18}$F]-FDG PET scans for diagnosis is limited due to radiation exposure, cost, and patient burden. To address this, we have developed a predictive image-to-image translation (I2I) model to forecast future [$^{18}$F]-FDG PET scans using baseline and year-one data. The proposed model employs a convolutional neural network architecture with long-short term memory and was trained on [$^{18}$F]-FDG PET data from 161 individuals from the Alzheimer's Disease Neuroimaging Initiative. Our I2I network showed high accuracy in predicting year-two [18F]-FDG PET scans, with a mean absolute error of 0.031 and a structural similarity index of 0.961. Furthermore, the model successfully predicted PET scans up to seven years post-baseline. Notably, the predicted [$^{18}$F]-FDG PET signal in an AD-susceptible meta-region was highly accurate for individuals with mild cognitive impairment across years. In contrast, a linear model was sufficient for predicting brain metabolism in cognitively normal and dementia subjects. In conclusion, both the I2I network and the linear model could offer valuable prognostic insights, guiding early intervention strategies to preemptively address anticipated declines in brain metabolism and potentially to monitor treatment effects.",
+      "authors": [
+        "Elena Doering",
+        "Merle C. Hönig",
+        "Tobias Deußer",
+        "Gerard N. Bischof",
+        "Thilo van Eimeren",
+        "Alexander Drzezga",
+        "Lotta M. Ellingsen"
+      ],
+      "year": 2024,
+      "group": "medicine",
+      "categories": [
+        "eess.IV",
+        "physics.med-ph",
+        "q-bio.NC"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2402.04299",
+      "tags": [
+        "eess.IV",
+        "physics.med-ph",
+        "q-bio.NC"
+      ],
+      "summary": "Phương pháp tính toán và hình ảnh trong nghiên cứu y sinh."
+    },
+    {
+      "id": "1804.10812",
+      "title": "Imaging of Fiber-Like Structures in Digital Breast Tomosynthesis",
+      "abstract": "Fiber-like features are an important aspect of breast imaging. Vessels and ducts are present in all breast images, and spiculations radiating from a mass can indicate malignancy. Accordingly, fiber objects are one of the three types of signals used in the American College of Radiology digital mammography (ACR-DM) accreditation phantom. This work focuses on the image properties of fiber-like structures in digital breast tomosynthesis (DBT) and how image reconstruction can affect their appearance. The impact of DBT image reconstruction algorithm and regularization strength on the conspicuity of fiber-like signals of various orientations is investigated in simulation. A metric is developed to characterize this orientation dependence and allow for quantitative comparison of algorithms and associated parameters in the context of imaging fiber signals. The imaging properties of fibers, characterized in simulation, are then demonstrated in detail with physical DBT data of the ACR-DM phantom. The characterization of imaging of fiber signals is used to explain features of an actual clinical DBT case. For the algorithms investigated, at low regularization setting, the results show a striking variation in conspicuity as a function of orientation in the viewing plane. In particular, the conspicuity of fibers nearly aligned with the plane of the X-ray source trajectory is decreased relative to more obliquely oriented fibers. Increasing regularization strength mitigates this orientation dependence at the cost of increasing depth blur of these structures.",
+      "authors": [
+        "Sean D. Rose",
+        "Emil Y. Sidky",
+        "Ingrid Reiser",
+        "Xiaochuan Pan"
+      ],
+      "year": 2018,
+      "group": "medicine",
+      "categories": [
+        "physics.med-ph"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/1804.10812",
+      "tags": [
+        "physics.med-ph"
+      ],
+      "summary": "Phương pháp tính toán và hình ảnh trong nghiên cứu y sinh."
+    },
+    {
+      "id": "2004.07064",
+      "title": "Fully Automated Myocardial Strain Estimation from CMR Tagged Images using a Deep Learning Framework in the UK Biobank",
+      "abstract": "Purpose: To demonstrate the feasibility and performance of a fully automated deep learning framework to estimate myocardial strain from short-axis cardiac magnetic resonance tagged images. Methods and Materials: In this retrospective cross-sectional study, 4508 cases from the UK Biobank were split randomly into 3244 training and 812 validation cases, and 452 test cases. Ground truth myocardial landmarks were defined and tracked by manual initialization and correction of deformable image registration using previously validated software with five readers. The fully automatic framework consisted of 1) a convolutional neural network (CNN) for localization, and 2) a combination of a recurrent neural network (RNN) and a CNN to detect and track the myocardial landmarks through the image sequence for each slice. Radial and circumferential strain were then calculated from the motion of the landmarks and averaged on a slice basis. Results: Within the test set, myocardial end-systolic circumferential Green strain errors were -0.001 +/- 0.025, -0.001 +/- 0.021, and 0.004 +/- 0.035 in basal, mid, and apical slices respectively (mean +/- std. dev. of differences between predicted and manual strain). The framework reproduced significant reductions in circumferential strain in diabetics, hypertensives, and participants with previous heart attack. Typical processing time was ~260 frames (~13 slices) per second on an NVIDIA Tesla K40 with 12GB RAM, compared with 6-8 minutes per slice for the manual analysis. Conclusions: The fully automated RNNCNN framework for analysis of myocardial strain enabled unbiased strain evaluation in a high-throughput workflow, with similar ability to distinguish impairment due to diabetes, hypertension, and previous heart attack.",
+      "authors": [
+        "Edward Ferdian",
+        "Avan Suinesiaputra",
+        "Kenneth Fung",
+        "Nay Aung",
+        "Elena Lukaschuk",
+        "Ahmet Barutcu",
+        "Edd Maclean",
+        "Jose Paiva",
+        "Stefan K. Piechnik",
+        "Stefan Neubauer",
+        "Steffen E Petersen",
+        "Alistair A. Young"
+      ],
+      "year": 2020,
+      "group": "medicine",
+      "categories": [
+        "eess.IV",
+        "cs.CV",
+        "physics.med-ph"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2004.07064",
+      "tags": [
+        "eess.IV",
+        "cs.CV",
+        "physics.med-ph"
+      ],
+      "summary": "Phương pháp tính toán và hình ảnh trong nghiên cứu y sinh."
+    },
+    {
+      "id": "2011.05146",
+      "title": "X-ray phase-contrast imaging: a broad overview of some fundamentals",
+      "abstract": "We outline some basics of imaging using both fully-coherent and partially-coherent X-ray beams, with an emphasis on phase-contrast imaging. We open with some of the basic notions of X-ray imaging, including the vacuum wave equations and the physical meaning of the intensity and phase of complex scalar fields. The projection approximation is introduced, together with the concepts of attenuation contrast and phase contrast. We also outline the multi-slice approach to X-ray propagation through thick samples or optical elements, together with the Fresnel scaling theorem. Having introduced the fundamentals, we then consider several aspects of the forward problem, of modelling the formation of phase-contrast X-ray images. Several topics related to this forward problem are considered, including the transport-of-intensity equation, arbitrary linear imaging systems, shift-invariant linear imaging systems, the transfer-function formalism, blurring induced by finite source size, the space-frequency model for partially-coherent fields, and the Fokker-Planck equation for paraxial X-ray imaging. Having considered these means for modelling the formation of X-ray phase-contrast images, we then consider aspects of the associated inverse problem of phase retrieval. This concerns how one may decode phase-contrast images to gain information regarding the sample-induced attenuation and phase shift.",
+      "authors": [
+        "David M. Paganin",
+        "Daniele Pelliccia"
+      ],
+      "year": 2020,
+      "group": "medicine",
+      "categories": [
+        "eess.IV",
+        "physics.app-ph",
+        "physics.med-ph",
+        "physics.optics"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2011.05146",
+      "tags": [
+        "eess.IV",
+        "physics.app-ph",
+        "physics.med-ph",
+        "physics.optics"
+      ],
+      "summary": "Phương pháp tính toán và hình ảnh trong nghiên cứu y sinh."
+    },
+    {
+      "id": "2610.32396",
+      "title": "Interactive image diagnosis using test-time backpropagation from the auxiliary task",
+      "abstract": "Multi-task deep learning has been developed to ensure explainability in computer-aided diagnosis (CAD) systems. These systems simultaneously predict interpretable characteristics of findings in auxiliary tasks to help radiologists assess the reliability of the diagnostic prediction. However, the CAD's opinion would not be referred to when the auxiliary task prediction deviates from the radiologist's expectation. To further leverage CAD's knowledge in the above situation, we proposed a multi-task gradient assist (MGA) method that brings interactivity to multi-task models without additional training. MGA allows radiologists to give feedback to the CAD and ask for additional diagnostic suggestions. Using two datasets of mammography and CT, we show that MGA successfully improves diagnostic accuracy upon feedback on various auxiliary tasks. Compared to an existing method using forward propagation only, MGA performs more robustly and can be combined to further improve accuracy. Our method paves a promising way for integrating artificial intelligence into image diagnosis.",
+      "authors": [
+        "Takuro Shimaya"
+      ],
+      "year": 2026,
+      "group": "medicine",
+      "categories": [
+        "cs.CV",
+        "physics.med-ph"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2610.32396",
+      "tags": [
+        "cs.CV",
+        "physics.med-ph"
+      ],
+      "summary": "Phương pháp tính toán và hình ảnh trong nghiên cứu y sinh."
+    },
+    {
+      "id": "2111.07355",
+      "title": "Fracture Detection in Wrist X-ray Images Using Deep Learning-Based Object Detection Models",
+      "abstract": "Hospitals, especially their emergency services, receive a high number of wrist fracture cases. For correct diagnosis and proper treatment of these, images obtained from various medical equipment must be viewed by physicians, along with the patients medical records and physical examination. The aim of this study is to perform fracture detection by use of deep learning on wrist Xray images to support physicians in the diagnosis of these fractures, particularly in the emergency services. Using SABL, RegNet, RetinaNet, PAA, Libra R_CNN, FSAF, Faster R_CNN, Dynamic R_CNN and DCN deep learning based object detection models with various backbones, 20 different fracture detection procedures were performed on Gazi University Hospitals dataset of wrist Xray images. To further improve these procedures, five different ensemble models were developed and then used to reform an ensemble model to develop a unique detection model, wrist fracture detection_combo (WFD_C). From 26 different models for fracture detection, the highest detection result obtained was 0.8639 average precision (AP50) in the WFD-C model. Huawei Turkey R&D Center supports this study within the scope of the ongoing cooperation project coded 071813 between Gazi University, Huawei and Medskor. Code is available at https://github.com/fatihuysal88/wrist-d",
+      "authors": [
+        "Fırat Hardalaç",
+        "Fatih Uysal",
+        "Ozan Peker",
+        "Murat Çiçeklidağ",
+        "Tolga Tolunay",
+        "Nil Tokgöz",
+        "Uğurhan Kutbay",
+        "Boran Demirciler",
+        "Fatih Mert"
+      ],
+      "year": 2021,
+      "group": "medicine",
+      "categories": [
+        "eess.IV",
+        "cs.CV",
+        "cs.LG",
+        "physics.med-ph"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2111.07355",
+      "tags": [
+        "eess.IV",
+        "cs.CV",
+        "cs.LG",
+        "physics.med-ph"
+      ],
+      "summary": "Phương pháp tính toán và hình ảnh trong nghiên cứu y sinh."
+    },
+    {
+      "id": "2602.11092",
+      "title": "MerLin: A Discovery Engine for Photonic and Hybrid Quantum Machine Learning",
+      "abstract": "Identifying where quantum models may offer practical benefits in near term quantum machine learning (QML) requires moving beyond isolated algorithmic proposals toward systematic and empirical exploration across models, datasets, and hardware constraints. We introduce MerLin, an open-source framework designed as a discovery engine for photonic and hybrid quantum machine learning. MerLin integrates optimized strong simulation of linear optical circuits into standard PyTorch and scikit learn workflows, enabling end-to-end differentiable training of quantum layers. MerLin is designed around systematic benchmarking and reproducibility. As an initial contribution, we reproduce eighteen state-of-the-art photonic and hybrid QML works spanning kernel methods, reservoir computing, convolutional and recurrent architectures, generative models, and modern training paradigms. These reproductions are released as reusable, modular experiments that can be directly extended and adapted, establishing a shared experimental baseline consistent with empirical benchmarking methodologies widely adopted in modern artificial intelligence. By embedding photonic quantum models within established machine learning ecosystems, MerLin allows practitioners to leverage existing tooling for ablation studies, cross-modality comparisons, and hybrid classical-quantum workflows. The framework already implements hardware-aware features, allowing tests on available quantum hardware while enabling exploration beyond its current capabilities, positioning MerLin as a forward-looking co-design tool linking algorithms, benchmarks, and hardware.",
+      "authors": [
+        "Cassandre Notton",
+        "Benjamin Stott",
+        "Philippe Schoeb",
+        "Anthony Walsh",
+        "Grégoire Leboucher",
+        "Vincent Espitalier",
+        "Vassilis Apostolou",
+        "Louis-Félix Vigneux",
+        "Alexia Salavrakos",
+        "Jean Senellart"
+      ],
+      "year": 2026,
+      "group": "physics",
+      "categories": [
+        "cs.LG",
+        "cs.PL",
+        "quant-ph"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2602.11092",
+      "tags": [
+        "cs.LG",
+        "cs.PL",
+        "quant-ph"
+      ],
+      "summary": "Nghiên cứu vật lý và mô hình hóa hệ thống."
+    },
+    {
+      "id": "2110.03861",
+      "title": "QTN-VQC: An End-to-End Learning framework for Quantum Neural Networks",
+      "abstract": "The advent of noisy intermediate-scale quantum (NISQ) computers raises a crucial challenge to design quantum neural networks for fully quantum learning tasks. To bridge the gap, this work proposes an end-to-end learning framework named QTN-VQC, by introducing a trainable quantum tensor network (QTN) for quantum embedding on a variational quantum circuit (VQC). The architecture of QTN is composed of a parametric tensor-train network for feature extraction and a tensor product encoding for quantum embedding. We highlight the QTN for quantum embedding in terms of two perspectives: (1) we theoretically characterize QTN by analyzing its representation power of input features; (2) QTN enables an end-to-end parametric model pipeline, namely QTN-VQC, from the generation of quantum embedding to the output measurement. Our experiments on the MNIST dataset demonstrate the advantages of QTN for quantum embedding over other quantum embedding approaches.",
+      "authors": [
+        "Jun Qi",
+        "Chao-Han Huck Yang",
+        "Pin-Yu Chen"
+      ],
+      "year": 2021,
+      "group": "physics",
+      "categories": [
+        "quant-ph",
+        "cs.AI",
+        "cs.CL",
+        "cs.CV",
+        "cs.LG",
+        "cs.NE"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2110.03861",
+      "tags": [
+        "quant-ph",
+        "cs.AI",
+        "cs.CL",
+        "cs.CV",
+        "cs.LG",
+        "cs.NE"
+      ],
+      "summary": "Nghiên cứu vật lý và mô hình hóa hệ thống."
+    },
+    {
+      "id": "2510.23237",
+      "title": "Robust Iterative Learning Hidden Quantum Markov Models",
+      "abstract": "Hidden Quantum Markov Models (HQMMs) extend classical Hidden Markov Models to the quantum domain, offering a powerful probabilistic framework for modeling sequential data with quantum coherence. However, existing HQMM learning algorithms are highly sensitive to data corruption and lack mechanisms to ensure robustness under adversarial perturbations. In this work, we introduce the Adversarially Corrupted HQMM (AC-HQMM), which formalizes robustness analysis by allowing a controlled fraction of observation sequences to be adversarially corrupted. To learn AC-HQMMs, we propose the Robust Iterative Learning Algorithm (RILA), a derivative-free method that integrates a Remove Corrupted Rows by Entropy Filtering (RCR-EF) module with an iterative stochastic resampling procedure for physically valid Kraus operator updates. RILA incorporates L1-penalized likelihood objectives to enhance stability, resist overfitting, and remain effective under non-differentiable conditions. Across multiple HQMM and HMM benchmarks, RILA demonstrates superior convergence stability, corruption resilience, and preservation of physical validity compared to existing algorithms, establishing a principled and efficient approach for robust quantum sequential learning.",
+      "authors": [
+        "Ning Ning"
+      ],
+      "year": 2025,
+      "group": "physics",
+      "categories": [
+        "cs.LG",
+        "quant-ph",
+        "stat.CO",
+        "stat.ME",
+        "stat.ML"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2510.23237",
+      "tags": [
+        "cs.LG",
+        "quant-ph",
+        "stat.CO",
+        "stat.ME",
+        "stat.ML"
+      ],
+      "summary": "Nghiên cứu vật lý và mô hình hóa hệ thống."
+    },
+    {
+      "id": "2501.15893",
+      "title": "Benchmarking Quantum Reinforcement Learning",
+      "abstract": "Benchmarking and establishing proper statistical validation metrics for reinforcement learning (RL) remain ongoing challenges, where no consensus has been established yet. The emergence of quantum computing and its potential applications in quantum reinforcement learning (QRL) further complicate benchmarking efforts. To enable valid performance comparisons and to streamline current research in this area, we propose a novel benchmarking methodology, which is based on a statistical estimator for sample complexity and a definition of statistical outperformance. Furthermore, considering QRL, our methodology casts doubt on some previous claims regarding its superiority. We conducted experiments on a novel benchmarking environment with flexible levels of complexity. While we still identify possible advantages, our findings are more nuanced overall. We discuss the potential limitations of these results and explore their implications for empirical research on quantum advantage in QRL.",
+      "authors": [
+        "Nico Meyer",
+        "Christian Ufrecht",
+        "George Yammine",
+        "Georgios Kontes",
+        "Christopher Mutschler",
+        "Daniel D. Scherer"
+      ],
+      "year": 2025,
+      "group": "physics",
+      "categories": [
+        "quant-ph",
+        "cs.LG"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2501.15893",
+      "tags": [
+        "quant-ph",
+        "cs.LG"
+      ],
+      "summary": "Nghiên cứu vật lý và mô hình hóa hệ thống."
+    },
+    {
+      "id": "2411.00230",
+      "title": "Reinforcement learning with learned gadgets to tackle hard quantum problems on real hardware",
+      "abstract": "Quantum computing offers exciting opportunities for simulating complex quantum systems and optimizing large scale combinatorial problems, but its practical use is limited by device noise and constrained connectivity. Designing quantum circuits, which are fundamental to quantum algorithms, is therefore a central challenge in current quantum hardware. Existing reinforcement learning based methods for circuit design lose accuracy when restricted to hardware native gates and device level compilation. Here, we introduce gadget reinforcement learning (GRL), which combines learning with program synthesis to automatically construct composite gates that expand the action space while respecting hardware constraints. We show that this approach improves accuracy, hardware compatibility, and scalability for transverse-field Ising and quantum chemistry problems, reaching systems of up to ten qubits within realistic computational budgets. This framework demonstrates how learned, reusable circuit building blocks can guide the co-design of algorithms and hardware for quantum processors.",
+      "authors": [
+        "Akash Kundu",
+        "Leopoldo Sarra"
+      ],
+      "year": 2024,
+      "group": "physics",
+      "categories": [
+        "quant-ph",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2411.00230",
+      "tags": [
+        "quant-ph",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "summary": "Nghiên cứu vật lý và mô hình hóa hệ thống."
+    },
+    {
+      "id": "2306.09912",
+      "title": "Towards Quantum Federated Learning",
+      "abstract": "Quantum Federated Learning (QFL) is an emerging interdisciplinary field that merges the principles of Quantum Computing (QC) and Federated Learning (FL), with the goal of leveraging quantum technologies to enhance privacy, security, and efficiency in the learning process. Currently, there is no comprehensive survey for this interdisciplinary field. This review offers a thorough, holistic examination of QFL. We aim to provide a comprehensive understanding of the principles, techniques, and emerging applications of QFL. We discuss the current state of research in this rapidly evolving field, identify challenges and opportunities associated with integrating these technologies, and outline future directions and open research questions. We propose a unique taxonomy of QFL techniques, categorized according to their characteristics and the quantum techniques employed. As the field of QFL continues to progress, we can anticipate further breakthroughs and applications across various industries, driving innovation and addressing challenges related to data privacy, security, and resource optimization. This review serves as a first-of-its-kind comprehensive guide for researchers and practitioners interested in understanding and advancing the field of QFL.",
+      "authors": [
+        "Chao Ren",
+        "Rudai Yan",
+        "Huihui Zhu",
+        "Han Yu",
+        "Minrui Xu",
+        "Yuan Shen",
+        "Yan Xu",
+        "Ming Xiao",
+        "Zhao Yang Dong",
+        "Mikael Skoglund",
+        "Dusit Niyato",
+        "Leong Chuan Kwek"
+      ],
+      "year": 2023,
+      "group": "physics",
+      "categories": [
+        "cs.LG",
+        "quant-ph"
+      ],
+      "sourceUrl": "https://arxiv.org/abs/2306.09912",
+      "tags": [
+        "cs.LG",
+        "quant-ph"
+      ],
+      "summary": "Nghiên cứu vật lý và mô hình hóa hệ thống."
+    }
+  ]
+}

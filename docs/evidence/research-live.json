@@ -1,0 +1,539 @@
+[
+  {
+    "input": {
+      "query": "Tôi muốn tìm phương pháp nhận diện vùng bệnh trong ảnh y tế",
+      "scope": "library"
+    },
+    "status": 200,
+    "elapsedMs": 136,
+    "decodedBytes": 967015,
+    "research": {
+      "query": "Tôi muốn tìm phương pháp nhận diện vùng bệnh trong ảnh y tế",
+      "plan": {
+        "original": "Tôi muốn tìm phương pháp nhận diện vùng bệnh trong ảnh y tế",
+        "intent": "Detect diseased regions in medical images",
+        "queries": [
+          "medical image segmentation deep learning",
+          "lesion detection neural networks"
+        ],
+        "method": "local-llm"
+      },
+      "retrieval": "hybrid-passages",
+      "mode": "grounded-generation",
+      "claims": [
+        {
+          "text": "Deep learning models are used to detect fractures in wrist X-ray images, improving diagnosis accuracy.",
+          "evidenceIds": [
+            "E1"
+          ]
+        },
+        {
+          "text": "U-Net is effective for segmenting neuronal structures in electron microscopy, winning challenges.",
+          "evidenceIds": [
+            "E2"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "id": "E1",
+          "paperId": "2111.07355",
+          "title": "Fracture Detection in Wrist X-ray Images Using Deep Learning-Based Object Detection Models",
+          "url": "https://arxiv.org/abs/2111.07355",
+          "quote": "Hospitals, especially their emergency services, receive a high number of wrist fracture cases. For correct diagnosis and proper treatment of these, images obtained from various medical equipment must be viewed by physicians, along with the patients medical records and physical examination. The aim of this study is to perform fracture detection by use of deep learning on wrist Xray images to support physicians in the diagnosis of these fractures, particularly in the emergency services. Using SABL, RegNet, RetinaNet, PAA, Libra R_CNN, FSAF, Faster R_CNN, Dynamic R_CNN and DCN deep learning based object detection models with various backbones, 20 different fracture",
+          "start": 0,
+          "end": 670,
+          "cosine": 0.8051099179657597,
+          "fusionScore": 0.03252247488101534,
+          "coverage": "abstract",
+          "rerankScore": -1.4342973232269287
+        },
+        {
+          "id": "E2",
+          "paperId": "1505.04597",
+          "title": "U-Net: Convolutional Networks for Biomedical Image Segmentation",
+          "url": "https://arxiv.org/abs/1505.04597",
+          "quote": "best method (a sliding-window convolutional network) on the ISBI challenge for segmentation of neuronal structures in electron microscopic stacks. Using the same network trained on transmitted light microscopy images (phase contrast and DIC) we won the ISBI cell tracking challenge 2015 in these categories by a large margin. Moreover, the network is fast. Segmentation of a 512x512 image takes less than a second on a recent GPU. The full implementation (based on Caffe) and the trained networks are available at http://lmb.informatik.uni-freiburg.de/people/ronneber/u-net .",
+          "start": 516,
+          "end": 1091,
+          "cosine": 0.812882256066145,
+          "fusionScore": 0.03200204813108039,
+          "coverage": "abstract",
+          "rerankScore": -1.6260745525360107
+        },
+        {
+          "id": "E6",
+          "paperId": "1505.04597",
+          "title": "U-Net: Convolutional Networks for Biomedical Image Segmentation",
+          "url": "https://arxiv.org/abs/1505.04597",
+          "quote": "There is large consent that successful training of deep networks requires many thousand annotated training samples. In this paper, we present a network and training strategy that relies on the strong use of data augmentation to use the available annotated samples more efficiently. The architecture consists of a contracting path to capture context and a symmetric expanding path that enables precise localization. We show that such a network can be trained end-to-end from very few images and outperforms the prior best method (a sliding-window convolutional network) on the ISBI challenge for segmentation of neuronal structures in electron microscopic stacks. Using",
+          "start": 0,
+          "end": 668,
+          "cosine": 0.7901912357960573,
+          "fusionScore": 0.031544957774465976,
+          "coverage": "abstract",
+          "rerankScore": -1.1638011932373047
+        },
+        {
+          "id": "E3",
+          "paperId": "2004.07064",
+          "title": "Fully Automated Myocardial Strain Estimation from CMR Tagged Images using a Deep Learning Framework in the UK Biobank",
+          "url": "https://arxiv.org/abs/2004.07064",
+          "quote": "Purpose: To demonstrate the feasibility and performance of a fully automated deep learning framework to estimate myocardial strain from short-axis cardiac magnetic resonance tagged images. Methods and Materials: In this retrospective cross-sectional study, 4508 cases from the UK Biobank were split randomly into 3244 training and 812 validation cases, and 452 test cases. Ground truth myocardial landmarks were defined and tracked by manual initialization and correction of deformable image registration using previously validated software with five readers. The fully automatic framework consisted of 1) a convolutional neural network (CNN) for localization, and 2) a combination of a recurrent neural network",
+          "start": 0,
+          "end": 711,
+          "cosine": 0.803699094918329,
+          "fusionScore": 0.031024531024531024,
+          "coverage": "abstract",
+          "rerankScore": -4.135869979858398
+        },
+        {
+          "id": "E4",
+          "paperId": "2111.07355",
+          "title": "Fracture Detection in Wrist X-ray Images Using Deep Learning-Based Object Detection Models",
+          "url": "https://arxiv.org/abs/2111.07355",
+          "quote": "R_CNN, FSAF, Faster R_CNN, Dynamic R_CNN and DCN deep learning based object detection models with various backbones, 20 different fracture detection procedures were performed on Gazi University Hospitals dataset of wrist Xray images. To further improve these procedures, five different ensemble models were developed and then used to reform an ensemble model to develop a unique detection model, wrist fracture detection_combo (WFD_C). From 26 different models for fracture detection, the highest detection result obtained was 0.8639 average precision (AP50) in the WFD-C model. Huawei Turkey R&D Center supports this study within the scope of the ongoing cooperation project coded 071813",
+          "start": 532,
+          "end": 1220,
+          "cosine": 0.7995521784839608,
+          "fusionScore": 0.031009615384615385,
+          "coverage": "abstract",
+          "rerankScore": -3.8434104919433594
+        },
+        {
+          "id": "E5",
+          "paperId": "2004.07064",
+          "title": "Fully Automated Myocardial Strain Estimation from CMR Tagged Images using a Deep Learning Framework in the UK Biobank",
+          "url": "https://arxiv.org/abs/2004.07064",
+          "quote": "framework consisted of 1) a convolutional neural network (CNN) for localization, and 2) a combination of a recurrent neural network (RNN) and a CNN to detect and track the myocardial landmarks through the image sequence for each slice. Radial and circumferential strain were then calculated from the motion of the landmarks and averaged on a slice basis. Results: Within the test set, myocardial end-systolic circumferential Green strain errors were -0.001 +/- 0.025, -0.001 +/- 0.021, and 0.004 +/- 0.035 in basal, mid, and apical slices respectively (mean +/- std. dev. of differences between predicted and manual strain). The framework reproduced",
+          "start": 580,
+          "end": 1229,
+          "cosine": 0.7978995165289464,
+          "fusionScore": 0.031009615384615385,
+          "coverage": "abstract",
+          "rerankScore": -1.9113560914993286
+        }
+      ],
+      "gaps": [
+        "Các đoạn gần nghĩa là gợi ý đọc, chưa chứng minh đáp ứng mọi điều kiện của câu hỏi.",
+        "Hiện chỉ đọc tiêu đề và abstract, chưa đọc toàn văn PDF.",
+        "AI diễn giải từ các đoạn trích; trích dẫn hợp lệ chưa bảo đảm mọi nhận định được chứng minh."
+      ],
+      "traceId": "9e4ffff3-abb9-480a-b6fa-39e271d014cc",
+      "model": "onnx-community/Qwen3-0.6B-ONNX",
+      "metrics": {
+        "candidates": 90,
+        "passages": 225,
+        "elapsedMs": 49428.2702
+      }
+    },
+    "providers": [],
+    "storage": "mongodb",
+    "warnings": [],
+    "top": [
+      {
+        "id": "2111.07355",
+        "title": "Fracture Detection in Wrist X-ray Images Using Deep Learning-Based Object Detection Models",
+        "cosine": 0.8051099179657597,
+        "url": "https://arxiv.org/abs/2111.07355"
+      },
+      {
+        "id": "1505.04597",
+        "title": "U-Net: Convolutional Networks for Biomedical Image Segmentation",
+        "cosine": 0.812882256066145,
+        "url": "https://arxiv.org/abs/1505.04597"
+      },
+      {
+        "id": "2004.07064",
+        "title": "Fully Automated Myocardial Strain Estimation from CMR Tagged Images using a Deep Learning Framework in the UK Biobank",
+        "cosine": 0.803699094918329,
+        "url": "https://arxiv.org/abs/2004.07064"
+      },
+      {
+        "id": "2610.32396",
+        "title": "Interactive image diagnosis using test-time backpropagation from the auxiliary task",
+        "cosine": 0.7968535546869755,
+        "url": "https://arxiv.org/abs/2610.32396"
+      },
+      {
+        "id": "2402.04299",
+        "title": "Translating the future: Image-to-image translation for the prediction of future brain metabolism",
+        "cosine": 0.8049707861377641,
+        "url": "https://arxiv.org/abs/2402.04299"
+      },
+      {
+        "id": "oa:W3134228094",
+        "title": "BIỂU HIỆN VÀ TINH SẠCH NHÂN TỐ PHIÊN MÃ NF- κB P65 CỦA NGƯỜI SỬ DỤNG TẾ BÀO VẬT CHỦ E. coli ĐỊNH HƯỚNG ỨNG DỤNG SÀNG LỌC CHẤT ỨC CHẾ UNG THƯ",
+        "cosine": 0.8434639988647858,
+        "url": "https://doi.org/10.51298/vmj.v498i1.54"
+      }
+    ],
+    "exactQuotes": true,
+    "vectorDimensions": [
+      384
+    ],
+    "citationIdsValid": true
+  },
+  {
+    "input": {
+      "query": "Tôi muốn giảm lỗi khi truyền thông tin bằng máy tính lượng tử",
+      "scope": "online"
+    },
+    "status": 200,
+    "elapsedMs": 42933,
+    "decodedBytes": 1099281,
+    "research": {
+      "query": "Tôi muốn giảm lỗi khi truyền thông tin bằng máy tính lượng tử",
+      "plan": {
+        "original": "Tôi muốn giảm lỗi khi truyền thông tin bằng máy tính lượng tử",
+        "intent": "Detect errors in transmitted information using quantum communication",
+        "queries": [
+          "quantum error detection algorithms",
+          "quantum communication error correction protocols"
+        ],
+        "method": "local-llm"
+      },
+      "retrieval": "hybrid-passages",
+      "mode": "grounded-generation",
+      "claims": [
+        {
+          "text": "The QIEDP protocol uses quantum principles to correct errors in classical systems, improving BER with O(1) complexity.  The routing protocol with quantum teleportation ensures communication reliability by correcting errors in quantum channels.",
+          "evidenceIds": [
+            "E1",
+            "E2"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "id": "E2",
+          "paperId": "oa:W7139959311",
+          "title": "QIEDP: A Quantum-Inspired Two-Bit Error Correction Protocol for Low-Power Serial Communication in IoT Systems",
+          "url": "https://doi.org/10.1109/hipc66333.2025.00032",
+          "quote": "This paper presents the Quantum-Inspired Error Detection Protocol (QIEDP), a novel error correction scheme for serial communication that adapts quantum stabilizer code principles—specifically multi-dimensional parity relationships and syndrome-based detection—to classical digital systems. QIEDP implements a$(15,7,5)$linear code providing 2-bit error correction with$O(1)$computational complexity using pre-computed lookup tables containing 105 correctable error patterns. Simulation results demonstrate consistent Bit Error Rate (BER) improvements of 1.6-1.8× over conventional UART with parity in typical IoT operating conditions (9-15 dB Signal-to-Noise Ratio(SNR)), despite syndrome collisions limiting double-bit correction to 85.7% efficiency. The protocol achieves 46.7% code efficiency with 100% single-bit and 85.7% double-bit error correction rates",
+          "start": 0,
+          "end": 859,
+          "cosine": 0.7990601819821692,
+          "fusionScore": 0.03252247488101534,
+          "coverage": "abstract",
+          "rerankScore": 7.584560871124268
+        },
+        {
+          "id": "E1",
+          "paperId": "oa:W2375461933",
+          "title": "The Routing Communication Protocol for Small Quantum Network Based on Quantum Error Correction Code",
+          "url": "https://openalex.org/W2375461933",
+          "quote": "of these routing tables,quantum teleportation can be realized from source quantum node to the nodes w ithin one-hop or tw o-hop. Correct the errors of code resulting from noise of quantum channel based on error correcting code theory,and handle it accordingly,to ensure the reliability of communication information at data link layer. The security of the protocol is proved in theory.",
+          "start": 547,
+          "end": 931,
+          "cosine": 0.796954273364892,
+          "fusionScore": 0.03177805800756621,
+          "coverage": "abstract",
+          "rerankScore": 6.641509056091309
+        },
+        {
+          "id": "E3",
+          "paperId": "oa:W2375461933",
+          "title": "The Routing Communication Protocol for Small Quantum Network Based on Quantum Error Correction Code",
+          "url": "https://openalex.org/W2375461933",
+          "quote": "In small quantum netw ork,the security of communication information can be guaranteed physically by the application of quantum teleportation,the noise of quantum channel w ill be bound to interfere w ith the communication information,leading to the error of code. In order to guarantee the reliability of information communication,a routing protocol of small quantum netw ork is proposed based on quantum error correcting code. According to the routing characteristics of small quantum netw ork,corresponding routing tables are made. On the basis of these routing tables,quantum teleportation can be realized from source quantum node to the nodes w ithin one-hop or tw",
+          "start": 0,
+          "end": 668,
+          "cosine": 0.7963403339332337,
+          "fusionScore": 0.03149801587301587,
+          "coverage": "abstract",
+          "rerankScore": 6.7242608070373535
+        },
+        {
+          "id": "E8",
+          "paperId": "oa:W7204654298",
+          "title": "Multi-Variable Quantum Error Correction and Quantum Communication Protocol Design",
+          "url": "https://doi.org/10.5281/zenodo.22156652",
+          "quote": "This paper presents a novel approach to multi-variable quantum error correction (VQEC) and its application in designing quantum communication protocols. The core claim is to design a code capable of simultaneously correcting multiple qubit errors, significantly enhancing the resilience of quantum information transmission. The proposed mechanism leverages quantum entanglement and classical channels to construct a VQEC code, employing an encoding-decoding algorithm for reliable quantum communication. Unlike existing codes primarily focused on single-qubit error correction, this research introduces a framework for scalable error correction, addressing a critical limitation in the practical implementation of quantum communication. The design incorporates key considerations for",
+          "start": 0,
+          "end": 783,
+          "cosine": 0.7764491715760757,
+          "fusionScore": 0.030834914611005692,
+          "coverage": "abstract",
+          "rerankScore": 7.416503429412842
+        },
+        {
+          "id": "E7",
+          "paperId": "oa:W7204649926",
+          "title": "Quantum Error Correction Code-Based Communication Protocol Optimization",
+          "url": "https://doi.org/10.5281/zenodo.22152747",
+          "quote": "performance of quantum communication networks. The proposed approach aims to mitigate the detrimental effects of noise and decoherence, which are inherent challenges in quantum communication, thereby paving the way for more robust and reliable quantum data transmission. The presented methodology offers a framework for tailoring QECCs to specific communication scenarios, optimizing for both error correction performance and communication overhead.",
+          "start": 596,
+          "end": 1045,
+          "cosine": 0.7861855540426657,
+          "fusionScore": 0.030798389007344232,
+          "coverage": "abstract",
+          "rerankScore": 7.400703430175781
+        },
+        {
+          "id": "E4",
+          "paperId": "2503.10790",
+          "title": "Quantum Error Detection For Early Term Fault-Tolerant Quantum Algorithms",
+          "url": "https://arxiv.org/abs/2503.10790",
+          "quote": "Quantum error detection (QED) offers a promising pathway to fault tolerance in near-term quantum devices by balancing error suppression with minimal resource overhead. However, its practical utility hinges on optimizing design parameters-such as syndrome measurement frequency-to avoid diminishing returns from detection overhead. In this work, we present a comprehensive framework for fault-tolerant compilation and simulation of quantum algorithms using [[n, n-2, 2]] codes, which enable low-qubit-overhead error detection and a simple nearly fault-tolerant universal set of operations. We demonstrate and analyze our pipeline with a purely statistical interpretation and through the implementation of Grover's search algorithm. Our results are used",
+          "start": 0,
+          "end": 751,
+          "cosine": 0.789991972595244,
+          "fusionScore": 0.030117753623188408,
+          "coverage": "abstract",
+          "rerankScore": 5.273148059844971
+        }
+      ],
+      "gaps": [
+        "Các đoạn gần nghĩa là gợi ý đọc, chưa chứng minh đáp ứng mọi điều kiện của câu hỏi.",
+        "Hiện chỉ đọc tiêu đề và abstract, chưa đọc toàn văn PDF.",
+        "AI diễn giải từ các đoạn trích; trích dẫn hợp lệ chưa bảo đảm mọi nhận định được chứng minh."
+      ],
+      "traceId": "3f49b495-cca1-4657-bc1b-1780b6dff21e",
+      "model": "onnx-community/Qwen3-0.6B-ONNX",
+      "metrics": {
+        "candidates": 29,
+        "passages": 67,
+        "elapsedMs": 42850.716299999985
+      }
+    },
+    "providers": [
+      {
+        "provider": "arxiv",
+        "status": "ok",
+        "count": 16,
+        "message": "Đã tìm qua 2 cách diễn đạt.",
+        "durationMs": 3721.2649999999994
+      },
+      {
+        "provider": "openalex",
+        "status": "ok",
+        "count": 16,
+        "message": "Đã tìm qua 2 cách diễn đạt.",
+        "durationMs": 1274.7119000000093
+      }
+    ],
+    "storage": "mongodb",
+    "warnings": [],
+    "top": [
+      {
+        "id": "oa:W7139959311",
+        "title": "QIEDP: A Quantum-Inspired Two-Bit Error Correction Protocol for Low-Power Serial Communication in IoT Systems",
+        "cosine": 0.7990601819821692,
+        "url": "https://doi.org/10.1109/hipc66333.2025.00032"
+      },
+      {
+        "id": "oa:W2375461933",
+        "title": "The Routing Communication Protocol for Small Quantum Network Based on Quantum Error Correction Code",
+        "cosine": 0.796954273364892,
+        "url": "https://openalex.org/W2375461933"
+      },
+      {
+        "id": "oa:W7204654298",
+        "title": "Multi-Variable Quantum Error Correction and Quantum Communication Protocol Design",
+        "cosine": 0.7764491715760757,
+        "url": "https://doi.org/10.5281/zenodo.22156652"
+      },
+      {
+        "id": "oa:W7204649926",
+        "title": "Quantum Error Correction Code-Based Communication Protocol Optimization",
+        "cosine": 0.7861855540426657,
+        "url": "https://doi.org/10.5281/zenodo.22152747"
+      },
+      {
+        "id": "2503.10790",
+        "title": "Quantum Error Detection For Early Term Fault-Tolerant Quantum Algorithms",
+        "cosine": 0.789991972595244,
+        "url": "https://arxiv.org/abs/2503.10790"
+      },
+      {
+        "id": "2601.07223",
+        "title": "Quantum Error Correction and Detection for Quantum Machine Learning",
+        "cosine": 0.7943861673861354,
+        "url": "https://arxiv.org/abs/2601.07223"
+      }
+    ],
+    "exactQuotes": true,
+    "vectorDimensions": [
+      384
+    ],
+    "citationIdsValid": true
+  },
+  {
+    "input": {
+      "query": "Tìm cách chạy mô hình lớn khi bộ nhớ VRAM không đủ",
+      "scope": "online"
+    },
+    "status": 200,
+    "elapsedMs": 28233,
+    "decodedBytes": 1057594,
+    "research": {
+      "query": "Tìm cách chạy mô hình lớn khi bộ nhớ VRAM không đủ",
+      "plan": {
+        "original": "Tìm cách chạy mô hình lớn khi bộ nhớ VRAM không đủ",
+        "intent": "Run large-scale models when VRAM is insufficient",
+        "queries": [
+          "large-scale model training with limited VRAM",
+          "VRAM optimization techniques for large-scale models"
+        ],
+        "method": "local-llm"
+      },
+      "retrieval": "hybrid-passages",
+      "mode": "extractive",
+      "claims": [],
+      "evidence": [
+        {
+          "id": "E1",
+          "paperId": "oa:W7160961523",
+          "title": "VRAM OPTIMIZATION FOR TRANSFORMERS BASED NUTRITION PREDICTION MODEL",
+          "url": "https://doi.org/10.5281/zenodo.20048115",
+          "quote": "Accurate estimation of nutritional content from food images can promote better dietary awareness and health management. Recent advances in deep learning have enabled transformer-based models to achieve state-of-the-art results for nutrition prediction; however, their high video memory (VRAM) requirements limit accessibility and scalability. In this work, we propose the integration of four VRAM optimization techniques into an existing state-of-the-art transformer-based nutrition prediction framework to reduce memory consumption during training. The optimization methods include Automatic Mixed Precision (AMP), gradient checkpointing, gradient accumulation, and the Adam8bit optimizer. The framework employs a Swin Transformer (Swin-T) backbone with a Feature Pyramid Network (FPN) and",
+          "start": 0,
+          "end": 790,
+          "cosine": 0.8250592002475299,
+          "fusionScore": 0.03177805800756621,
+          "coverage": "abstract",
+          "rerankScore": 1.1841844320297241
+        },
+        {
+          "id": "E5",
+          "paperId": "oa:W7160961523",
+          "title": "VRAM OPTIMIZATION FOR TRANSFORMERS BASED NUTRITION PREDICTION MODEL",
+          "url": "https://doi.org/10.5281/zenodo.20048115",
+          "quote": "accumulation, and the Adam8bit optimizer. The framework employs a Swin Transformer (Swin-T) backbone with a Feature Pyramid Network (FPN) and a Swin-TUNA segmentation module for food-region detection. Experiments on the Nutrition5k dataset demonstrate a 77% reduction in peak VRAM and a 78% reduction in reserved VRAM during training, while maintaining model accuracy (PMAE = 16.9%, improved from 17.2%). Although training time increased due to re-computation and accumulation overhead, the proposed optimization approach enables stable training of large transformer architectures on mid-range GPUs. This work provides a practical direction for developing memory-efficient nutrition prediction systems, improving the accessibility of transformer-based models",
+          "start": 649,
+          "end": 1407,
+          "cosine": 0.8191244807666593,
+          "fusionScore": 0.03177805800756621,
+          "coverage": "abstract",
+          "rerankScore": 3.236208915710449
+        },
+        {
+          "id": "E4",
+          "paperId": "2607.15105",
+          "title": "Long-Context Fine-Tuning with Limited VRAM",
+          "url": "https://arxiv.org/abs/2607.15105",
+          "quote": "Parameter-efficient fine-tuning reduces model and optimizer memory, but dense attention still makes long training sequences expensive. We combine Hierarchical Global Attention (HGA) with segment-wise backpropagation and tiered KV storage. Only the active segment remains differentiable in VRAM; older KV is detached into RAM or NVMe, and HGA loads a bounded set of exact historical tokens for each query block. On Qwen3-8B with 4-bit QLoRA and PG19, dense training on a 16 GB Quadro RTX 5000 fits 2,048 tokens but fails at 4,096, whereas HGA reaches 16,384 tokens with 15.28 GB peak VRAM. Under evaluation the same adapter runs through 131,072",
+          "start": 0,
+          "end": 643,
+          "cosine": 0.8217174048076437,
+          "fusionScore": 0.031754032258064516,
+          "coverage": "abstract",
+          "rerankScore": 2.276857614517212
+        },
+        {
+          "id": "E2",
+          "paperId": "2604.26334",
+          "title": "Efficient, VRAM-Constrained xLM Inference on Clients",
+          "url": "https://arxiv.org/abs/2604.26334",
+          "quote": "To usher in the next round of client AI innovation, there is an urgent need to enable efficient, lossless inference of high-accuracy large language models (LLMs) and vision language models (VLMs), jointly referred to as xLMs, on client systems. To address this, we present pipelined sharding, a novel, benchmark-profile-guided CPU-GPU hybrid scheduling technique to achieve efficient, VRAM-constrained inference for both dense and mixture-of-experts (MoE) LLMs. Using a combination of model sharding at the sub-layer level, CPU offloading, pipelined copy-compute, and prioritized tensor placement in VRAM, it optimizes both time-to-first-token (TTFT) and tokens per second (TPS) metrics, while flexibly adapting to",
+          "start": 0,
+          "end": 714,
+          "cosine": 0.8259504683917195,
+          "fusionScore": 0.031054405392392875,
+          "coverage": "abstract",
+          "rerankScore": 0.4829430878162384
+        },
+        {
+          "id": "E6",
+          "paperId": "2607.15105",
+          "title": "Long-Context Fine-Tuning with Limited VRAM",
+          "url": "https://arxiv.org/abs/2607.15105",
+          "quote": "at 4,096, whereas HGA reaches 16,384 tokens with 15.28 GB peak VRAM. Under evaluation the same adapter runs through 131,072 tokens on this card; VRAM is not constant but grows gently with the resident chunk summaries, so RAM and NVMe capacity set the practical limit beyond these lengths. At the shared 2K training length, HGA-trained and dense-trained adapters obtain 2.7405 and 2.7383 nat under the same dense-attention readout, while the stock model obtains 2.9541. At this boundary HGA training is already marginally faster (217.75 vs. 207.02 tokens/s), and the HGA-to-dense throughput ratio improves from 1K to 2K; because HGA keeps",
+          "start": 520,
+          "end": 1157,
+          "cosine": 0.8222993909090833,
+          "fusionScore": 0.030776515151515152,
+          "coverage": "abstract",
+          "rerankScore": 1.7569602727890015
+        },
+        {
+          "id": "E3",
+          "paperId": "oa:W1997692306",
+          "title": "Variable rate adaptive modulation (VRAM) for introducing small-world model into WSNs",
+          "url": "https://doi.org/10.1109/ciss.2013.6552329",
+          "quote": "approach is presented, in which nodes with highest betweenness centrality form a long distance relay path by using a lower order modulation scheme and therefore resulting in a relatively reduced data rate, but maintaining the same bit error rate. Our empirical and analytical evaluations demonstrate that this leads to a significant reduction in average path length and an increase in node degree.",
+          "start": 968,
+          "end": 1365,
+          "cosine": 0.8281427438150112,
+          "fusionScore": 0.03057889822595705,
+          "coverage": "abstract",
+          "rerankScore": 0.3885056972503662
+        }
+      ],
+      "gaps": [
+        "Các đoạn gần nghĩa là gợi ý đọc, chưa chứng minh đáp ứng mọi điều kiện của câu hỏi.",
+        "Hiện chỉ đọc tiêu đề và abstract, chưa đọc toàn văn PDF.",
+        "Model chưa tạo được diễn giải hợp lệ; chỉ hiển thị đoạn trích nguồn."
+      ],
+      "traceId": "950a976c-8807-49ea-8964-6f36e8a252db",
+      "model": null,
+      "metrics": {
+        "candidates": 14,
+        "passages": 38,
+        "elapsedMs": 28183.491700000013
+      }
+    },
+    "providers": [
+      {
+        "provider": "arxiv",
+        "status": "ok",
+        "count": 0,
+        "message": "Đã tìm qua 2 cách diễn đạt.",
+        "durationMs": 3620.9848999999813
+      },
+      {
+        "provider": "openalex",
+        "status": "ok",
+        "count": 14,
+        "message": "Đã tìm qua 2 cách diễn đạt.",
+        "durationMs": 1219.4912000000186
+      }
+    ],
+    "storage": "mongodb",
+    "warnings": [],
+    "top": [
+      {
+        "id": "oa:W7160961523",
+        "title": "VRAM OPTIMIZATION FOR TRANSFORMERS BASED NUTRITION PREDICTION MODEL",
+        "cosine": 0.8250592002475299,
+        "url": "https://doi.org/10.5281/zenodo.20048115"
+      },
+      {
+        "id": "2607.15105",
+        "title": "Long-Context Fine-Tuning with Limited VRAM",
+        "cosine": 0.8217174048076437,
+        "url": "https://arxiv.org/abs/2607.15105"
+      },
+      {
+        "id": "2604.26334",
+        "title": "Efficient, VRAM-Constrained xLM Inference on Clients",
+        "cosine": 0.8259504683917195,
+        "url": "https://arxiv.org/abs/2604.26334"
+      },
+      {
+        "id": "oa:W1997692306",
+        "title": "Variable rate adaptive modulation (VRAM) for introducing small-world model into WSNs",
+        "cosine": 0.8281427438150112,
+        "url": "https://doi.org/10.1109/ciss.2013.6552329"
+      },
+      {
+        "id": "2311.05610",
+        "title": "Efficient Parallelization Layouts for Large-Scale Distributed Model Training",
+        "cosine": 0.7878465008281645,
+        "url": "https://arxiv.org/abs/2311.05610"
+      },
+      {
+        "id": "2503.08131",
+        "title": "Large Scale Multi-Task Bayesian Optimization with Large Language Models",
+        "cosine": 0.7857298022495524,
+        "url": "https://arxiv.org/abs/2503.08131"
+      }
+    ],
+    "exactQuotes": true,
+    "vectorDimensions": [
+      384
+    ],
+    "citationIdsValid": true
+  }
+]

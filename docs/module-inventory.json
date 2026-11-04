@@ -1,0 +1,71 @@
+{
+  "generatedAt": "2026-11-04T11:33:36.592Z",
+  "functionCount": 201,
+  "variableCount": 1148,
+  "modules": [
+    {
+      "name": "Scene3D",
+      "prefix": "apps/web/src/scene/",
+      "readme": "apps/web/src/scene/README.md",
+      "log": "apps/web/src/scene/ai-development-log.jsonl",
+      "functions": 59,
+      "variables": 352
+    },
+    {
+      "name": "Model trong browser",
+      "prefix": "apps/web/src/semantic/",
+      "readme": "apps/web/src/semantic/README.md",
+      "log": "apps/web/ai-development-log.jsonl",
+      "functions": 2,
+      "variables": 12
+    },
+    {
+      "name": "RAG backend",
+      "prefix": "apps/api/lib/rag/",
+      "readme": "apps/api/lib/rag/README.md",
+      "log": "apps/api/lib/rag/ai-development-log.jsonl",
+      "functions": 21,
+      "variables": 97
+    },
+    {
+      "name": "Nguồn học thuật",
+      "prefix": "apps/api/lib/online/",
+      "readme": "apps/api/lib/online/README.md",
+      "log": "apps/api/lib/online/ai-development-log.jsonl",
+      "functions": 17,
+      "variables": 80
+    },
+    {
+      "name": "Frontend và lưu web",
+      "prefix": "apps/web/",
+      "readme": "apps/web/README.md",
+      "log": "apps/web/ai-development-log.jsonl",
+      "functions": 23,
+      "variables": 92
+    },
+    {
+      "name": "Backend/API",
+      "prefix": "apps/api/",
+      "readme": "apps/api/README.md",
+      "log": "apps/api/ai-development-log.jsonl",
+      "functions": 20,
+      "variables": 75
+    },
+    {
+      "name": "Core dùng chung",
+      "prefix": "packages/core/",
+      "readme": "packages/core/README.md",
+      "log": "packages/core/ai-development-log.jsonl",
+      "functions": 36,
+      "variables": 122
+    },
+    {
+      "name": "Công cụ và kiểm chứng",
+      "prefix": "scripts/",
+      "readme": "scripts/README.md",
+      "log": "scripts/ai-development-log.jsonl",
+      "functions": 23,
+      "variables": 318
+    }
+  ]
+}

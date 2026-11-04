@@ -1,0 +1,23 @@
+[Unit]
+Description=Paper Magic static web and API proxy
+After=network.target paper-magic-api.service
+Wants=paper-magic-api.service
+
+[Service]
+Type=simple
+User=papermagic
+Group=papermagic
+WorkingDirectory=/srv/paper-magic
+EnvironmentFile=/etc/paper-magic/app.env
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node /srv/paper-magic/scripts/serve-production.mjs
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

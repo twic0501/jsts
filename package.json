@@ -1,0 +1,37 @@
+{
+  "name": "paper-magic",
+  "version": "0.7.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env scripts/dev.mjs",
+    "build": "pnpm --filter @paper-galaxy/web build && node scripts/build-sw.mjs && pnpm --filter @paper-galaxy/api build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "data:fetch": "node scripts/fetch-papers.mjs",
+    "db:start": "node scripts/mongo.mjs",
+    "db:seed": "node --env-file-if-exists=.env scripts/seed.mjs",
+    "preview": "node --env-file-if-exists=.env scripts/preview.mjs",
+    "serve": "node --env-file-if-exists=.env scripts/serve-production.mjs",
+    "test:online": "node --env-file-if-exists=.env scripts/check-online.mjs",
+    "ai:setup": "node scripts/setup-model.mjs && node scripts/copy-wasm.mjs",
+    "ai:prepare": "node scripts/prepare-semantic.mjs",
+    "ai:evaluate": "node scripts/evaluate-semantic.mjs",
+    "ai:rag:setup": "node scripts/setup-rag-model.mjs && node scripts/setup-rag-model.mjs --reranker",
+    "test:research": "node scripts/check-research.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/node": "24.10.0",
+    "mongodb": "7.8.0",
+    "mongodb-memory-server": "11.3.0",
+    "typescript": "5.9.3",
+    "vitest": "5.1.0"
+  }
+}

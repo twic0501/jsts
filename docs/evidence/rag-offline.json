@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-04T10:51:18.311Z",
+  "networkFetchDisabled": true,
+  "networkAttempts": 0,
+  "embeddingDimensions": 384,
+  "rerankScores": [
+    0.6534399390220642,
+    -11.36959457397461
+  ],
+  "generation": "READY",
+  "elapsedMs": 7879,
+  "scope": "Inference runtimes only; not OS-wide network isolation or complete offline backend E2E"
+}

@@ -1,0 +1,1 @@
+export default function Page() { return <main><h1>Paper Galaxy API</h1><p>Backend Next.js đang chạy. Giao diện Vite: <a href="http://127.0.0.1:5173">127.0.0.1:5173</a></p><a href="/api/v1/health">Kiểm tra trạng thái API</a></main>; }

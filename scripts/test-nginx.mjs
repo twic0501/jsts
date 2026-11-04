@@ -1,0 +1,15 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import https from 'node:https';
+import {spawn,spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+const root=process.cwd(),folder=path.resolve('.local/nginx-check'),executable=path.join(folder,'nginx-1.30.6/nginx.exe');
+await fs.mkdir(path.join(folder,'logs'),{recursive:true});await fs.mkdir(path.join(folder,'temp'),{recursive:true});
+const cert=path.resolve('.local/tls-test/localhost.cert.pem').replaceAll('\\','/'),key=path.resolve('.local/tls-test/localhost.key.pem').replaceAll('\\','/'),auth=path.join(folder,'demo.htpasswd').replaceAll('\\','/');
+await fs.writeFile(auth,'demo:{SHA}'+createHash('sha1').update('local-only-test').digest('base64')+'\n');
+let config=await fs.readFile('deploy/nginx.conf','utf8');config=config.replace('listen 443 ssl;','listen 127.0.0.1:443 ssl;').replace('server_name research.example.com;','server_name localhost;').replace('/etc/letsencrypt/live/research.example.com/fullchain.pem',cert).replace('/etc/letsencrypt/live/research.example.com/privkey.pem',key).replace('/etc/nginx/paper-magic.htpasswd',auth);
+await fs.writeFile(path.join(folder,'test.conf'),'worker_processes 1;\nerror_log logs/error.log;\npid logs/nginx.pid;\nevents {worker_connections 256;}\nhttp {\n'+config+'\n}\n');
+const prefix=folder.replaceAll('\\','/')+'/',checked=spawnSync(executable,['-p',prefix,'-c','test.conf','-t'],{encoding:'utf8'});if(checked.status!==0)throw new Error(checked.stderr);
+const server=spawn(executable,['-p',prefix,'-c','test.conf','-g','daemon off;'],{stdio:'ignore'}),ca=await fs.readFile(cert);
+async function get(route,authenticated=false){return await new Promise((resolve,reject)=>{const request=https.get('https://127.0.0.1:443'+route,{ca,rejectUnauthorized:true,headers:authenticated?{Authorization:'Basic '+Buffer.from('demo:local-only-test').toString('base64')}:{}},response=>{const tls=response.socket.getProtocol(),authorized=response.socket.authorized;response.resume();response.on('end',()=>resolve({status:response.statusCode,tls,authorized,hsts:response.headers['strict-transport-security']}))});request.on('error',reject)})}
+try{let ready=false;for(let i=0;i<30;i++){try{await get('/');ready=true;break}catch{await new Promise(resolve=>setTimeout(resolve,100))}}if(!ready)throw new Error('Nginx startup failed');const denied=await get('/'),web=await get('/',true),api=await get('/api/v1/health',true),version=spawnSync(executable,['-v'],{encoding:'utf8'}).stderr.trim();const report={date:new Date().toISOString(),version,configurationCheck:checked.status===0,port:443,untrustedPublicCertificate:false,certificate:'Local self-signed test CA only;does not prove public deployment',denied,web,api,passed:denied.status===401&&web.status===200&&api.status===200};await fs.writeFile('.local/nginx-report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));if(!report.passed)process.exitCode=1}finally{spawnSync(executable,['-p',prefix,'-c','test.conf','-s','quit']);if(server.exitCode===null)await new Promise(resolve=>server.once('exit',resolve))}

@@ -1,0 +1,17 @@
+# Configuration template; certificate and CA must exist before requireTLS starts.
+storage:
+  dbPath: /var/lib/mongodb
+systemLog:
+  destination: file
+  path: /var/log/mongodb/mongod.log
+  logAppend: true
+net:
+  port: 27017
+  bindIp: 127.0.0.1
+  tls:
+    mode: requireTLS
+    certificateKeyFile: /etc/mongodb/server.pem
+    CAFile: /etc/mongodb/ca.pem
+    allowConnectionsWithoutCertificates: true
+security:
+  authorization: enabled

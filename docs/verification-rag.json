@@ -1,0 +1,190 @@
+{
+  "version": "0.7.0",
+  "date": "2026-11-04T11:01:32.424Z",
+  "unit": {
+    "passed": 116,
+    "total": 116,
+    "files": 9
+  },
+  "e2e": {
+    "passed": 21,
+    "total": 21,
+    "duration": "1.9m",
+    "baseURL": "http://127.0.0.1:8080",
+    "browser": "Edge Chromium",
+    "retries": 0
+  },
+  "typecheck": "Core/web/API passed",
+  "build": "Vite+Next passed;SW regenerated",
+  "live": [
+    {
+      "query": "Tôi muốn tìm phương pháp nhận diện vùng bệnh trong ảnh y tế",
+      "status": 200,
+      "elapsedMs": 136,
+      "decodedBytes": 967015,
+      "mode": "grounded-generation",
+      "exactQuotes": true,
+      "citationIdsValid": true,
+      "warning": "Citation IDs and exact excerpts do not prove semantic entailment or research quality"
+    },
+    {
+      "query": "Tôi muốn giảm lỗi khi truyền thông tin bằng máy tính lượng tử",
+      "status": 200,
+      "elapsedMs": 42933,
+      "decodedBytes": 1099281,
+      "mode": "grounded-generation",
+      "exactQuotes": true,
+      "citationIdsValid": true,
+      "warning": "Citation IDs and exact excerpts do not prove semantic entailment or research quality"
+    },
+    {
+      "query": "Tìm cách chạy mô hình lớn khi bộ nhớ VRAM không đủ",
+      "status": 200,
+      "elapsedMs": 28233,
+      "decodedBytes": 1057594,
+      "mode": "extractive",
+      "exactQuotes": true,
+      "citationIdsValid": true,
+      "warning": "Citation IDs and exact excerpts do not prove semantic entailment or research quality"
+    }
+  ],
+  "offline": {
+    "date": "2026-11-04T10:51:18.311Z",
+    "networkFetchDisabled": true,
+    "networkAttempts": 0,
+    "embeddingDimensions": 384,
+    "rerankScores": [
+      0.6534399390220642,
+      -11.36959457397461
+    ],
+    "generation": "READY",
+    "elapsedMs": 7879,
+    "scope": "Inference runtimes only; not OS-wide network isolation or complete offline backend E2E"
+  },
+  "mongo": {
+    "date": "2026-11-04T10:56:49.372Z",
+    "onlinePapers": 96,
+    "onlineEmbeddings": 96,
+    "ragRuns": 15,
+    "ragRunIndexes": [
+      {
+        "key": {
+          "_id": 1
+        }
+      },
+      {
+        "key": {
+          "expiresAt": 1
+        },
+        "expireAfterSeconds": 0
+      }
+    ]
+  },
+  "visual": {
+    "date": "2026-11-04T10:54:13.064Z",
+    "realApi": true,
+    "requestedTopK": 6,
+    "errors": [],
+    "overflow": false,
+    "mode": "grounded-generation",
+    "plan": {
+      "original": "Tôi muốn tìm phương pháp nhận diện vùng bệnh trong ảnh y tế",
+      "intent": "Detect diseased regions in medical images",
+      "queries": [
+        "medical image segmentation deep learning",
+        "lesion detection neural networks"
+      ],
+      "method": "local-llm"
+    },
+    "claims": [
+      {
+        "text": "Deep learning models are used for fracture detection in wrist X-ray images, improving diagnosis accuracy.",
+        "evidenceIds": [
+          "E1"
+        ]
+      },
+      {
+        "text": "U-Net is effective for neuronal segmentation in electron microscopy, achieving high performance.",
+        "evidenceIds": [
+          "E3"
+        ]
+      }
+    ],
+    "traceId": "b24a2291-c2ac-4779-97d0-fe6cb1837d74",
+    "quotes": 6
+  },
+  "performance": {
+    "date": "2026-11-04T10:55:46.835Z",
+    "input": {
+      "query": "Tôi muốn tìm phương pháp nhận diện vùng bệnh trong ảnh y tế",
+      "scope": "library",
+      "topK": 6
+    },
+    "conditions": "5 identical sequential requests after one warm-up; includes HTTP+Mongo cache loading, usually response cache hits, not fresh generation/network/load benchmark",
+    "samples": [
+      {
+        "ms": 41.72319999999999,
+        "bytes": 963334,
+        "mode": "grounded-generation"
+      },
+      {
+        "ms": 37.73489999999998,
+        "bytes": 963334,
+        "mode": "grounded-generation"
+      },
+      {
+        "ms": 34.908500000000004,
+        "bytes": 963334,
+        "mode": "grounded-generation"
+      },
+      {
+        "ms": 29.01079999999996,
+        "bytes": 963334,
+        "mode": "grounded-generation"
+      },
+      {
+        "ms": 34.73090000000002,
+        "bytes": 963334,
+        "mode": "grounded-generation"
+      }
+    ],
+    "p50Ms": 34.908500000000004,
+    "p95Ms": 41.72319999999999,
+    "p99Ms": 41.72319999999999,
+    "maxDecodedBytes": 963334
+  },
+  "proxy": {
+    "date": "2026-11-04T10:41:25.499Z",
+    "abortedRequests": 12,
+    "delayedUpstreamMs": 100,
+    "survived": true,
+    "followupStatus": 200
+  },
+  "finalSmoke": {
+    "date": "2026-11-04T11:00:35.957Z",
+    "status": 200,
+    "ranking": "hybrid-e5-bm25-rrf-rerank",
+    "top": "1505.04597",
+    "retrieval": "hybrid-passages",
+    "mode": "extractive",
+    "evidenceCount": 6,
+    "storage": "mongodb"
+  },
+  "catalog": {
+    "namedFunctions": 195,
+    "shortVariableInitializers": 964
+  },
+  "limitations": [
+    "Small model may misunderstand, overstate evidence or answer in English.",
+    "Abstract/title only;not full PDF RAG.",
+    "No independent quality benchmark or 5k–20k corpus evaluation.",
+    "Offline runtime smoke disables fetch,not OS-wide full backend offline E2E.",
+    "No training,public deployment,HTTPS443 or auth/RBAC completion claimed."
+  ],
+  "report": "docs/verification.md",
+  "architecture": "docs/12-rag-architecture.md",
+  "review": {
+    "selfChecked": true,
+    "independentReview": false
+  }
+}

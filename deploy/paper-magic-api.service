@@ -1,0 +1,26 @@
+[Unit]
+Description=Paper Magic Next.js API
+After=network.target mongod.service
+Wants=mongod.service
+
+[Service]
+Type=simple
+User=papermagic
+Group=papermagic
+WorkingDirectory=/srv/paper-magic/apps/api
+EnvironmentFile=/etc/paper-magic/app.env
+Environment=NODE_ENV=production
+Environment=NEXT_TELEMETRY_DISABLED=1
+ExecStart=/usr/bin/node /srv/paper-magic/apps/api/node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3001
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/paper-magic/.local /srv/paper-magic/apps/api/.next
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
