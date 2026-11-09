@@ -1,0 +1,285 @@
+/* ==========================================================
+   LIGHT MODE cho Paper Magic
+   - Đặt file này ở: src/light-theme.css (cùng thư mục App.tsx)
+   - Chỉ có hiệu lực khi <html data-theme="light">, nên chế độ tối
+     hoàn toàn không bị ảnh hưởng.
+   - Dùng selector :root[data-theme='light'] nên độ ưu tiên cao hơn
+     CSS gốc, không phụ thuộc thứ tự import.
+   ========================================================== */
+
+:root[data-theme='light'] {
+  --pm-bg: #f6f7fd;
+  --pm-text: #1b1f3b;
+  --pm-muted: #5a6285;
+  --pm-glass: rgba(255, 255, 255, 0.68);
+  --pm-glass-strong: rgba(255, 255, 255, 0.88);
+  --pm-border: rgba(80, 90, 160, 0.2);
+  --pm-shadow: 0 8px 30px rgba(70, 80, 140, 0.16);
+  --pm-accent: #6d5ce8;
+  /* màu mức tương đồng: đậm hơn để đọc được trên nền sáng */
+  --pm-high: #0d9488;
+  --pm-medium: #0284c7;
+  --pm-low: #7c3aed;
+}
+
+/* ---------- Nền & chữ chung ---------- */
+:root[data-theme='light'] body,
+:root[data-theme='light'] .app-shell {
+  background: var(--pm-bg);
+  color: var(--pm-text);
+}
+
+:root[data-theme='light'] .ambient-wash {
+  background:
+    radial-gradient(60% 50% at 15% 5%, rgba(167, 139, 250, 0.28), transparent 70%),
+    radial-gradient(50% 45% at 85% 20%, rgba(125, 211, 252, 0.3), transparent 70%),
+    radial-gradient(45% 40% at 50% 100%, rgba(244, 170, 200, 0.22), transparent 70%);
+  opacity: 1;
+  mix-blend-mode: normal;
+}
+
+/* ---------- Thẻ kính (glass) ---------- */
+:root[data-theme='light'] .glass {
+  background: var(--pm-glass);
+  border-color: var(--pm-border);
+  box-shadow: var(--pm-shadow);
+  color: var(--pm-text);
+}
+
+:root[data-theme='light'] .workspace-heading,
+:root[data-theme='light'] .under-scene,
+:root[data-theme='light'] .page-footer,
+:root[data-theme='light'] .page-footer a,
+:root[data-theme='light'] .page-footer button {
+  color: var(--pm-muted);
+}
+
+:root[data-theme='light'] .similarity-legend small,
+:root[data-theme='light'] .similarity-legend p,
+:root[data-theme='light'] .detail-empty p {
+  color: var(--pm-muted);
+}
+
+:root[data-theme='light'] .detail-empty h2,
+:root[data-theme='light'] .similarity-legend strong {
+  color: var(--pm-text);
+}
+
+:root[data-theme='light'] .tone-high {
+  background: var(--pm-high);
+}
+:root[data-theme='light'] .tone-medium {
+  background: var(--pm-medium);
+}
+:root[data-theme='light'] .tone-low {
+  background: var(--pm-low);
+}
+
+/* ---------- Khung cuốn sách 3D (magic-viewport) ---------- */
+:root[data-theme='light'] .magic-viewport {
+  background:
+    radial-gradient(70% 60% at 50% 30%, rgba(167, 139, 250, 0.22), transparent 70%),
+    radial-gradient(60% 50% at 80% 70%, rgba(125, 211, 252, 0.28), transparent 70%),
+    linear-gradient(180deg, #eef0fb 0%, #dfe4f7 100%);
+  border-color: var(--pm-border);
+  color: var(--pm-text);
+}
+
+:root[data-theme='light'] .scene-heading h2,
+:root[data-theme='light'] .scene-eyebrow,
+:root[data-theme='light'] .spatial-caption strong {
+  color: var(--pm-text);
+}
+
+:root[data-theme='light'] .spatial-caption span,
+:root[data-theme='light'] .scene-hint,
+:root[data-theme='light'] .scene-guide,
+:root[data-theme='light'] .map-legend,
+:root[data-theme='light'] .map-legend span {
+  color: var(--pm-muted);
+}
+
+:root[data-theme='light'] .scene-loading,
+:root[data-theme='light'] .scene-fallback,
+:root[data-theme='light'] .scene-placeholder {
+  color: var(--pm-text);
+  background: var(--pm-glass-strong);
+}
+
+/* nút: Thoát / toàn màn hình / đổi theme / điều khiển */
+:root[data-theme='light'] .scene-icon,
+:root[data-theme='light'] .scene-controls,
+:root[data-theme='light'] .reader-page-focus,
+:root[data-theme='light'] .reader-navigation {
+  background: var(--pm-glass-strong);
+  border-color: var(--pm-border);
+  color: var(--pm-text);
+  box-shadow: var(--pm-shadow);
+}
+
+:root[data-theme='light'] .scene-controls button,
+:root[data-theme='light'] .reader-page-focus button,
+:root[data-theme='light'] .reader-navigation button,
+:root[data-theme='light'] .reader-source {
+  color: var(--pm-text);
+}
+
+:root[data-theme='light'] .reader-page-focus button.active {
+  background: rgba(109, 92, 232, 0.16);
+  color: var(--pm-accent);
+}
+
+:root[data-theme='light'] .scene-icon:hover,
+:root[data-theme='light'] .scene-controls button:hover:not(:disabled),
+:root[data-theme='light'] .reader-navigation button:hover:not(:disabled) {
+  background: rgba(109, 92, 232, 0.12);
+}
+
+/* tooltip khi rê vào node */
+:root[data-theme='light'] .spatial-tooltip {
+  background: var(--pm-glass-strong);
+  border: 1px solid var(--pm-border);
+  color: var(--pm-text);
+  box-shadow: var(--pm-shadow);
+}
+
+:root[data-theme='light'] .spatial-tooltip small,
+:root[data-theme='light'] .spatial-tooltip span {
+  color: var(--pm-muted);
+}
+
+/* ---------- Ô tìm kiếm / SearchHero, panel kết quả ---------- */
+:root[data-theme='light'] .search-hero input,
+:root[data-theme='light'] .search-box input,
+:root[data-theme='light'] main input[type='search'],
+:root[data-theme='light'] main input[type='text'] {
+  color: var(--pm-text);
+}
+
+:root[data-theme='light'] main input::placeholder {
+  color: var(--pm-muted);
+  opacity: 0.8;
+}
+
+:root[data-theme='light'] kbd {
+  background: rgba(80, 90, 160, 0.1);
+  border-color: var(--pm-border);
+  color: var(--pm-muted);
+}
+
+/* chuyển theme mượt */
+body,
+.app-shell,
+.glass,
+.magic-viewport,
+.scene-icon,
+.scene-controls {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+/* ==========================================================
+   CHỮ DỄ ĐỌC HƠN trong light mode
+   (ghi đè các chữ trắng / xám nhạt còn sót từ giao diện tối)
+   ========================================================== */
+
+/* Nút, tab, nhãn trong vùng chính: chữ đậm */
+:root[data-theme='light'] main button:not(.spatial-tooltip),
+:root[data-theme='light'] main label,
+:root[data-theme='light'] main select,
+:root[data-theme='light'] main [role='tab'],
+:root[data-theme='light'] main [role='radio'] {
+  color: var(--pm-text);
+}
+
+/* Tab đang chọn (Thư viện / Trên mạng / Cả hai): nền rõ hơn */
+:root[data-theme='light'] main [role='tab'][aria-selected='true'],
+:root[data-theme='light'] main [role='radio'][aria-checked='true'],
+:root[data-theme='light'] main button.active,
+:root[data-theme='light'] main button[aria-pressed='true'] {
+  background: rgba(109, 92, 232, 0.18);
+  color: #3b2fb0;
+  font-weight: 600;
+}
+
+/* Dòng ghi chú nhỏ dưới thanh tìm kiếm ("Bản dev · Offline khả dụng...") */
+:root[data-theme='light'] main small,
+:root[data-theme='light'] main p,
+:root[data-theme='light'] main figcaption {
+  color: var(--pm-muted);
+}
+
+/* Hộp "Màu của những kết nối": nhãn Cao / Vừa / Thấp hơn */
+:root[data-theme='light'] .similarity-legend,
+:root[data-theme='light'] .similarity-legend span,
+:root[data-theme='light'] .legend-levels,
+:root[data-theme='light'] .legend-levels span {
+  color: var(--pm-text);
+}
+:root[data-theme='light'] .similarity-legend small,
+:root[data-theme='light'] .legend-levels small {
+  color: var(--pm-muted);
+}
+
+/* Dòng trạng thái giữa cảnh ("Một câu hỏi mới đang chờ bạn.") nằm trên bục tối:
+   dùng chữ đậm + viền sáng để đọc được trên mọi nền */
+:root[data-theme='light'] .scene-hint {
+  color: #1b1f3b;
+  font-weight: 500;
+  text-shadow:
+    0 0 6px rgba(255, 255, 255, 0.95),
+    0 0 14px rgba(255, 255, 255, 0.85);
+}
+
+/* Dòng chú thích dưới cùng của cảnh */
+:root[data-theme='light'] .scene-guide,
+:root[data-theme='light'] .map-legend,
+:root[data-theme='light'] .spatial-caption span,
+:root[data-theme='light'] .scene-eyebrow {
+  color: #4a527a;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+/* Phím tắt ⌘K */
+:root[data-theme='light'] kbd {
+  color: #4a527a;
+  background: rgba(80, 90, 160, 0.14);
+}
+
+/* ==========================================================
+   Ô TÌM KIẾM trong light mode
+   (ghi đè .immersive .search-bar ... trong styles.css)
+   ========================================================== */
+:root[data-theme='light'] .immersive .search-bar {
+  color: #5a6285; /* màu biểu tượng kính lúp */
+}
+
+:root[data-theme='light'] .immersive .search-bar input {
+  color: #1b1f3b;
+  caret-color: #6d5ce8;
+}
+
+:root[data-theme='light'] .immersive .search-bar input::placeholder {
+  color: #6b7399;
+  opacity: 1;
+}
+
+:root[data-theme='light'] .immersive .search-bar kbd {
+  color: #4a527a;
+  border-color: rgba(80, 90, 160, 0.3);
+}
+
+:root[data-theme='light'] .immersive .search-bar .clear-search {
+  color: #4a527a;
+}
+
+/* Dòng giải thích dưới ô tìm kiếm */
+:root[data-theme='light'] .immersive .intro > p.search-scope-explainer {
+  color: #3d4468;
+  font-weight: 500;
+  text-shadow:
+    0 0 6px rgba(255, 255, 255, 0.95),
+    0 0 12px rgba(255, 255, 255, 0.8);
+}
