@@ -1,107 +1,528 @@
-import { useEffect,useMemo,useRef,useState,useCallback,lazy,Suspense } from 'react';
-import { BookOpen,Bookmark,Search,Sparkles,ArrowUpRight,ChevronDown,WifiOff,Check,X,HelpCircle,ArrowRight,Layers,Orbit } from 'lucide-react';
-import { GROUPS,SemanticIndex,validateSnapshot,corpusSchema,searchSchema,searchResultSchema,researchResponseSchema,documentFallbackReport,mergeBundles,validateBundle,type ResearchReport,type DatasetBundle,type ProviderStatus,type Corpus,type Group,type Paper,type SearchResult } from '@paper-galaxy/core';
-import corpusFile from '../../../data/corpus.json';
-import snapshotFile from '../../../data/semantic-snapshot.json';
-import{embedQueryLocal}from'./semantic/client';
-import { loadBookmarks,loadCorpus,saveCorpus,setBookmark,loadOnlineDataset,saveOnlineDataset } from './storage';
-import {similarityTone,SIMILARITY_BANDS} from './scene/ritual';
-import PaperDossier from './PaperDossier';
-import ResearchPanel from './ResearchPanel';
-const MagicBook=lazy(()=>import('./scene/MagicBook'));
-const initialCorpus=corpusSchema.parse(corpusFile);
-const snapshot=validateSnapshot(initialCorpus,snapshotFile);
-const initialBundle:DatasetBundle={corpus:initialCorpus,snapshot};
-type Source='connecting'|'api-json'|'api-mongodb'|'local';
-export default function App(){
- const [corpus,setCorpus]=useState<Corpus>(initialCorpus),[source,setSource]=useState<Source>('connecting');
- const [onlineBundle,setOnlineBundle]=useState<DatasetBundle|null>(null),[scope,setScope]=useState<'library'|'online'|'combined'>('library'),[providerStates,setProviderStates]=useState<ProviderStatus[]>([]),[searchEpoch,setSearchEpoch]=useState(0);const onlineRef=useRef<DatasetBundle|null>(null);
- const [draft,setDraft]=useState(''),[query,setQuery]=useState(''),[group,setGroup]=useState<Group|'all'>('all'),[year,setYear]=useState('all');
- const [selected,setSelected]=useState<Paper|null>(null),[saved,setSaved]=useState<string[]>([]),[savedOnly,setSavedOnly]=useState(false),[searching,setSearching]=useState(false);
- const [result,setResult]=useState<SearchResult>(()=>new SemanticIndex(initialCorpus,snapshot).search({query:'',topK:50}));
- const[completedQuery,setCompletedQuery]=useState('');
- const[research,setResearch]=useState<ResearchReport|null>(null),[researchOpen,setResearchOpen]=useState(false);
- const[offlineReady,setOfflineReady]=useState(()=>document.documentElement.dataset.offlineReady==='true');
- useEffect(()=>{const update=(event:Event)=>setOfflineReady(Boolean((event as CustomEvent<boolean>).detail));window.addEventListener('paper-magic-offline-ready',update);return()=>window.removeEventListener('paper-magic-offline-ready',update)},[]);
- const [castId,setCastId]=useState(0);const pendingOpen=useRef<string|null>(null);
- const [libraryOpen,setLibraryOpen]=useState(false),[detailsOpen,setDetailsOpen]=useState(false);
- const selectPaper=useCallback((paper:Paper|null)=>{pendingOpen.current=null;setSelected(paper);if(paper){setLibraryOpen(false);setDetailsOpen(false)}},[]);
- const [help,setHelp]=useState(false),[sidebar,setSidebar]=useState(false),[notice,setNotice]=useState('');const searchRef=useRef<HTMLInputElement>(null);
- const baseIndex=useMemo(()=>new SemanticIndex(corpus,snapshot),[corpus]);
- const activeCorpus=onlineBundle?.corpus??corpus,activeSnapshot=onlineBundle?.snapshot??snapshot;
- const index=useMemo(()=>new SemanticIndex(activeCorpus,activeSnapshot),[activeCorpus,activeSnapshot]);
- useEffect(()=>{
-  const abort=new AbortController();let active=true;
-  loadBookmarks().then(ids=>{if(active)setSaved(ids)}).catch(()=>{if(active)setNotice('Không đọc được bài đã lưu. Kiểm tra quyền lưu trữ trình duyệt.');});
-  loadOnlineDataset().then(bundle=>{if(active&&bundle){const merged=mergeBundles(initialBundle,bundle);onlineRef.current=merged;setOnlineBundle(merged)}}).catch(()=>{if(active)setNotice('Bộ nhớ bài trực tuyến không hợp lệ hoặc không đọc được; thư viện gốc vẫn dùng được.');});
-  (async()=>{try{const response=await fetch('/api/v1/papers',{signal:abort.signal});if(!response.ok)throw new Error('API unavailable');const raw:unknown=await response.json();const data=corpusSchema.parse(raw);if(!active)return;setCorpus(data);const storage=raw&&typeof raw==='object'&&'storage'in raw?raw.storage:'json';setSource(storage==='mongodb'?'api-mongodb':'api-json');saveCorpus(data).catch(()=>setNotice('Không lưu được bản sao offline. Bộ dữ liệu đóng gói vẫn dùng được.'));}catch{if(abort.signal.aborted||!active)return;try{const local=await loadCorpus();if(active){setCorpus(local||initialCorpus);setSource('local');}}catch{if(active)setSource('local')}}})();
-  return()=>{active=false;abort.abort()};
- },[]);
- useEffect(()=>{
-  const listener=(e:KeyboardEvent)=>{if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();searchRef.current?.focus()}if(e.key==='Escape'){setHelp(false);setSidebar(false);setLibraryOpen(false);setDetailsOpen(false);setResearchOpen(false)}};
-  window.addEventListener('keydown',listener);return()=>window.removeEventListener('keydown',listener);
- },[]);
- useEffect(()=>{
-  const abort=new AbortController();let active=true;
-  const input=searchSchema.parse({query,topK:50,...(group!=='all'?{group}:{}),...(year!=='all'?{yearFrom:Number(year)}:{})});
-  setSearching(true);
-  const timer=window.setTimeout(async()=>{
-   const local=async()=>{try{const started=performance.now(),localIndex=onlineRef.current?new SemanticIndex(onlineRef.current.corpus,onlineRef.current.snapshot):baseIndex;const vector=input.query?await embedQueryLocal(input.query):undefined;if(!active)return;const result=localIndex.search(input,vector);if(vector)result.queryPoint=localIndex.projectQuery(vector);result.durationMs=performance.now()-started;setResult(result);setResearch(input.query?documentFallbackReport(input.query,result):null);setCompletedQuery(input.query);setProviderStates([]);}catch(error){if(active){setNotice(error instanceof Error?error.message:'Không chạy được AI offline.');setResult({items:[],total:0,durationMs:0,method:'semantic',datasetVersion:corpus.version});setCompletedQuery(input.query);}}finally{if(active)setSearching(false)}};
-   if(input.query.length>=2&&source!=='connecting'&&(source!=='local'||scope!=='library')){
-    try{const response=await fetch('/api/v3/research',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...input,topK:12,scope}),signal:abort.signal});if(!response.ok)throw new Error('Truy xuất AI chưa sẵn sàng.');const data=researchResponseSchema.parse(await response.json());validateBundle(data.dataset);if(!active)return;const merged=mergeBundles(initialBundle,data.dataset,onlineRef.current??undefined);onlineRef.current=merged;setOnlineBundle(merged);setProviderStates(data.providers);setResearch(data.research);setResearchOpen(input.query.split(/\s+/).length>=5);const{queryPoint,...rest}=data.result;setResult(queryPoint?{...rest,queryPoint}:rest);setCompletedQuery(input.query);setSearching(false);if(data.warnings.length)setNotice(data.warnings.join(' '));saveOnlineDataset(merged).catch(()=>setNotice('Chưa lưu được bài/vector để dùng offline.'));return}catch{if(!active||abort.signal.aborted)return;setSource('local');setNotice('Backend AI chưa sẵn sàng; đang tìm bằng vector trong trình duyệt.');await local();return}
-   }
-   if(onlineRef.current){await local();return}
-   if(source==='local'||source==='connecting'){await local();return}
-   try{const response=await fetch('/api/v1/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(input),signal:abort.signal});if(!response.ok)throw new Error('Search unavailable');const raw:unknown=await response.json();
-    const parsed=searchResultSchema.parse(raw);
-    if(parsed.datasetVersion!==corpus.version)throw new Error('Dataset version mismatch');
-    if(active){const{queryPoint,...rest}=parsed;setResult(queryPoint?{...rest,queryPoint}:rest);setCompletedQuery(input.query);setSearching(false)}
-   }catch{if(!active||abort.signal.aborted)return;setSource('local');await local();}
-  },180);
-  return()=>{active=false;abort.abort();window.clearTimeout(timer)};
- },[query,group,year,baseIndex,source,corpus.version,scope,searchEpoch]);
- const hits=savedOnly&&!query?activeCorpus.papers.filter(paper=>saved.includes(paper.id)&&(group==='all'||paper.group===group)&&(year==='all'||paper.year>=Number(year))).map(paper=>({paper,score:0})):savedOnly?result.items.filter(hit=>saved.includes(hit.paper.id)):result.items;
- const counts=useMemo(()=>Object.fromEntries(Object.keys(GROUPS).map(g=>[g,activeCorpus.papers.filter(p=>p.group===g).length])),[activeCorpus]);
- 
- const neighbors=useMemo(()=>selected?index.neighbors(selected,3):[],[selected,index]);
- const visualScores=useMemo(()=>query?(completedQuery===query&&!searching?result.items.map(h=>({id:h.paper.id,score:h.score})):[]):selected?index.neighbors(selected,activeCorpus.papers.length-1).map(h=>({id:h.paper.id,score:h.score})).concat({id:selected.id,score:1}):[],[selected,index,activeCorpus.papers.length,query,result,completedQuery,searching]);
- useEffect(()=>{if(!searching&&pendingOpen.current!==null&&pendingOpen.current===completedQuery){pendingOpen.current=null;setSelected(result.items[0]?.paper??null)}},[searching,completedQuery,result]);
- function search(value:string){const parsed=searchSchema.safeParse({query:value,topK:50});if(!parsed.success){setNotice('Câu tìm kiếm tối đa 300 ký tự.');return}const next=parsed.data.query;if(scope!=='library'&&next&&next.length<2){setNotice('Tìm trực tuyến cần ít nhất 2 ký tự.');return}pendingOpen.current=next||null;if(next)setCastId(id=>id+1);setSelected(null);setSearching(true);setSearchEpoch(n=>n+1);setLibraryOpen(false);setDetailsOpen(false);setResearchOpen(false);setResearch(null);setQuery(next);setDraft(value);setSavedOnly(false);setNotice('');}
- function changeScope(value:'library'|'online'|'combined'){setScope(value);setProviderStates([]);setSelected(null);if(query){pendingOpen.current=query;setSearching(true);setCastId(id=>id+1)}}
- async function bookmark(paper:Paper){const next=!saved.includes(paper.id);try{await setBookmark(paper.id,next);setSaved(ids=>next?[...ids,paper.id]:ids.filter(id=>id!==paper.id));setNotice(next?'Đã cất bài vào kệ sách của bạn.':'Đã bỏ bài khỏi kệ sách.');}catch{setNotice('Chưa lưu được. Bộ nhớ trình duyệt có thể đã đầy hoặc bị chặn.')}}
- function chooseGroup(value:Group|'all'){pendingOpen.current=null;setGroup(value);setSelected(null);setSidebar(false);}
- const isLocal=source==='local';
- return <div className={`app-shell immersive ${libraryOpen?'library-open':''} ${detailsOpen?'details-open':''} ${selected?'has-reader':''}`}>
-  <div className="ambient-wash" aria-hidden="true"/>
-  <header className="topbar glass">
-   <a className="brand" href="/" aria-label="Paper Magic trang chủ"><span className="brand-mark"><Orbit size={24}/></span><span>paper<span className="brand-light">magic</span></span><span className="brand-beta">LAB</span></a>
-   <nav className="primary-nav" aria-label="Điều hướng"><button className={!savedOnly?'active':''} onClick={()=>{setSavedOnly(false);setSidebar(false);setLibraryOpen(true)}}><Sparkles size={15}/>Khám phá</button><button className={savedOnly?'active':''} onClick={()=>{setSavedOnly(true);selectPaper(null);setLibraryOpen(true)}}><Bookmark size={15}/>Bài đã lưu <span>{saved.length}</span></button></nav>
-   <div className="topbar-right"><button className="hud-library" aria-label={libraryOpen?'Đóng thư viện':'Mở thư viện'} onClick={()=>{setLibraryOpen(!libraryOpen);setDetailsOpen(false);setResearchOpen(false)}}><Layers size={14}/>Thư viện</button><button className="hud-details" aria-label={detailsOpen?'Đóng góc đọc':'Mở góc đọc'} onClick={()=>{setDetailsOpen(!detailsOpen);setLibraryOpen(false);setResearchOpen(false)}}><BookOpen size={14}/>Góc đọc</button>{research&&<button className="hud-research" aria-label="Mở dẫn chứng ngữ nghĩa" onClick={()=>{setResearchOpen(!researchOpen);setDetailsOpen(false);setLibraryOpen(false)}}><Sparkles size={14}/><span>Dẫn chứng</span></button>}<span className={`connection-pill ${isLocal?'offline':''}`}>{isLocal?<WifiOff size={12}/>:<span className="live-dot"/>}{source==='connecting'?'Đang kết nối':isLocal?'Dữ liệu trong máy':source==='api-mongodb'?'MongoDB cục bộ':'API · dữ liệu cục bộ'}</span><button className="icon-button" onClick={()=>setHelp(true)} aria-label="Hướng dẫn"><HelpCircle size={19}/></button><button className="mobile-menu icon-button" onClick={()=>setSidebar(!sidebar)} aria-label="Mở danh mục"><Layers size={19}/></button><span className="avatar">PM</span></div>
-  </header>
-  <aside className={`sidebar glass ${sidebar?'is-open':''}`} aria-label="Danh mục"><div className="sidebar-title">Thư viện của bạn<button className="icon-button" aria-label="Đóng danh mục" onClick={()=>setSidebar(false)}><X size={18}/></button></div><nav className="category-nav"><button onClick={()=>chooseGroup('all')}>Tất cả lĩnh vực <span>{corpus.papers.length}</span></button>{(Object.keys(GROUPS)as Group[]).map(key=><button key={key} onClick={()=>chooseGroup(key)}><i style={{background:GROUPS[key].color}}/>{GROUPS[key].label}<span>{counts[key]}</span></button>)}</nav></aside>
-  <main>
-   <section className="intro"><div className="eyebrow"><span/> A SPACE FOR CURIOUS MINDS</div><h1>{savedOnly?'Những ý tưởng bạn giữ lại.':<>Một chút tò mò.<br/><span>Mở ra cả vũ trụ.</span></>}</h1><p>{savedOnly?'Kệ sách riêng của bạn, luôn ở đây khi cần.':'Biến câu hỏi thành những kết nối bất ngờ giữa các bài nghiên cứu.'}</p>
-    <form className="search-bar glass" onSubmit={e=>{e.preventDefault();search(draft)}}><Search size={20}/><input ref={searchRef} value={draft} onChange={e=>setDraft(e.target.value)} placeholder="Bạn muốn khám phá điều gì?" aria-label="Tìm bài báo" maxLength={300}/>{draft&&<button className="clear-search icon-button" type="button" aria-label="Xóa tìm kiếm" onClick={()=>search('')}><X size={15}/></button>}<kbd>⌘ K</kbd><button className="search-submit" type="submit">Tìm trong sách<Sparkles size={15}/></button></form>
-    <div className="search-scope glass" role="group" aria-label="Phạm vi tìm kiếm">{([['library','Thư viện'],['online','Trên mạng'],['combined','Cả hai']] as const).map(([value,label])=><button key={value} type="button" aria-pressed={scope===value} onClick={()=>changeScope(value)}>{label}</button>)}</div><p className="search-scope-explainer">{scope==='library'?(offlineReady?'Trong các bài đã tải · Sẵn sàng dùng offline':import.meta.env.PROD?'Đang cài tài nguyên để dùng offline…':'Bản dev · Offline khả dụng ở bản build'):scope==='online'?'Tìm bài mới trên OpenAlex và arXiv · Cần Internet':'Tìm bài đã có và bổ sung từ các nguồn trên mạng'}</p><div className="provider-status" aria-live="polite">{scope!=='library'&&(searching?'Đang lấy nguồn và tính vector…':providerStates.length?providerStates.map(p=>`${p.provider}: ${p.status==='ok'?'đã kết nối':p.status==='cached'?'từ bộ nhớ':p.status==='rate-limited'?'giới hạn lượt':'chưa kết nối'} · ${p.count} bài`).join(' / '):'Tìm nguồn học thuật; mất mạng dùng bài đã có.')}</div><div className="suggestions"><span>Bắt đầu từ</span>{['Học sâu','Ảnh y sinh','Lượng tử','Protein'].map(q=><button key={q} onClick={()=>search(q)}>{q}<ArrowUpRight size={11}/></button>)}</div>
-   </section>
-   <div className="workspace-heading"><span><span className="workspace-symbol">✧</span> Không gian khám phá</span><span>{corpus.papers.length} bài báo <i/> 4 lĩnh vực <i/> AI trên máy</span></div>
-   <div className="explorer-grid">
-    <div className="book-column"><Suspense fallback={<div className="magic-viewport scene-placeholder"><Sparkles/>Đang chuẩn bị cuốn sách…</div>}><MagicBook paper={selected} snapshot={activeSnapshot} papers={activeCorpus.papers} onSelect={selectPaper} visibleIds={hits.map(h=>h.paper.id)} queryPoint={!searching&&completedQuery===query?result.queryPoint??null:null} castId={castId} searching={searching} scores={visualScores}/></Suspense>
-     <div className="under-scene"><span><span className="tiny-orbit">◎</span> Không gian dựng bằng toán học</span><span>Không ảnh dựng sẵn · Không video</span></div>
+import { useEffect, useMemo, useRef, useState, useCallback, lazy, Suspense } from 'react'
+import { BookOpen, Bookmark, Sparkles, Check, Orbit } from 'lucide-react'
+import {
+  GROUPS,
+  SemanticIndex,
+  validateSnapshot,
+  corpusSchema,
+  searchSchema,
+  searchResultSchema,
+  documentFallbackReport,
+  type ResearchReport,
+  type Corpus,
+  type Group,
+  type Paper,
+  type SearchResult,
+} from '@paper-galaxy/core'
+import corpusFile from '../../../data/corpus.json'
+import snapshotFile from '../../../data/semantic-snapshot.json'
+import { embedQueryLocal } from './semantic/client'
+import { loadBookmarks, loadCorpus, saveCorpus, setBookmark } from './storage'
+import { SIMILARITY_BANDS } from './scene/ritual'
+import PaperDossier from './PaperDossier'
+import Header from './components/layout/Header'
+import Sidebar from './components/layout/Sidebar'
+import SearchHero from './components/layout/SearchHero'
+import ResultsPanel from './components/layout/ResultsPanel'
+import Modals from './components/layout/Modals'
+import './light-theme.css'
+
+const MagicBook = lazy(() => import('./scene/MagicBook'))
+const initialCorpus = corpusSchema.parse(corpusFile)
+const snapshot = validateSnapshot(initialCorpus, snapshotFile)
+type Source = 'connecting' | 'api-json' | 'api-mongodb' | 'local'
+
+export default function App() {
+  const [corpus, setCorpus] = useState<Corpus>(initialCorpus),
+    [source, setSource] = useState<Source>('connecting')
+
+  // Quản lý trạng thái Sáng / Tối
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const stored = localStorage.getItem('paper-magic-theme')
+    if (stored === 'light' || stored === 'dark') return stored
+    // Lần đầu vào trang: theo cài đặt của hệ điều hành
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+  })
+
+  useEffect(() => {
+    const root = document.documentElement
+    root.classList.toggle('dark', theme === 'dark')
+    root.dataset.theme = theme // để CSS dùng :root[data-theme='light']
+    root.style.colorScheme = theme // scrollbar, input... đổi theo theme
+    root.style.backgroundColor = theme === 'dark' ? '#020617' : '#f6f7fd'
+    try {
+      localStorage.setItem('paper-magic-theme', theme)
+    } catch {
+      /* bỏ qua nếu trình duyệt chặn localStorage */
+    }
+  }, [theme])
+
+  const toggleTheme = useCallback(
+    () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark')),
+    []
+  )
+
+  const [searchEpoch, setSearchEpoch] = useState(0)
+  const [draft, setDraft] = useState(''),
+    [query, setQuery] = useState(''),
+    [group, setGroup] = useState<Group | 'all'>('all'),
+    [year, setYear] = useState('all')
+  const [selected, setSelected] = useState<Paper | null>(null),
+    [saved, setSaved] = useState<string[]>([]),
+    [savedOnly, setSavedOnly] = useState(false),
+    [searching, setSearching] = useState(false)
+  const [result, setResult] = useState<SearchResult>(() =>
+    new SemanticIndex(initialCorpus, snapshot).search({ query: '', topK: 50 })
+  )
+  const [completedQuery, setCompletedQuery] = useState('')
+  const [research, setResearch] = useState<ResearchReport | null>(null),
+    [researchOpen, setResearchOpen] = useState(false)
+  const [offlineReady, setOfflineReady] = useState(
+    () => document.documentElement.dataset.offlineReady === 'true'
+  )
+  useEffect(() => {
+    const update = (event: Event) =>
+      setOfflineReady(Boolean((event as CustomEvent<boolean>).detail))
+    window.addEventListener('paper-magic-offline-ready', update)
+    return () => window.removeEventListener('paper-magic-offline-ready', update)
+  }, [])
+  const [castId, setCastId] = useState(0)
+  const pendingOpen = useRef<string | null>(null)
+  const [libraryOpen, setLibraryOpen] = useState(false),
+    [detailsOpen, setDetailsOpen] = useState(false)
+  const selectPaper = useCallback((paper: Paper | null) => {
+    pendingOpen.current = null
+    setSelected(paper)
+    if (paper) {
+      setLibraryOpen(false)
+      setDetailsOpen(false)
+    }
+  }, [])
+  const [help, setHelp] = useState(false),
+    [sidebar, setSidebar] = useState(false),
+    [notice, setNotice] = useState('')
+  const searchRef = useRef<HTMLInputElement>(null)
+  const baseIndex = useMemo(() => new SemanticIndex(corpus, snapshot), [corpus])
+  // Chỉ dùng bộ dữ liệu cục bộ (đã bỏ tìm kiếm trên mạng)
+  const activeCorpus = corpus,
+    activeSnapshot = snapshot
+  const index = baseIndex
+  useEffect(() => {
+    const abort = new AbortController()
+    let active = true
+    loadBookmarks()
+      .then((ids) => {
+        if (active) setSaved(ids)
+      })
+      .catch(() => {
+        if (active) setNotice('Không đọc được bài đã lưu. Kiểm tra quyền lưu trữ trình duyệt.')
+      })
+    ;(async () => {
+      try {
+        const response = await fetch('/api/v1/papers', { signal: abort.signal })
+        if (!response.ok) throw new Error('API unavailable')
+        const raw: unknown = await response.json()
+        const data = corpusSchema.parse(raw)
+        if (!active) return
+        setCorpus(data)
+        const storage = raw && typeof raw === 'object' && 'storage' in raw ? raw.storage : 'json'
+        setSource(storage === 'mongodb' ? 'api-mongodb' : 'api-json')
+        saveCorpus(data).catch(() =>
+          setNotice('Không lưu được bản sao offline. Bộ dữ liệu đóng gói vẫn dùng được.')
+        )
+      } catch {
+        if (abort.signal.aborted || !active) return
+        try {
+          const local = await loadCorpus()
+          if (active) {
+            setCorpus(local || initialCorpus)
+            setSource('local')
+          }
+        } catch {
+          if (active) setSource('local')
+        }
+      }
+    })()
+    return () => {
+      active = false
+      abort.abort()
+    }
+  }, [])
+  useEffect(() => {
+    const listener = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault()
+        searchRef.current?.focus()
+      }
+      if (e.key === 'Escape') {
+        setHelp(false)
+        setSidebar(false)
+        setLibraryOpen(false)
+        setDetailsOpen(false)
+        setResearchOpen(false)
+      }
+    }
+    window.addEventListener('keydown', listener)
+    return () => window.removeEventListener('keydown', listener)
+  }, [])
+  useEffect(() => {
+    const abort = new AbortController()
+    let active = true
+    const input = searchSchema.parse({
+      query,
+      topK: 50,
+      ...(group !== 'all' ? { group } : {}),
+      ...(year !== 'all' ? { yearFrom: Number(year) } : {}),
+    })
+    setSearching(true)
+    const timer = window.setTimeout(async () => {
+      const local = async () => {
+        try {
+          const started = performance.now(),
+            localIndex = baseIndex
+          const vector = input.query ? await embedQueryLocal(input.query) : undefined
+          if (!active) return
+          const result = localIndex.search(input, vector)
+          if (vector) result.queryPoint = localIndex.projectQuery(vector)
+          result.durationMs = performance.now() - started
+          setResult(result)
+          setResearch(input.query ? documentFallbackReport(input.query, result) : null)
+          setCompletedQuery(input.query)
+        } catch (error) {
+          if (active) {
+            setNotice(error instanceof Error ? error.message : 'Không chạy được AI offline.')
+            setResult({
+              items: [],
+              total: 0,
+              durationMs: 0,
+              method: 'semantic',
+              datasetVersion: corpus.version,
+            })
+            setCompletedQuery(input.query)
+          }
+        } finally {
+          if (active) setSearching(false)
+        }
+      }
+      if (source === 'local' || source === 'connecting') {
+        await local()
+        return
+      }
+      try {
+        const response = await fetch('/api/v1/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(input),
+          signal: abort.signal,
+        })
+        if (!response.ok) throw new Error('Search unavailable')
+        const raw: unknown = await response.json()
+        const parsed = searchResultSchema.parse(raw)
+        if (parsed.datasetVersion !== corpus.version) throw new Error('Dataset version mismatch')
+        if (active) {
+          const { queryPoint, ...rest } = parsed
+          const apiResult = queryPoint ? { ...rest, queryPoint } : rest
+          setResult(apiResult)
+          setResearch(input.query ? documentFallbackReport(input.query, apiResult) : null)
+          setCompletedQuery(input.query)
+          setSearching(false)
+        }
+      } catch {
+        if (!active || abort.signal.aborted) return
+        setSource('local')
+        await local()
+      }
+    }, 180)
+    return () => {
+      active = false
+      abort.abort()
+      window.clearTimeout(timer)
+    }
+  }, [query, group, year, baseIndex, source, corpus.version, searchEpoch])
+  const hits =
+    savedOnly && !query
+      ? activeCorpus.papers
+          .filter(
+            (paper) =>
+              saved.includes(paper.id) &&
+              (group === 'all' || paper.group === group) &&
+              (year === 'all' || paper.year >= Number(year))
+          )
+          .map((paper) => ({ paper, score: 0 }))
+      : savedOnly
+        ? result.items.filter((hit) => saved.includes(hit.paper.id))
+        : result.items
+  const counts = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.keys(GROUPS).map((g) => [g, activeCorpus.papers.filter((p) => p.group === g).length])
+      ),
+    [activeCorpus]
+  )
+
+  const neighbors = useMemo(() => (selected ? index.neighbors(selected, 3) : []), [selected, index])
+  const visualScores = useMemo(
+    () =>
+      query
+        ? completedQuery === query && !searching
+          ? result.items.map((h) => ({ id: h.paper.id, score: h.score }))
+          : []
+        : selected
+          ? index
+              .neighbors(selected, activeCorpus.papers.length - 1)
+              .map((h) => ({ id: h.paper.id, score: h.score }))
+              .concat({ id: selected.id, score: 1 })
+          : [],
+    [selected, index, activeCorpus.papers.length, query, result, completedQuery, searching]
+  )
+  useEffect(() => {
+    if (!searching && pendingOpen.current !== null && pendingOpen.current === completedQuery) {
+      pendingOpen.current = null
+      setSelected(result.items[0]?.paper ?? null)
+    }
+  }, [searching, completedQuery, result])
+  function search(value: string) {
+    const parsed = searchSchema.safeParse({ query: value, topK: 50 })
+    if (!parsed.success) {
+      setNotice('Câu tìm kiếm tối đa 300 ký tự.')
+      return
+    }
+    const next = parsed.data.query
+    pendingOpen.current = next || null
+    if (next) setCastId((id) => id + 1)
+    setSelected(null)
+    setSearching(true)
+    setSearchEpoch((n) => n + 1)
+    setLibraryOpen(false)
+    setDetailsOpen(false)
+    setResearchOpen(false)
+    setResearch(null)
+    setQuery(next)
+    setDraft(value)
+    setSavedOnly(false)
+    setNotice('')
+  }
+  async function bookmark(paper: Paper) {
+    const next = !saved.includes(paper.id)
+    try {
+      await setBookmark(paper.id, next)
+      setSaved((ids) => (next ? [...ids, paper.id] : ids.filter((id) => id !== paper.id)))
+      setNotice(next ? 'Đã cất bài vào kệ sách của bạn.' : 'Đã bỏ bài khỏi kệ sách.')
+    } catch {
+      setNotice('Chưa lưu được. Bộ nhớ trình duyệt có thể đã đầy hoặc bị chặn.')
+    }
+  }
+  function chooseGroup(value: Group | 'all') {
+    pendingOpen.current = null
+    setGroup(value)
+    setSelected(null)
+    setSidebar(false)
+  }
+  const isLocal = source === 'local'
+
+  return (
+    <div
+      className={`app-shell immersive ${libraryOpen ? 'library-open' : ''} ${detailsOpen ? 'details-open' : ''} ${selected ? 'has-reader' : ''}`}
+    >
+      <div className="ambient-wash" aria-hidden="true" />
+
+      {/* Đưa Header ra bên ngoài, nằm trên cùng với z-index cao để hiển thị rõ ràng */}
+      <div className="sticky top-0 z-50 w-full px-4 pt-2">
+        <Header
+          savedOnly={savedOnly}
+          setSavedOnly={setSavedOnly}
+          savedCount={saved.length}
+          libraryOpen={libraryOpen}
+          setLibraryOpen={setLibraryOpen}
+          detailsOpen={detailsOpen}
+          setDetailsOpen={setDetailsOpen}
+          researchOpen={researchOpen}
+          setResearchOpen={setResearchOpen}
+          hasResearch={!!research}
+          isLocal={isLocal}
+          source={source}
+          setHelp={setHelp}
+          sidebar={sidebar}
+          setSidebar={setSidebar}
+          selectPaper={selectPaper}
+          theme={theme}
+          toggleTheme={toggleTheme}
+        />
+      </div>
+
+      <Sidebar
+        sidebar={sidebar}
+        setSidebar={setSidebar}
+        chooseGroup={chooseGroup}
+        counts={counts}
+        totalPapers={corpus.papers.length}
+      />
+
+      <main>
+        <SearchHero
+          draft={draft}
+          setDraft={setDraft}
+          searchRef={searchRef}
+          search={search}
+          offlineReady={offlineReady}
+          searching={searching}
+          savedOnly={savedOnly}
+        />
+
+        <div className="workspace-heading">
+          <span>
+            <span className="workspace-symbol">✧</span> Không gian khám phá
+          </span>
+          <span>
+            {corpus.papers.length} bài báo <i /> 4 lĩnh vực <i /> AI trên máy
+          </span>
+        </div>
+
+        <div className="explorer-grid">
+          <div className="book-column">
+            <Suspense
+              fallback={
+                <div className="magic-viewport scene-placeholder">
+                  <Sparkles />
+                  Đang chuẩn bị cuốn sách…
+                </div>
+              }
+            >
+              <MagicBook
+                paper={selected}
+                snapshot={activeSnapshot}
+                papers={activeCorpus.papers}
+                onSelect={selectPaper}
+                visibleIds={hits.map((h) => h.paper.id)}
+                queryPoint={
+                  !searching && completedQuery === query ? (result.queryPoint ?? null) : null
+                }
+                castId={castId}
+                searching={searching}
+                scores={visualScores}
+                theme={theme}
+                toggleTheme={toggleTheme}
+              />
+            </Suspense>
+            <div className="under-scene">
+              <span>
+                <span className="tiny-orbit">◎</span> Không gian dựng bằng toán học
+              </span>
+              <span>Không ảnh dựng sẵn · Không video</span>
+            </div>
+          </div>
+
+          <ResultsPanel
+            result={result}
+            completedQuery={completedQuery}
+            savedOnly={savedOnly}
+            query={query}
+            hits={hits}
+            searching={searching}
+            group={group}
+            chooseGroup={chooseGroup}
+            year={year}
+            setYear={setYear}
+            search={search}
+            setSavedOnly={setSavedOnly}
+            selected={selected}
+            selectPaper={selectPaper}
+            setNotice={setNotice}
+            saved={saved}
+            bookmark={bookmark}
+          />
+        </div>
+
+        <div className="similarity-legend glass">
+          <div>
+            <span className="legend-icon">
+              <Orbit size={19} />
+            </span>
+            <span>
+              <strong>Màu của những kết nối</strong>
+              <small>
+                {query
+                  ? 'So với câu tìm kiếm'
+                  : selected
+                    ? 'So với bài đang đọc'
+                    : 'Màu xuất hiện khi tìm hoặc chọn một bài'}
+              </small>
+            </span>
+          </div>
+          <div className="legend-levels">
+            <span>
+              <i className="tone-high" /> Cao <small>≥ {SIMILARITY_BANDS.high}</small>
+            </span>
+            <span>
+              <i className="tone-medium" /> Vừa{' '}
+              <small>
+                {SIMILARITY_BANDS.medium}–{SIMILARITY_BANDS.high}
+              </small>
+            </span>
+            <span>
+              <i className="tone-low" /> Thấp hơn <small>&lt; {SIMILARITY_BANDS.medium}</small>
+            </span>
+          </div>
+          <p>
+            Cosine từ vector 384D.
+            <br />
+            Không phải % độ chính xác.
+          </p>
+        </div>
+
+        <section
+          className={`detail-panel glass ${selected ? 'has-selection' : ''}`}
+          aria-label="Thông tin bài báo"
+        >
+          {selected ? (
+            <PaperDossier
+              paper={selected}
+              saved={saved.includes(selected.id)}
+              onSave={() => void bookmark(selected)}
+              onSelect={selectPaper}
+              neighbors={neighbors}
+              onNotice={setNotice}
+            />
+          ) : (
+            <div className="detail-empty">
+              <span className="detail-book-icon">
+                <BookOpen size={26} />
+              </span>
+              <div>
+                <h2>Những khám phá lớn bắt đầu bằng một câu hỏi nhỏ.</h2>
+                <p>Tìm một chủ đề để đánh thức cuốn sách, hoặc mở một bài từ thư viện.</p>
+              </div>
+              <span className="detail-sparkle">✧</span>
+            </div>
+          )}
+        </section>
+
+        <footer className="page-footer">
+          <a className="footer-brand" href="/">
+            paper magic<span>Made for curious minds.</span>
+          </a>
+          <span>
+            <Check size={12} /> Tìm kiếm AI cục bộ · Dữ liệu trên máy
+          </span>
+          <button onClick={() => setHelp(true)}>
+            Một chút hướng dẫn
+            <Bookmark size={12} />
+          </button>
+        </footer>
+      </main>
+
+      <Modals
+        researchOpen={researchOpen}
+        research={research}
+        papers={activeCorpus.papers}
+        setResearchOpen={setResearchOpen}
+        selectPaper={selectPaper}
+        notice={notice}
+        setNotice={setNotice}
+        help={help}
+        setHelp={setHelp}
+        totalPapers={corpus.papers.length}
+      />
     </div>
-    <section className="results-panel glass" aria-label="Kết quả tìm kiếm" data-search-method={result.method} data-completed-query={completedQuery}>
-     <div className="results-heading"><div><span className="section-kicker">YOUR NEXT DISCOVERY</span><h2>{savedOnly?'Kệ sách của bạn':query?'Những kết nối tìm thấy':'Thư viện ý tưởng'}<span>{hits.length}</span></h2></div><BookOpen size={19}/></div><p className="results-query">{searching?'Đang tìm những bài liên quan…':query?`Dành cho “${query}”`:'Một bài báo. Một góc nhìn mới.'}</p>
-     <div className="result-filters"><label className="select-wrapper"><select aria-label="Lọc lĩnh vực" value={group} onChange={e=>chooseGroup(e.target.value as Group|'all')}><option value="all">Tất cả lĩnh vực</option>{(Object.keys(GROUPS)as Group[]).map(g=><option key={g} value={g}>{GROUPS[g].label}</option>)}</select><ChevronDown size={12}/></label><label className="select-wrapper"><select aria-label="Năm xuất bản" value={year} onChange={e=>{setYear(e.target.value);selectPaper(null)}}><option value="all">Mọi năm</option><option value="2020">Từ 2020</option><option value="2024">Từ 2024</option><option value="2026">Từ 2026</option></select><ChevronDown size={12}/></label></div>
-     <div className="result-list" aria-live="polite" aria-busy={searching}>{hits.length===0?<div className="empty-state"><BookOpen size={30}/><h3>{savedOnly?'Kệ sách còn trống':'Chưa tìm thấy bài phù hợp'}</h3><p>{savedOnly?'Lưu một bài để quay lại đọc sau.':'Thử câu hỏi khác hoặc bỏ bớt bộ lọc.'}</p><button onClick={()=>{search('');setGroup('all');setYear('all');setSavedOnly(false)}}>Xem toàn bộ thư viện<ArrowRight size={14}/></button></div>:hits.map(({paper,score},i)=>{const tone=similarityTone(query?score:null);return <article className={`paper-card ${selected?.id===paper.id?'selected':''}`} key={paper.id} data-paper-id={paper.id} data-testid="paper-card"><button className="paper-select" disabled={searching} onClick={()=>{selectPaper(paper);setNotice('')}} aria-pressed={selected?.id===paper.id}><div className="paper-meta"><span className="paper-group"><i style={{background:GROUPS[paper.group].color}}/>{GROUPS[paper.group].label}</span><span>{paper.year}</span></div><div className="card-source-line"><span>{paper.provenance?.provider??'arxiv'}</span><span className={paper.provenance?.abstractAvailable===false?'coverage-limited':'coverage-complete'}>{paper.provenance?.abstractAvailable===false?'Chỉ tiêu đề':'Có abstract'}</span></div><h3>{paper.title}</h3><p>{paper.summary}</p><div className="paper-foot">{query?<span className="similarity-score" title={tone.label}><i style={{background:tone.color}}/>cos {score.toFixed(3)}</span>:<span>arXiv · {paper.id}</span>}<span className="open-book-label">{selected?.id===paper.id?'Đang đọc':'Mở sách'}<ArrowUpRight size={12}/></span></div></button><span className="paper-number">{String(i+1).padStart(2,'0')}</span><button className={`save-card ${saved.includes(paper.id)?'saved':''}`} aria-label={`${saved.includes(paper.id)?'Bỏ lưu':'Lưu'} ${paper.title}`} onClick={()=>void bookmark(paper)}><Bookmark size={15} fill={saved.includes(paper.id)?'currentColor':'none'}/></button></article>})}</div>
-     <div className="result-footer"><span className="live-dot"/>{scope==='library'?'Thư viện đã tải':'OpenAlex / arXiv'}<span>{query?`${result.durationMs.toFixed(1)} ms`:'Lưu trữ trên máy'}</span></div>
-    </section>
-   </div>
-   <div className="similarity-legend glass"><div><span className="legend-icon"><Orbit size={19}/></span><span><strong>Màu của những kết nối</strong><small>{query?'So với câu tìm kiếm':selected?'So với bài đang đọc':'Màu xuất hiện khi tìm hoặc chọn một bài'}</small></span></div><div className="legend-levels"><span><i className="tone-high"/>Cao <small>≥ {SIMILARITY_BANDS.high}</small></span><span><i className="tone-medium"/>Vừa <small>{SIMILARITY_BANDS.medium}–{SIMILARITY_BANDS.high}</small></span><span><i className="tone-low"/>Thấp hơn <small>&lt; {SIMILARITY_BANDS.medium}</small></span></div><p>Cosine từ vector 384D.<br/>Không phải % độ chính xác.</p></div>
-   <section className={`detail-panel glass ${selected?'has-selection':''}`} aria-label="Thông tin bài báo">{selected?<PaperDossier paper={selected} saved={saved.includes(selected.id)} onSave={()=>void bookmark(selected)} onSelect={selectPaper} neighbors={neighbors} onNotice={setNotice}/>:<div className="detail-empty"><span className="detail-book-icon"><BookOpen size={26}/></span><div><h2>Những khám phá lớn bắt đầu bằng một câu hỏi nhỏ.</h2><p>Tìm một chủ đề để đánh thức cuốn sách, hoặc mở một bài từ thư viện.</p></div><span className="detail-sparkle">✧</span></div>}</section>
-   <footer className="page-footer"><a className="footer-brand" href="/">paper magic<span>Made for curious minds.</span></a><span><Check size={12}/>Tìm kiếm AI cục bộ · Dữ liệu trên máy</span><button onClick={()=>setHelp(true)}>Một chút hướng dẫn<ArrowUpRight size={12}/></button></footer>
-  </main>
-  {researchOpen&&research&&<ResearchPanel report={research} papers={activeCorpus.papers} onSelect={paper=>{setResearchOpen(false);selectPaper(paper)}} onClose={()=>setResearchOpen(false)}/>}
-  {notice&&<div className="toast glass" role="status"><Check size={16}/>{notice}<button onClick={()=>setNotice('')} aria-label="Đóng thông báo"><X size={14}/></button></div>}
-  {help&&<div className="modal-backdrop" onClick={()=>setHelp(false)}><section className="help-dialog glass" role="dialog" aria-modal="true" aria-labelledby="help-title" onClick={e=>e.stopPropagation()}><button className="dialog-close icon-button" autoFocus aria-label="Đóng hướng dẫn" onClick={()=>setHelp(false)}><X size={20}/></button><span className="brand-mark"><Orbit size={27}/></span><h2 id="help-title">Đi theo sự tò mò của bạn.</h2><p>Nhập câu hỏi rồi tìm: chữ xoáy vào sách, sách khép lại và mở ra để đọc. Dùng mũi tên để lật trang, “Bài tiếp theo” để đổi bài và “Thoát” để trở về. Có thể kéo xoay, cuộn phóng to và chọn Trang trái/Trang phải để đọc lớn. Thư viện và Góc đọc mở thành các bảng kính nổi.</p><div className="help-note"><strong>Phía sau phép màu</strong><p>{corpus.papers.length} bài thật từ arXiv. E5 tạo vector 384 chiều, tìm bằng cosine. Các đốm sáng quanh sách dùng tọa độ PCA thật. Rê xem tên, bấm để mở bài; đường nối là các bài gần nhất theo cosine384D. Màu là các dải điểm quy ước, không phải đánh giá chất lượng bài báo.</p></div><p>Hình khối dựng bằng TypeScript, ký tự và trang giấy vẽ bằng Canvas. Chuyển động dùng số phức, sin/cos và nội suy. Không dùng ảnh hoặc video tải sẵn. Model và thư viện cần cài cục bộ lần đầu; sau đó bản build hỗ trợ offline. Link arXiv cần Internet.</p><button className="search-submit" onClick={()=>setHelp(false)}>Bắt đầu khám phá<ArrowRight size={16}/></button></section></div>}
- </div>;
+  )
 }
