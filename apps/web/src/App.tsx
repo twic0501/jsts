@@ -267,7 +267,7 @@ export default function App() {
     [activeCorpus]
   )
 
-  const neighbors = useMemo(() => (selected ? index.neighbors(selected, 3) : []), [selected, index])
+  const neighbors = useMemo(() => (selected ? index.neighbors(selected, 5) : []), [selected, index])
   const visualScores = useMemo(
     () =>
       query

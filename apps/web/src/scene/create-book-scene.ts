@@ -473,23 +473,21 @@ export function createBookScene(
       plan.length > 1
         ? plan.slice(1).map((step) => ({ a: step.parent!, b: step.id, score: step.score }))
         : sparseSemanticLinks(neighborRows, visible)
-    const positions: number[] = [],
-      colors: number[] = [],
-      lightColors: number[] = []
+    const lightColors: number[] = []
     for (const link of links) {
-      for (const id of [link.a, link.b]) {
-        const point = mapNodes.get(id)!.position,
-          color = baseColors.get(id) ?? tint(GROUPS[mapPaper.get(id)!.group].color)
-        positions.push(point.x, point.y, point.z)
-        colors.push(color.r, color.g, color.b)
-      }
       const color = baseColors.get(link.a) ?? tint('#a9cfff')
       lightColors.push(color.r, color.g, color.b)
     }
     network.geometry.dispose()
     network.geometry = new THREE.BufferGeometry()
-    network.geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
-    network.geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
+    network.geometry.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute(new Float32Array(links.length * CURVE_SEG * 6), 3)
+    )
+    network.geometry.setAttribute(
+      'color',
+      new THREE.Float32BufferAttribute(new Float32Array(links.length * CURVE_SEG * 6), 3)
+    )
     linkLights.geometry.dispose()
     linkLights.geometry = new THREE.BufferGeometry()
     linkLights.geometry.setAttribute(
@@ -507,14 +505,13 @@ export function createBookScene(
       if (source)
         for (const neighbor of semanticIndex.neighbors(paper, 5)) {
           const target = mapNodes.get(neighbor.paper.id)
-          if (target && target.visible)
-            points.push(source.position.clone(), target.position.clone())
+          if (target && target.visible) curveSegments(source.position, target.position, points)
         }
     }
     edgeGeometry.dispose()
     edgeGeometry = new THREE.BufferGeometry().setFromPoints(points)
     edges.geometry = edgeGeometry
-    canvas.dataset.relatedEdges = String(points.length / 2)
+    canvas.dataset.relatedEdges = String(points.length / 2 / CURVE_SEG)
   }
   const ritual = new BookRitual(),
     reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -662,7 +659,12 @@ export function createBookScene(
     plan = scoreValues.size ? planSpread(neighborRows, scoreValues, visible) : []
     planIndex.clear()
     plan.forEach((step, i) => planIndex.set(step.id, i))
-    if (!plan.length) anchorId = null
+    if (!plan.length) {
+      anchorId = null
+      galaxyOn = false
+    }
+    if (galaxyOn) computeGalaxy()
+    else cloudCenter.set(0, 4.1, -4.2)
   }
   function linkDone(link: SemanticLink) {
     const i = planIndex.get(link.b)
@@ -673,9 +675,14 @@ export function createBookScene(
   function writeNetwork(T: number) {
     const pos = network.geometry.getAttribute('position') as THREE.BufferAttribute | undefined,
       col = network.geometry.getAttribute('color') as THREE.BufferAttribute | undefined
-    if (!pos || !col || pos.count !== links.length * 2) return
+    if (!pos || !col || pos.count !== links.length * CURVE_SEG * 2) return
     const bg = new THREE.Color('#eceffc'),
-      c = new THREE.Color()
+      ca = new THREE.Color(),
+      cb = new THREE.Color(),
+      c = new THREE.Color(),
+      ctrl = new THREE.Vector3(),
+      p0 = new THREE.Vector3(),
+      p1 = new THREE.Vector3()
     links.forEach((link, j) => {
       const na = mapNodes.get(link.a),
         nb = mapNodes.get(link.b)
@@ -687,16 +694,28 @@ export function createBookScene(
           i === undefined || T === Infinity
             ? 1
             : Math.max(0, Math.min(1, (T - linkStartAt(i, plan.length)) / SPREAD.linkDur)),
-        e = smooth(p),
-        k = (0.22 + 0.78 * similarityStrength(link.score)) * (p > 0 ? 1 : 0)
-      pos.setXYZ(j * 2, a.x, a.y, a.z)
-      pos.setXYZ(j * 2 + 1, a.x + (b.x - a.x) * e, a.y + (b.y - a.y) * e, a.z + (b.z - a.z) * e)
-      ;[link.a, link.b].forEach((id, v) => {
-        c.copy(baseColors.get(id) ?? tint(GROUPS[mapPaper.get(id)!.group].color))
-        if (isLight) c.lerp(bg, 1 - k)
-        else c.multiplyScalar(k)
-        col.setXYZ(j * 2 + v, c.r, c.g, c.b)
-      })
+        e = smooth(p)
+      let k = (0.22 + 0.78 * similarityStrength(link.score)) * (p > 0 ? 1 : 0)
+      if (focusId) k *= link.a === focusId || link.b === focusId ? 1.7 : 0.3
+      else if (anchorId && scoreValues.size && link.a === anchorId) k *= 1.5
+      linkCtrl(a, b, ctrl)
+      ca.copy(baseColors.get(link.a) ?? tint(GROUPS[mapPaper.get(link.a)!.group].color))
+      cb.copy(baseColors.get(link.b) ?? tint(GROUPS[mapPaper.get(link.b)!.group].color))
+      for (let s = 0; s < CURVE_SEG; s++) {
+        const t0 = s / CURVE_SEG,
+          t1 = (s + 1) / CURVE_SEG
+        bez(a, ctrl, b, Math.min(t0, e), p0)
+        bez(a, ctrl, b, Math.min(t1, e), p1)
+        const o = (j * CURVE_SEG + s) * 2
+        pos.setXYZ(o, p0.x, p0.y, p0.z)
+        pos.setXYZ(o + 1, p1.x, p1.y, p1.z)
+        for (let v = 0; v < 2; v++) {
+          c.copy(ca).lerp(cb, v ? t1 : t0)
+          if (isLight) c.lerp(bg, 1 - Math.min(1, k))
+          else c.multiplyScalar(k)
+          col.setXYZ(o + v, c.r, c.g, c.b)
+        }
+      }
     })
     pos.needsUpdate = true
     col.needsUpdate = true
@@ -752,6 +771,120 @@ export function createBookScene(
           T < SPREAD.rootAt ? 0.95 : Math.max(0, 0.95 * (1 - (T - SPREAD.rootAt) / 0.35))
       }
     }
+  }
+
+  /* ===== BỐ CỤC THIÊN HÀ + ĐƯỜNG CONG + CAMERA FOCUS ===== */
+  /** Chỉnh nhanh: bán kính vòng gần/xa nhất quanh bài số 1, độ zoom khi focus (nhỏ hơn = zoom gần hơn). */
+  const GALAXY = { inner: 1.4, outer: 4.4, flatten: 0.55, minGap: 0.95 },
+    AUTO_ZOOM = 0.72,
+    NODE_ZOOM = 0.6
+  const CURVE_SEG = 14,
+    _up = new THREE.Vector3(0, 1, 0),
+    _m = new THREE.Vector3(),
+    _t = new THREE.Vector3(),
+    _c = new THREE.Vector3(),
+    _p = new THREE.Vector3(),
+    cloudCenter = new THREE.Vector3(0, 4.1, -4.2)
+  const homePos = new Map<string, THREE.Vector3>()
+  mapNodes.forEach((n, id) => homePos.set(id, n.position.clone()))
+  const galaxyTarget = new Map<string, THREE.Vector3>()
+  let galaxyOn = false,
+    layoutBlend = 0,
+    layoutApplied = false,
+    camFocusId: string | null = null,
+    camZoomTarget = 1,
+    camZoom = 1
+  const camOff = { x: 0, y: 0, z: 0 }
+  /** Điểm điều khiển của đường cong: lệch ngang theo hướng xoáy quanh tâm, tạo các "nhánh" như thiên hà. */
+  function linkCtrl(a: THREE.Vector3, b: THREE.Vector3, out: THREE.Vector3) {
+    _m.addVectors(a, b).multiplyScalar(0.5)
+    const len = a.distanceTo(b)
+    _t.copy(_m).sub(cloudCenter)
+    _t.crossVectors(_up, _t)
+    if (_t.lengthSq() < 1e-6) {
+      _t.subVectors(b, a)
+      _t.crossVectors(_up, _t)
+    }
+    if (_t.lengthSq() < 1e-9) _t.set(1, 0, 0)
+    _t.normalize().multiplyScalar(len * 0.2)
+    out.copy(_m).add(_t)
+    out.y += len * 0.05
+    return out
+  }
+  function bez(
+    a: THREE.Vector3,
+    c: THREE.Vector3,
+    b: THREE.Vector3,
+    t: number,
+    out: THREE.Vector3
+  ) {
+    const u = 1 - t
+    return out.set(
+      u * u * a.x + 2 * u * t * c.x + t * t * b.x,
+      u * u * a.y + 2 * u * t * c.y + t * t * b.y,
+      u * u * a.z + 2 * u * t * c.z + t * t * b.z
+    )
+  }
+  function curveSegments(a: THREE.Vector3, b: THREE.Vector3, out: THREE.Vector3[]) {
+    linkCtrl(a, b, _c)
+    let prev = a.clone()
+    for (let i = 1; i <= CURVE_SEG; i++) {
+      const next = bez(a, _c, b, i / CURVE_SEG, new THREE.Vector3())
+      out.push(prev, next)
+      prev = next
+    }
+  }
+  /**
+   * Bố cục thiên hà: bài số 1 ở tâm; các bài khác nằm trên các vòng quanh tâm, bán kính tăng dần khi điểm cosine
+   * thật giảm dần. Hướng của mỗi bài lấy từ toạ độ PCA (so với trọng tâm) nên các bài cùng chủ đề vẫn gần nhau.
+   */
+  function computeGalaxy() {
+    galaxyTarget.clear()
+    if (plan.length < 2) {
+      cloudCenter.set(0, 4.1, -4.2)
+      return
+    }
+    const root = homePos.get(plan[0]!.id)!,
+      centroid = new THREE.Vector3()
+    for (const step of plan) centroid.add(homePos.get(step.id)!)
+    centroid.multiplyScalar(1 / plan.length)
+    const top = scoreValues.get(plan[0]!.id) ?? 1,
+      low = Math.min(...plan.slice(1).map((step) => scoreValues.get(step.id) ?? top)),
+      span = Math.max(1e-6, top - low)
+    const radii: number[] = [0],
+      pts: THREE.Vector3[] = [new THREE.Vector3()]
+    plan.forEach((step, i) => {
+      if (i === 0) return
+      const d = homePos.get(step.id)!.clone().sub(centroid)
+      d.y *= GALAXY.flatten
+      if (d.lengthSq() < 1e-6) d.set(Math.cos(i * 2.4), 0, Math.sin(i * 2.4))
+      d.normalize()
+      const t = Math.max(0, Math.min(1, (top - (scoreValues.get(step.id) ?? low)) / span)),
+        r = GALAXY.inner + Math.pow(t, 0.85) * (GALAXY.outer - GALAXY.inner)
+      radii.push(r)
+      pts.push(d.multiplyScalar(r))
+    })
+    for (let it = 0; it < 40; it++) {
+      for (let i = 1; i < pts.length; i++)
+        for (let j = i + 1; j < pts.length; j++) {
+          const diff = pts[i]!.clone().sub(pts[j]!),
+            dist = diff.length()
+          if (dist < GALAXY.minGap) {
+            if (dist < 1e-4) diff.set(Math.cos(i + j), 0.2, Math.sin(i + j))
+            diff.normalize().multiplyScalar((GALAXY.minGap - dist) / 2)
+            pts[i]!.add(diff)
+            pts[j]!.sub(diff)
+          }
+        }
+      for (let i = 1; i < pts.length; i++) {
+        const l = pts[i]!.length() || 1
+        pts[i]!.multiplyScalar(radii[i]! / l)
+      }
+    }
+    plan.forEach((step, i) => {
+      if (i > 0) galaxyTarget.set(step.id, root.clone().add(pts[i]!))
+    })
+    cloudCenter.copy(root)
   }
 
   let yaw = Math.PI / 2,
@@ -914,6 +1047,8 @@ export function createBookScene(
     targetYaw = Math.PI / 2
     targetPitch = 0.43
     targetRadius = 12
+    camFocusId = null
+    camZoomTarget = 1
   }
   updateEdges(null)
   updateNetwork()
@@ -1020,9 +1155,17 @@ export function createBookScene(
     centerY = damp(centerY, filmCenter * (1 - blend) + (-0.27 + 0.65 * foldFrame) * blend, 6, dt)
     centerX = damp(centerX, reading.centerX * blend, 6, dt)
     centerZ = damp(centerZ, -1.8 * (1 - blend), 6, dt)
-    const pos = orbitPosition(radius, yaw, pitch, { x: centerX, y: centerY, z: centerZ })
+    const fw = camFocusId && 1 - blend > 0.5 ? worldNodes.get(camFocusId) : undefined
+    camOff.x = damp(camOff.x, fw ? fw.x - centerX : 0, 3.2, dt)
+    camOff.y = damp(camOff.y, fw ? fw.y - centerY : 0, 3.2, dt)
+    camOff.z = damp(camOff.z, fw ? fw.z - centerZ : 0, 3.2, dt)
+    camZoom = damp(camZoom, fw ? camZoomTarget : 1, 2.8, dt)
+    const vx = centerX + camOff.x,
+      vy = centerY + camOff.y,
+      vz = centerZ + camOff.z
+    const pos = orbitPosition(radius * camZoom, yaw, pitch, { x: vx, y: vy, z: vz })
     camera.position.set(pos.x, pos.y, pos.z)
-    camera.lookAt(centerX, centerY, centerZ)
+    camera.lookAt(vx, vy, vz)
     const bookScale = 1.2 + 0.4 * blend
     book.scale.set(bookScale * PAGE_WIDTH_SCALE, bookScale, bookScale)
     const landing = state.phase === 'settling' ? state.linear * state.linear : state.land
@@ -1051,6 +1194,23 @@ export function createBookScene(
       y: Math.sin(elapsed * 0.28) * 0.075 * (1 - landing),
       z: bookRoll + Math.sin(elapsed * 0.7) * 0.025 * (1 - landing),
     })
+    const wantLayout = galaxyOn ? 1 : 0
+    layoutBlend += (wantLayout - layoutBlend) * (1 - Math.exp(-dt * 2.2))
+    if (Math.abs(wantLayout - layoutBlend) < 0.002) layoutBlend = wantLayout
+    if (layoutBlend > 0 || layoutApplied) {
+      const le = smooth(layoutBlend)
+      for (const [id, node] of mapNodes) {
+        const h = homePos.get(id)!,
+          g = galaxyTarget.get(id)
+        if (g && le > 0) node.position.lerpVectors(h, g, le)
+        else node.position.copy(h)
+      }
+      layoutApplied = layoutBlend > 0
+    }
+    if (galaxyOn && anchorId) {
+      const r = homePos.get(anchorId)
+      if (r) queryNode.position.set(r.x, r.y + 0.9, r.z)
+    }
     const cloudAngle = Math.sin(elapsed * 0.18) * 0.12 + elapsed * 0.018,
       cloudScale = compact ? 0.7 : 1
     map.rotation.y = cloudAngle
@@ -1201,25 +1361,28 @@ export function createBookScene(
                 ? 1
                 : 0.5,
         ap = appearOf(id),
+        isRoot = id === anchorId && scoreValues.size > 0,
         apc = Math.min(1, ap),
         strength = scoreValues.has(id) ? similarityStrength(scoreValues.get(id)!) : 0.6
       halo.visible = node.visible
       halo.scale.setScalar(
-        (id === focusedId ? 0.7 : 0.43) *
+        (id === focusedId ? 0.7 : isRoot ? 0.62 : 0.43) *
           (1 + 0.06 * Math.sin(elapsed * 0.9 + haloIndex++) + pulse * 0.65) *
           (0.55 + 0.45 * ap) *
           (0.8 + 0.45 * strength)
       )
       halo.material.opacity =
-        ((active ? 0.4 : 0.24) * (0.45 + 0.9 * strength) + pulse * 0.4) * (0.12 + 0.88 * apc)
+        ((active ? 0.4 : 0.24) * (0.45 + 0.9 * strength) + pulse * 0.4) *
+        (0.12 + 0.88 * apc) *
+        (isRoot ? 1.5 : 1)
       node.scale.setScalar(
-        (id === focusedId ? 1.5 : 1) *
+        (id === focusedId ? 1.5 : isRoot ? 1.55 : 1) *
           (1 + pulse * 0.12) *
           (0.5 + 0.5 * ap) *
           (0.85 + 0.3 * strength)
       )
       const material = node.material as THREE.MeshBasicMaterial
-      material.color.copy(tint(base)).multiplyScalar(1 + pulse * 0.2)
+      material.color.copy(tint(base)).multiplyScalar(1 + pulse * 0.2 + (isRoot ? 0.25 : 0))
       material.opacity = emphasis * (0.14 + 0.86 * apc)
       node.rotation.y = elapsed * 0.12
     }
@@ -1230,12 +1393,9 @@ export function createBookScene(
         const a = mapNodes.get(link.a)!.position,
           b = mapNodes.get(link.b)!.position,
           t = linkDone(link) ? (elapsed * 0.23 + i * 0.381) % 1 : 0
-        lightPositions.setXYZ(
-          i,
-          a.x + (b.x - a.x) * t,
-          a.y + (b.y - a.y) * t,
-          a.z + (b.z - a.z) * t
-        )
+        linkCtrl(a, b, _c)
+        bez(a, _c, b, t, _p)
+        lightPositions.setXYZ(i, _p.x, _p.y, _p.z)
       })
       lightPositions.needsUpdate = true
     }
@@ -1331,6 +1491,19 @@ export function createBookScene(
     },
     showResults() {
       if (!selected && ritual.phase === 'waiting') ritual.close()
+      if (plan.length < 1) {
+        galaxyOn = false
+        anchorId = null
+        camFocusId = null
+        if (revealMode === 'hold') endSpread()
+        return
+      }
+      if (plan.length > 1) {
+        galaxyOn = true
+        computeGalaxy()
+      }
+      camFocusId = plan[0]!.id
+      camZoomTarget = AUTO_ZOOM
       startSpread()
     },
     inspect(paper) {
@@ -1339,6 +1512,14 @@ export function createBookScene(
         ? new Set([paper.id, ...semanticIndex.neighbors(paper, 5).map((n) => n.paper.id)])
         : new Set<string>()
       updateEdges(paper)
+      if (paper) {
+        camFocusId = paper.id
+        camZoomTarget = NODE_ZOOM
+      } else {
+        camFocusId = revealMode !== 'hold' && galaxyOn && anchorId ? anchorId : null
+        camZoomTarget = AUTO_ZOOM
+      }
+      writeNetwork(spreadClock())
       canvas.dataset.focus = focusId
     },
     select(paper) {
