@@ -12,7 +12,7 @@ import {
   type Point3,
 } from '@paper-galaxy/core'
 import { createEnchantingTable } from './enchanting-table'
-import { BookRitual, similarityTone, smooth, type Phase } from './ritual'
+import { BookRitual, similarityStrength, similarityTone, smooth, type Phase } from './ritual'
 import { createPageTexture, readingPages, type BookPage } from './book-pages'
 import { createAtmosphere } from './atmosphere'
 import { toLibraryPoint, readingCamera, PAGE_WIDTH_SCALE, type PageFocus } from './spatial-layout'
@@ -20,11 +20,125 @@ import { launchDelay, flightProgress, arcPoint, orderLetters } from './letter-fl
 import { createKnowledgePortal } from './knowledge-portal'
 import { sparseSemanticLinks, type SemanticLink } from './semantic-links'
 
+/* ===== Kế hoạch lan tỏa tri thức (đã gộp vào file này) ===== */
+/**
+ * Kế hoạch "lan tỏa tri thức": bài giống câu hỏi nhất xuất hiện đầu tiên, rồi các đường nối
+ * được vẽ dần sang những bài tiếp theo. Toàn bộ là hàm thuần (không đụng tới Three.js) để
+ * kiểm tra được bằng test.
+ */
+type SpreadStep = { id: string; parent: string | null; score: number }
+
+/** Thời gian (giây) của hiệu ứng. Chỉnh ở đây để đổi nhịp lan tỏa. */
+const SPREAD = {
+  rootAt: 1.1, // bài số 1 hiện ra sau khi đốm sáng bay từ sách tới nơi
+  linkDur: 0.7, // thời gian một đường nối được vẽ xong
+  popDur: 0.55, // thời gian một đốm sáng nở ra
+  minStep: 0.06, // khoảng cách tối thiểu giữa hai bài liên tiếp
+  maxStep: 0.22, // khoảng cách tối đa
+  budget: 4.2, // tổng thời gian lan tỏa mong muốn (giây)
+} as const
+
+function spreadStep(n: number) {
+  return Math.max(SPREAD.minStep, Math.min(SPREAD.maxStep, SPREAD.budget / Math.max(1, n - 1)))
+}
+
+/** Lúc đường nối dẫn tới bài thứ i bắt đầu được vẽ (i >= 1). */
+function linkStartAt(i: number, n: number) {
+  return SPREAD.rootAt + (i - 1) * spreadStep(n)
+}
+
+/** Lúc bài thứ i bắt đầu hiện ra (đường nối vừa chạm tới). */
+function appearAt(i: number, n: number) {
+  return i === 0 ? SPREAD.rootAt : linkStartAt(i, n) + SPREAD.linkDur * 0.85
+}
+
+/** Tổng thời gian của cả đợt lan tỏa. */
+function spreadDuration(n: number) {
+  return appearAt(Math.max(0, n - 1), n) + SPREAD.popDur + 0.4
+}
+
+/** 0 → 1 với một chút "nảy" ở cuối (đỉnh khoảng 1.1). */
+function popCurve(x: number) {
+  if (!Number.isFinite(x) || x <= 0) return 0
+  if (x >= 1) return 1
+  return 1 - Math.pow(1 - x, 3) + Math.sin(x * Math.PI) * 0.12
+}
+
+/**
+ * Lan tỏa kiểu Prim: bắt đầu từ bài điểm cao nhất, mỗi bước thêm bài "gần" nhất với tập đã
+ * chạm tới (cosine thật giữa hai bài), ưu tiên bài có điểm cao với câu hỏi.
+ *
+ * @param rows    láng giềng cosine của từng bài
+ * @param scores  điểm của từng bài so với câu hỏi (hoặc bài đang chọn)
+ * @param visible các bài đang hiển thị (sau khi lọc)
+ * @param limit   số bài tối đa tham gia lan tỏa
+ */
+function planSpread(
+  rows: { id: string; neighbors: { id: string; score: number }[] }[],
+  scores: ReadonlyMap<string, number>,
+  visible: ReadonlySet<string>,
+  limit = 60
+): SpreadStep[] {
+  const candidates = [...scores]
+    .filter(([id, s]) => visible.has(id) && Number.isFinite(s))
+    .sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1))
+    .slice(0, limit)
+  if (candidates.length === 0) return []
+
+  const ids = new Set(candidates.map(([id]) => id))
+  const score = new Map(candidates)
+  const sim = new Map<string, Map<string, number>>()
+  for (const row of rows) {
+    if (!ids.has(row.id)) continue
+    const m = new Map<string, number>()
+    for (const nb of row.neighbors)
+      if (ids.has(nb.id) && Number.isFinite(nb.score)) m.set(nb.id, nb.score)
+    sim.set(row.id, m)
+  }
+
+  const root = candidates[0]![0]
+  const steps: SpreadStep[] = [{ id: root, parent: null, score: score.get(root)! }]
+  const reached = [root]
+  const left = new Set(ids)
+  left.delete(root)
+
+  while (left.size) {
+    let best: { id: string; parent: string; link: number; priority: number } | null = null
+    for (const u of left) {
+      let parent: string | null = null
+      let link = -Infinity
+      for (const v of reached) {
+        const s = sim.get(u)?.get(v) ?? sim.get(v)?.get(u)
+        if (s !== undefined && s > link) {
+          link = s
+          parent = v
+        }
+      }
+      if (parent === null) continue
+      const priority = link + 0.5 * score.get(u)!
+      if (!best || priority > best.priority || (priority === best.priority && u < best.id)) {
+        best = { id: u, parent, link, priority }
+      }
+    }
+    if (!best) {
+      // không có số đo cosine giữa bài này và tập đã chạm tới: nối thẳng vào bài số 1
+      const u = [...left].sort()[0]!
+      best = { id: u, parent: root, link: score.get(u)!, priority: 0 }
+    }
+    steps.push({ id: best.id, parent: best.parent, score: best.link })
+    reached.push(best.id)
+    left.delete(best.id)
+  }
+  return steps
+}
+
 export type ReadingState = { phase: Phase; spread: number; spreads: number }
 export type SpatialHover = { paper: Paper; score: number | null } | null
 export type BookSceneHandle = {
   select: (paper: Paper | null) => void
   startSearch: () => void
+  showResults: () => void
+  inspect: (paper: Paper | null) => void
   empty: () => void
   turn: (direction: number) => void
   setScores: (scores: { id: string; score: number }[]) => void
@@ -354,7 +468,11 @@ export function createBookScene(
   }))
   function updateNetwork() {
     const visible = new Set([...mapNodes].filter(([, node]) => node.visible).map(([id]) => id))
-    links = sparseSemanticLinks(neighborRows, visible)
+    rebuildPlan(visible)
+    links =
+      plan.length > 1
+        ? plan.slice(1).map((step) => ({ a: step.parent!, b: step.id, score: step.score }))
+        : sparseSemanticLinks(neighborRows, visible)
     const positions: number[] = [],
       colors: number[] = [],
       lightColors: number[] = []
@@ -380,6 +498,7 @@ export function createBookScene(
     )
     linkLights.geometry.setAttribute('color', new THREE.Float32BufferAttribute(lightColors, 3))
     canvas.dataset.networkEdges = String(links.length)
+    writeNetwork(spreadClock())
   }
   function updateEdges(paper: Paper | null) {
     const points: THREE.Vector3[] = []
@@ -467,6 +586,8 @@ export function createBookScene(
     fog.color.set(bg)
     fog.density = isLight ? 0.016 : 0.028
     neutralInk.set(isLight ? '#3a4172' : '#d1d5ef')
+    queryGlow.material.color.set(isLight ? '#f59e0b' : '#fff3ad')
+    ;(queryNode.material as THREE.MeshBasicMaterial).color.set(isLight ? '#d97706' : '#fff3ad')
     ;(edges.material as THREE.LineBasicMaterial).color.set(isLight ? '#0d9488' : '#79f6dc')
     const blending = isLight ? THREE.NormalBlending : THREE.AdditiveBlending
     for (const m of blendTargets) {
@@ -492,6 +613,145 @@ export function createBookScene(
       halos.get(id)!.material.color.copy(c)
     }
     updateNetwork()
+  }
+
+  /* ===== LAN TỎA TRI THỨC: bài số 1 → các bài liên quan, đường nối vẽ dần theo độ tương đồng ===== */
+  let plan: SpreadStep[] = [],
+    revealMode: 'idle' | 'hold' | 'run' = 'idle',
+    spreadStart = 0
+  const planIndex = new Map<string, number>()
+  /** Bài giống nhất được neo ở đây (toạ độ thế giới, trên quyển sách). Đổi ANCHOR để dời vị trí. */
+  const ANCHOR = { x: 0, y: 3.3, z: -1.8 },
+    anchorTarget = new THREE.Vector3()
+  let anchorId: string | null = null,
+    anchorBlend = 0,
+    focusId = '',
+    focusSet = new Set<string>()
+  const spark = new THREE.Sprite(
+    new THREE.SpriteMaterial({
+      map: haloTexture,
+      color: '#9ff3e6',
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      toneMapped: false,
+    })
+  )
+  spark.visible = false
+  scene.add(spark)
+  blendTargets.push(spark.material)
+  const queryGlow = new THREE.Sprite(
+    new THREE.SpriteMaterial({
+      map: haloTexture,
+      color: '#fff3ad',
+      transparent: true,
+      opacity: 0.5,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      toneMapped: false,
+    })
+  )
+  queryGlow.scale.setScalar(1.1)
+  queryNode.add(queryGlow)
+  blendTargets.push(queryGlow.material)
+  /** Giây kể từ lúc bắt đầu lan tỏa; -1 khi đang chờ; Infinity khi đã xong. */
+  const spreadClock = () =>
+    revealMode === 'run' ? elapsed - spreadStart : revealMode === 'hold' ? -1 : Infinity
+  function rebuildPlan(visible: ReadonlySet<string>) {
+    plan = scoreValues.size ? planSpread(neighborRows, scoreValues, visible) : []
+    planIndex.clear()
+    plan.forEach((step, i) => planIndex.set(step.id, i))
+    if (!plan.length) anchorId = null
+  }
+  function linkDone(link: SemanticLink) {
+    const i = planIndex.get(link.b)
+    if (i === undefined || revealMode === 'idle') return true
+    return spreadClock() >= linkStartAt(i, plan.length) + SPREAD.linkDur
+  }
+  /** Vẽ lại các đường nối theo thời gian T: đầu đường nối trượt dần từ bài cha tới bài con, độ đậm theo cosine. */
+  function writeNetwork(T: number) {
+    const pos = network.geometry.getAttribute('position') as THREE.BufferAttribute | undefined,
+      col = network.geometry.getAttribute('color') as THREE.BufferAttribute | undefined
+    if (!pos || !col || pos.count !== links.length * 2) return
+    const bg = new THREE.Color('#eceffc'),
+      c = new THREE.Color()
+    links.forEach((link, j) => {
+      const na = mapNodes.get(link.a),
+        nb = mapNodes.get(link.b)
+      if (!na || !nb) return
+      const a = na.position,
+        b = nb.position,
+        i = planIndex.get(link.b),
+        p =
+          i === undefined || T === Infinity
+            ? 1
+            : Math.max(0, Math.min(1, (T - linkStartAt(i, plan.length)) / SPREAD.linkDur)),
+        e = smooth(p),
+        k = (0.22 + 0.78 * similarityStrength(link.score)) * (p > 0 ? 1 : 0)
+      pos.setXYZ(j * 2, a.x, a.y, a.z)
+      pos.setXYZ(j * 2 + 1, a.x + (b.x - a.x) * e, a.y + (b.y - a.y) * e, a.z + (b.z - a.z) * e)
+      ;[link.a, link.b].forEach((id, v) => {
+        c.copy(baseColors.get(id) ?? tint(GROUPS[mapPaper.get(id)!.group].color))
+        if (isLight) c.lerp(bg, 1 - k)
+        else c.multiplyScalar(k)
+        col.setXYZ(j * 2 + v, c.r, c.g, c.b)
+      })
+    })
+    pos.needsUpdate = true
+    col.needsUpdate = true
+  }
+  /** Mức "đã hiện" của một đốm sáng: 0 = mờ nền, 1 = sáng đủ (có thể vọt lên ~1.1 khi nở). */
+  function appearOf(id: string) {
+    if (revealMode === 'idle' || !scoreValues.size) return 1
+    const i = planIndex.get(id)
+    if (i === undefined || revealMode === 'hold') return 0
+    return popCurve((elapsed - spreadStart - appearAt(i, plan.length)) / SPREAD.popDur)
+  }
+  function holdSpread() {
+    if (reduced.matches) return
+    revealMode = 'hold'
+    writeNetwork(-1)
+  }
+  function endSpread() {
+    revealMode = 'idle'
+    writeNetwork(Infinity)
+  }
+  function startSpread() {
+    if (plan.length) anchorId = plan[0]!.id
+    if (reduced.matches || plan.length < 1) {
+      endSpread()
+      return
+    }
+    revealMode = 'run'
+    spreadStart = elapsed
+    spark.material.color.copy(tint(similarityTone(scoreValues.get(plan[0]!.id) ?? null).color))
+  }
+  function tickSpread() {
+    canvas.dataset.reveal = revealMode
+    queryGlow.visible = queryNode.visible
+    queryGlow.material.opacity = 0.42 + 0.2 * Math.sin(elapsed * 2.4)
+    spark.visible = false
+    if (revealMode !== 'run') return
+    const T = elapsed - spreadStart,
+      n = plan.length
+    if (T > spreadDuration(n)) {
+      endSpread()
+      return
+    }
+    writeNetwork(T)
+    if (T < SPREAD.rootAt + 0.35) {
+      const target = worldNodes.get(plan[0]!.id)
+      if (target) {
+        const k = smooth(T / SPREAD.rootAt),
+          at = arcPoint({ x: 0, y: book.position.y + 0.9, z: 0 }, target, k, 1.1)
+        spark.position.set(at.x, at.y, at.z)
+        spark.visible = true
+        spark.scale.setScalar(0.55 * (1 - 0.35 * k) + 0.18 * Math.sin(T * 18) ** 2)
+        spark.material.opacity =
+          T < SPREAD.rootAt ? 0.95 : Math.max(0, 0.95 * (1 - (T - SPREAD.rootAt) / 0.35))
+      }
+    }
   }
 
   let yaw = Math.PI / 2,
@@ -694,6 +954,7 @@ export function createBookScene(
         colorScores(scores)
       }
     }
+    if (revealMode === 'hold' && ritual.phase === 'idle') endSpread()
     const state = ritual.sample()
     publish()
     const blend = state.zoom,
@@ -799,6 +1060,21 @@ export function createBookScene(
       Math.sin(elapsed * 0.55) * 0.12,
       -4.2 * cloudScale + 4.2 * cloudScale * Math.cos(cloudAngle)
     )
+    const anchorNode = anchorId ? mapNodes.get(anchorId) : undefined
+    anchorBlend += ((anchorNode ? 1 : 0) - anchorBlend) * (1 - Math.exp(-dt * 2.8))
+    if (anchorNode && anchorBlend > 0.002) {
+      const sn = Math.sin(cloudAngle),
+        cs = Math.cos(cloudAngle),
+        lx = anchorNode.position.x * cloudScale,
+        ly = anchorNode.position.y * cloudScale,
+        lz = anchorNode.position.z * cloudScale
+      anchorTarget.set(
+        ANCHOR.x * cloudScale - (lx * cs + lz * sn),
+        ANCHOR.y * cloudScale - ly + Math.sin(elapsed * 0.55) * 0.1,
+        ANCHOR.z * cloudScale - (-lx * sn + lz * cs)
+      )
+      map.position.lerp(anchorTarget, Math.min(1, anchorBlend))
+    }
     worldNodes.clear()
     for (const [id, node] of mapNodes) {
       const point = node.getWorldPosition(new THREE.Vector3())
@@ -904,6 +1180,8 @@ export function createBookScene(
         else neutralGlyphs++
       }
     }
+    tickSpread()
+    const focusedId = selected?.id ?? focusId
     let haloIndex = 0
     for (const [id, halo] of halos) {
       const node = mapNodes.get(id)!,
@@ -912,26 +1190,46 @@ export function createBookScene(
         base = scoreValues.has(id)
           ? similarityTone(scoreValues.get(id)!).color
           : GROUPS[mapPaper.get(id)!.group].color,
-        emphasis = scoreValues.size === 0 ? 0.95 : active ? 1 : 0.5
+        emphasis =
+          focusId && !selected
+            ? focusSet.has(id)
+              ? 1
+              : 0.2
+            : scoreValues.size === 0
+              ? 0.95
+              : active
+                ? 1
+                : 0.5,
+        ap = appearOf(id),
+        apc = Math.min(1, ap),
+        strength = scoreValues.has(id) ? similarityStrength(scoreValues.get(id)!) : 0.6
       halo.visible = node.visible
       halo.scale.setScalar(
-        (id === selected?.id ? 0.65 : 0.43) *
-          (1 + 0.06 * Math.sin(elapsed * 0.9 + haloIndex++) + pulse * 0.65)
+        (id === focusedId ? 0.7 : 0.43) *
+          (1 + 0.06 * Math.sin(elapsed * 0.9 + haloIndex++) + pulse * 0.65) *
+          (0.55 + 0.45 * ap) *
+          (0.8 + 0.45 * strength)
       )
-      halo.material.opacity = (active ? 0.4 : 0.24) + pulse * 0.4
-      node.scale.setScalar((id === selected?.id ? 1.4 : 1) * (1 + pulse * 0.12))
+      halo.material.opacity =
+        ((active ? 0.4 : 0.24) * (0.45 + 0.9 * strength) + pulse * 0.4) * (0.12 + 0.88 * apc)
+      node.scale.setScalar(
+        (id === focusedId ? 1.5 : 1) *
+          (1 + pulse * 0.12) *
+          (0.5 + 0.5 * ap) *
+          (0.85 + 0.3 * strength)
+      )
       const material = node.material as THREE.MeshBasicMaterial
       material.color.copy(tint(base)).multiplyScalar(1 + pulse * 0.2)
-      material.opacity = emphasis
+      material.opacity = emphasis * (0.14 + 0.86 * apc)
       node.rotation.y = elapsed * 0.12
     }
-    networkMaterial.opacity = blend > 0.9 ? 0.14 : 0.42
+    networkMaterial.opacity = blend > 0.9 ? 0.14 : focusId ? 0.18 : 0.42
     const lightPositions = linkLights.geometry.getAttribute('position')
     if (lightPositions) {
       links.forEach((link, i) => {
         const a = mapNodes.get(link.a)!.position,
           b = mapNodes.get(link.b)!.position,
-          t = (elapsed * 0.23 + i * 0.381) % 1
+          t = linkDone(link) ? (elapsed * 0.23 + i * 0.381) % 1 : 0
         lightPositions.setXYZ(
           i,
           a.x + (b.x - a.x) * t,
@@ -1013,6 +1311,9 @@ export function createBookScene(
   onStatus('ready')
   return {
     startSearch() {
+      holdSpread()
+      focusId = ''
+      focusSet = new Set<string>()
       clearLeaf()
       selected = null
       pendingScores = null
@@ -1026,6 +1327,19 @@ export function createBookScene(
     },
     empty() {
       if (!selected) ritual.close()
+      if (revealMode === 'hold') endSpread()
+    },
+    showResults() {
+      if (!selected && ritual.phase === 'waiting') ritual.close()
+      startSpread()
+    },
+    inspect(paper) {
+      focusId = paper?.id ?? ''
+      focusSet = paper
+        ? new Set([paper.id, ...semanticIndex.neighbors(paper, 5).map((n) => n.paper.id)])
+        : new Set<string>()
+      updateEdges(paper)
+      canvas.dataset.focus = focusId
     },
     select(paper) {
       if (!paper) {

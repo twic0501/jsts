@@ -3,6 +3,8 @@ packages:
   - packages/*
 allowBuilds:
   mongodb-memory-server: false
+  onnxruntime-node: true
+  protobufjs: true
 minimumReleaseAgeExclude:
   - '@next/env@16.4.5'
   - '@next/swc-darwin-arm64@16.4.5'

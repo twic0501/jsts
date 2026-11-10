@@ -21,7 +21,7 @@ import {
   type SpatialHover,
 } from './create-book-scene'
 import type { PageFocus } from './spatial-layout'
-import { SIMILARITY_BANDS } from './ritual'
+import { SIMILARITY_BANDS, similarityTone } from './ritual'
 const phaseLabels = {
   idle: 'Một câu hỏi mới đang chờ bạn.',
   waiting: 'Đang hiểu câu hỏi và tính độ tương đồng…',
@@ -54,9 +54,11 @@ export default function MagicBook({
   scores,
   theme,
   toggleTheme,
+  openBook,
 }: {
   theme: 'light' | 'dark'
   toggleTheme: () => void
+  openBook: boolean
   paper: Paper | null
   snapshot: SemanticSnapshot
   papers: Paper[]
@@ -104,15 +106,15 @@ export default function MagicBook({
     }
   }, [castId, papers])
   useEffect(() => {
-    if (paper) {
+    if (paper && openBook) {
       setPaused(false)
       scene.current?.setPaused(false)
+      scene.current?.select(paper)
+    } else {
+      scene.current?.select(null)
     }
-    scene.current?.select(paper)
-  }, [paper, papers, castId])
-  useEffect(() => {
-    if (!searching && !paper && castId) scene.current?.empty()
-  }, [searching, paper, castId, papers])
+    scene.current?.inspect(openBook ? null : paper)
+  }, [paper, openBook, papers, castId])
   useEffect(() => {
     scene.current?.setPaused(paused)
   }, [paused, papers])
@@ -133,6 +135,13 @@ export default function MagicBook({
       theme
     )
   }, [theme, papers, snapshot])
+  const shown = useRef(0)
+  useEffect(() => {
+    if (searching || !castId || shown.current === castId) return
+    shown.current = castId
+    if (scores.length) scene.current?.showResults()
+    else scene.current?.empty()
+  }, [searching, castId, scores, papers])
   const isReading = reading.phase === 'reading',
     selectedIndex = visibleIds.indexOf(paper?.id ?? '')
   function close() {
@@ -175,7 +184,7 @@ export default function MagicBook({
           >
             {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
           </button>
-          {paper && (
+          {paper && openBook && (
             <button className="scene-icon exit-reader" onClick={close} aria-label="Thoát đọc sách">
               <X size={15} />
               Thoát
@@ -217,15 +226,19 @@ export default function MagicBook({
         {scores.length ? (
           <>
             <span>
-              <i style={{ background: '#7cf5cd' }} />
-              Cos ≥ {SIMILARITY_BANDS.high}
+              <i style={{ background: similarityTone(1).color }} />
+              Cos ≥ {SIMILARITY_BANDS.veryHigh}
             </span>
             <span>
-              <i style={{ background: '#8bc9ff' }} />
+              <i style={{ background: similarityTone(SIMILARITY_BANDS.high).color }} />
+              {SIMILARITY_BANDS.high}–{SIMILARITY_BANDS.veryHigh}
+            </span>
+            <span>
+              <i style={{ background: similarityTone(SIMILARITY_BANDS.medium).color }} />
               {SIMILARITY_BANDS.medium}–{SIMILARITY_BANDS.high}
             </span>
             <span>
-              <i style={{ background: '#d1a4ff' }} />
+              <i style={{ background: similarityTone(0).color }} />
               &lt; {SIMILARITY_BANDS.medium}
             </span>
           </>
@@ -331,7 +344,11 @@ export default function MagicBook({
       )}
       <div className="scene-bottom">
         <span className="scene-hint" role="status">
-          {phaseLabels[reading.phase]}
+          {!paper && scores.length > 0 && reading.phase === 'idle'
+            ? 'Bấm vào một đốm sáng để xem thông tin bài báo'
+            : paper && !openBook && reading.phase === 'idle'
+              ? 'Bấm đốm sáng khác để so sánh · Esc để bỏ chọn'
+              : phaseLabels[reading.phase]}
         </span>
         <div className="scene-controls">
           <button aria-label="Phóng to" title="Phóng to" onClick={() => scene.current?.zoom(-1)}>
