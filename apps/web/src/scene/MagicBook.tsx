@@ -139,8 +139,7 @@ export default function MagicBook({
   useEffect(() => {
     if (searching || !castId || shown.current === castId) return
     shown.current = castId
-    if (scores.length) scene.current?.showResults()
-    else scene.current?.empty()
+    scene.current?.showResults()
   }, [searching, castId, scores, papers])
   const isReading = reading.phase === 'reading',
     selectedIndex = visibleIds.indexOf(paper?.id ?? '')
@@ -375,7 +374,9 @@ export default function MagicBook({
         </div>
       </div>
       <div className="scene-guide">
-        Vị trí từ PCA của vector thật · Đường nối theo cosine 384D · Kéo để xoay
+        {scores.length
+          ? 'Hướng theo PCA của vector thật · Càng gần tâm càng giống câu hỏi (cosine) · Kéo để xoay'
+          : 'Vị trí từ PCA của vector thật · Đường nối theo cosine 384D · Kéo để xoay'}
       </div>
     </div>
   )
