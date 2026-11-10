@@ -17,9 +17,10 @@
   --pm-shadow: 0 8px 30px rgba(70, 80, 140, 0.16);
   --pm-accent: #6d5ce8;
   /* màu mức tương đồng: đậm hơn để đọc được trên nền sáng */
-  --pm-high: #0d9488;
-  --pm-medium: #0284c7;
-  --pm-low: #7c3aed;
+  --pm-very-high: #0d9488;
+  --pm-high: #2563eb;
+  --pm-medium: #7c3aed;
+  --pm-low: #a79fd0;
 }
 
 /* ---------- Nền & chữ chung ---------- */
@@ -65,6 +66,9 @@
   color: var(--pm-text);
 }
 
+:root[data-theme='light'] .tone-very-high {
+  background: var(--pm-very-high);
+}
 :root[data-theme='light'] .tone-high {
   background: var(--pm-high);
 }
@@ -186,28 +190,36 @@ body,
    ========================================================== */
 
 /* Nút, tab, nhãn trong vùng chính: chữ đậm */
-:root[data-theme='light'] main button:not(.spatial-tooltip),
-:root[data-theme='light'] main label,
-:root[data-theme='light'] main select,
-:root[data-theme='light'] main [role='tab'],
-:root[data-theme='light'] main [role='radio'] {
+:root[data-theme='light']
+  main
+  button:not(.spatial-tooltip):not(.detail-panel *):not(.results-panel *),
+:root[data-theme='light'] main label:not(.detail-panel *):not(.results-panel *),
+:root[data-theme='light'] main select:not(.detail-panel *):not(.results-panel *),
+:root[data-theme='light'] main [role='tab']:not(.detail-panel *):not(.results-panel *),
+:root[data-theme='light'] main [role='radio']:not(.detail-panel *):not(.results-panel *) {
   color: var(--pm-text);
 }
 
 /* Tab đang chọn (Thư viện / Trên mạng / Cả hai): nền rõ hơn */
-:root[data-theme='light'] main [role='tab'][aria-selected='true'],
-:root[data-theme='light'] main [role='radio'][aria-checked='true'],
-:root[data-theme='light'] main button.active,
-:root[data-theme='light'] main button[aria-pressed='true'] {
+:root[data-theme='light']
+  main
+  [role='tab'][aria-selected='true']:not(.detail-panel *):not(.results-panel *),
+:root[data-theme='light']
+  main
+  [role='radio'][aria-checked='true']:not(.detail-panel *):not(.results-panel *),
+:root[data-theme='light'] main button.active:not(.detail-panel *):not(.results-panel *),
+:root[data-theme='light']
+  main
+  button[aria-pressed='true']:not(.detail-panel *):not(.results-panel *) {
   background: rgba(109, 92, 232, 0.18);
   color: #3b2fb0;
   font-weight: 600;
 }
 
 /* Dòng ghi chú nhỏ dưới thanh tìm kiếm ("Bản dev · Offline khả dụng...") */
-:root[data-theme='light'] main small,
-:root[data-theme='light'] main p,
-:root[data-theme='light'] main figcaption {
+:root[data-theme='light'] main small:not(.detail-panel *):not(.results-panel *),
+:root[data-theme='light'] main p:not(.detail-panel *):not(.results-panel *),
+:root[data-theme='light'] main figcaption:not(.detail-panel *):not(.results-panel *) {
   color: var(--pm-muted);
 }
 
@@ -282,4 +294,61 @@ body,
   text-shadow:
     0 0 6px rgba(255, 255, 255, 0.95),
     0 0 12px rgba(255, 255, 255, 0.8);
+}
+
+/* ==========================================================
+   BẢNG MÀU 4 MỨC THEO ĐỘ TƯƠNG ĐỒNG (chế độ tối)
+   Khớp với similarityTone() trong scene/ritual.ts
+   ========================================================== */
+:root:not([data-theme='light']) .app-shell.immersive .tone-very-high {
+  background: #4de8d8;
+}
+:root:not([data-theme='light']) .app-shell.immersive .tone-high {
+  background: #6fb4ff;
+}
+:root:not([data-theme='light']) .app-shell.immersive .tone-medium {
+  background: #a98bff;
+}
+:root:not([data-theme='light']) .app-shell.immersive .tone-low {
+  background: #d6cdf2;
+}
+
+/* ==========================================================
+   BẢNG THÔNG TIN BÀI BÁO Ở GÓC PHẢI
+   ========================================================== */
+.app-shell.immersive .detail-panel {
+  left: auto;
+  right: 24px;
+  width: 430px;
+  max-width: calc(100vw - 48px);
+  top: 150px;
+  bottom: 96px;
+}
+.app-shell.immersive .detail-panel .dossier-cover h2 {
+  font-size: 21px;
+}
+.detail-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+@media (max-width: 700px) {
+  .app-shell.immersive .detail-panel {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    top: 151px;
+    bottom: 90px;
+  }
+}
+
+/* Light mode: bảng thông tin và danh sách kết quả giữ nền kính tối để chữ luôn rõ */
+:root[data-theme='light'] .app-shell.immersive .detail-panel,
+:root[data-theme='light'] .app-shell.immersive .results-panel {
+  background: rgba(23, 31, 59, 0.94);
+  border-color: rgba(214, 217, 255, 0.28);
+  color: #e7e9fa;
+  box-shadow: 0 20px 60px rgba(40, 50, 110, 0.35);
 }

@@ -4,7 +4,7 @@ interface SearchHeroProps {
   savedOnly: boolean
   draft: string
   setDraft: (val: string) => void
-  searchRef: React.RefObject<HTMLInputElement>
+  searchRef: React.RefObject<HTMLInputElement | null>
   search: (value: string) => void
   offlineReady: boolean
   searching: boolean

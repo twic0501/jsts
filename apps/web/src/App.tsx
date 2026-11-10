@@ -90,14 +90,21 @@ export default function App() {
   const pendingOpen = useRef<string | null>(null)
   const [libraryOpen, setLibraryOpen] = useState(false),
     [detailsOpen, setDetailsOpen] = useState(false)
+  const [reading, setReading] = useState(false) // true = đang mở sách 3D để đọc từng trang
   const selectPaper = useCallback((paper: Paper | null) => {
     pendingOpen.current = null
     setSelected(paper)
     if (paper) {
       setLibraryOpen(false)
+      setDetailsOpen(true) // bấm đốm sáng → mở bảng thông tin ở góc phải
+    } else {
       setDetailsOpen(false)
+      setReading(false)
     }
   }, [])
+  useEffect(() => {
+    if (!selected) setReading(false)
+  }, [selected])
   const [help, setHelp] = useState(false),
     [sidebar, setSidebar] = useState(false),
     [notice, setNotice] = useState('')
@@ -275,12 +282,6 @@ export default function App() {
           : [],
     [selected, index, activeCorpus.papers.length, query, result, completedQuery, searching]
   )
-  useEffect(() => {
-    if (!searching && pendingOpen.current !== null && pendingOpen.current === completedQuery) {
-      pendingOpen.current = null
-      setSelected(result.items[0]?.paper ?? null)
-    }
-  }, [searching, completedQuery, result])
   function search(value: string) {
     const parsed = searchSchema.safeParse({ query: value, topK: 50 })
     if (!parsed.success) {
@@ -316,13 +317,14 @@ export default function App() {
     pendingOpen.current = null
     setGroup(value)
     setSelected(null)
+    setDetailsOpen(false)
     setSidebar(false)
   }
   const isLocal = source === 'local'
 
   return (
     <div
-      className={`app-shell immersive ${libraryOpen ? 'library-open' : ''} ${detailsOpen ? 'details-open' : ''} ${selected ? 'has-reader' : ''}`}
+      className={`app-shell immersive ${libraryOpen ? 'library-open' : ''} ${detailsOpen && !reading ? 'details-open' : ''} ${selected && reading ? 'has-reader' : ''}`}
     >
       <div className="ambient-wash" aria-hidden="true" />
 
@@ -402,6 +404,7 @@ export default function App() {
                 scores={visualScores}
                 theme={theme}
                 toggleTheme={toggleTheme}
+                openBook={reading && !!selected}
               />
             </Suspense>
             <div className="under-scene">
@@ -451,7 +454,13 @@ export default function App() {
           </div>
           <div className="legend-levels">
             <span>
-              <i className="tone-high" /> Cao <small>≥ {SIMILARITY_BANDS.high}</small>
+              <i className="tone-very-high" /> Rất cao <small>≥ {SIMILARITY_BANDS.veryHigh}</small>
+            </span>
+            <span>
+              <i className="tone-high" /> Cao{' '}
+              <small>
+                {SIMILARITY_BANDS.high}–{SIMILARITY_BANDS.veryHigh}
+              </small>
             </span>
             <span>
               <i className="tone-medium" /> Vừa{' '}
@@ -460,7 +469,7 @@ export default function App() {
               </small>
             </span>
             <span>
-              <i className="tone-low" /> Thấp hơn <small>&lt; {SIMILARITY_BANDS.medium}</small>
+              <i className="tone-low" /> Thấp <small>&lt; {SIMILARITY_BANDS.medium}</small>
             </span>
           </div>
           <p>
@@ -482,6 +491,9 @@ export default function App() {
               onSelect={selectPaper}
               neighbors={neighbors}
               onNotice={setNotice}
+              score={query ? (visualScores.find((s) => s.id === selected.id)?.score ?? null) : null}
+              onOpenBook={() => setReading(true)}
+              onClose={() => selectPaper(null)}
             />
           ) : (
             <div className="detail-empty">
