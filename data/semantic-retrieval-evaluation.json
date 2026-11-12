@@ -1,0 +1,669 @@
+{
+  "benchmark": "Paper Galaxy Semantic Retrieval Evaluation",
+  "dataset": {
+    "paperCount": 30,
+    "queryCount": 18
+  },
+  "topK": 5,
+  "baseline": {
+    "metrics": {
+      "precisionAt5": 0.3,
+      "recallAt5": 0.8194,
+      "mrrAt5": 0.7593,
+      "hitRateAt5": 0.9444,
+      "successfulQueries": 17,
+      "totalQueries": 18
+    },
+    "counters": {
+      "embedCalls": 58,
+      "embeddedTexts": 98,
+      "rerankCalls": 0
+    }
+  },
+  "reranked": {
+    "metrics": {
+      "precisionAt5": 0.3111,
+      "recallAt5": 0.838,
+      "mrrAt5": 0.787,
+      "hitRateAt5": 0.9444,
+      "successfulQueries": 17,
+      "totalQueries": 18
+    },
+    "counters": {
+      "embedCalls": 18,
+      "embeddedTexts": 18,
+      "rerankCalls": 18
+    }
+  },
+  "comparison": {
+    "precisionAt5": 0.0111,
+    "recallAt5": 0.0186,
+    "mrrAt5": 0.0277,
+    "hitRateAt5": 0
+  },
+  "queries": [
+    {
+      "id": "Q01",
+      "topic": "Zero-shot image recognition",
+      "query": "How can visual recognition systems understand images using natural language descriptions without training on every category?",
+      "relevantIds": [
+        "2103.00020"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2103.00020",
+          "2005.14165",
+          "2010.11929",
+          "2106.09685",
+          "2610.32396"
+        ],
+        "relevantRetrieved": [
+          "2103.00020"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2103.00020",
+          "2010.11929",
+          "2005.14165",
+          "2106.09685",
+          "2610.32396"
+        ],
+        "relevantRetrieved": [
+          "2103.00020"
+        ]
+      }
+    },
+    {
+      "id": "Q02",
+      "topic": "Image classification architectures",
+      "query": "Deep neural network architectures for recognizing objects and classifying images efficiently",
+      "relevantIds": [
+        "1512.03385",
+        "1602.07360",
+        "2010.11929"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "1505.04597",
+          "1602.07360",
+          "2004.07064",
+          "1512.03385",
+          "2306.11715"
+        ],
+        "relevantRetrieved": [
+          "1602.07360",
+          "1512.03385"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "1505.04597",
+          "1602.07360",
+          "1512.03385",
+          "2004.07064",
+          "2010.11929"
+        ],
+        "relevantRetrieved": [
+          "1602.07360",
+          "1512.03385",
+          "2010.11929"
+        ]
+      }
+    },
+    {
+      "id": "Q03",
+      "topic": "Transformer architectures",
+      "query": "Neural architectures that use attention mechanisms to model relationships between elements in a sequence",
+      "relevantIds": [
+        "1706.03762",
+        "1810.04805",
+        "2005.14165"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "1706.03762",
+          "1902.08661",
+          "2309.16519",
+          "2010.11929",
+          "1602.07360"
+        ],
+        "relevantRetrieved": [
+          "1706.03762"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "1706.03762",
+          "1902.08661",
+          "2010.11929",
+          "1602.07360",
+          "2309.16519"
+        ],
+        "relevantRetrieved": [
+          "1706.03762"
+        ]
+      }
+    },
+    {
+      "id": "Q04",
+      "topic": "Language understanding",
+      "query": "Bidirectional contextual representations for understanding the meaning of words in natural language",
+      "relevantIds": [
+        "1810.04805"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2103.00020",
+          "1810.04805",
+          "1902.08661",
+          "2010.11929",
+          "2005.14165"
+        ],
+        "relevantRetrieved": [
+          "1810.04805"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "1810.04805",
+          "2103.00020",
+          "1902.08661",
+          "2010.11929",
+          "2106.09685"
+        ],
+        "relevantRetrieved": [
+          "1810.04805"
+        ]
+      }
+    },
+    {
+      "id": "Q05",
+      "topic": "Few-shot language models",
+      "query": "Large language models that learn to perform new tasks from only a few examples in their prompts",
+      "relevantIds": [
+        "2005.14165"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2005.14165",
+          "2103.00020",
+          "1706.03762",
+          "2106.09685",
+          "1810.04805"
+        ],
+        "relevantRetrieved": [
+          "2005.14165"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2005.14165",
+          "2103.00020",
+          "2106.09685",
+          "1706.03762",
+          "1810.04805"
+        ],
+        "relevantRetrieved": [
+          "2005.14165"
+        ]
+      }
+    },
+    {
+      "id": "Q06",
+      "topic": "Efficient LLM fine-tuning",
+      "query": "Adapting pretrained language models to downstream tasks while reducing the number of trainable parameters",
+      "relevantIds": [
+        "2106.09685"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2005.14165",
+          "2106.09685",
+          "2103.00020",
+          "1706.03762",
+          "1810.04805"
+        ],
+        "relevantRetrieved": [
+          "2106.09685"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2106.09685",
+          "2005.14165",
+          "2103.00020",
+          "1706.03762",
+          "1810.04805"
+        ],
+        "relevantRetrieved": [
+          "2106.09685"
+        ]
+      }
+    },
+    {
+      "id": "Q07",
+      "topic": "Generative models",
+      "query": "Deep generative neural networks that learn to produce realistic synthetic data and images",
+      "relevantIds": [
+        "1406.2661",
+        "2006.11239"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "1512.03385",
+          "1505.04597",
+          "2602.11092",
+          "2103.00020",
+          "2110.03861"
+        ],
+        "relevantRetrieved": []
+      },
+      "reranked": {
+        "retrievedIds": [
+          "1512.03385",
+          "1505.04597",
+          "2602.11092",
+          "2004.07064",
+          "1602.07360"
+        ],
+        "relevantRetrieved": []
+      }
+    },
+    {
+      "id": "Q08",
+      "topic": "Biomedical image segmentation",
+      "query": "Deep learning methods for identifying and separating anatomical structures in medical images at the pixel level",
+      "relevantIds": [
+        "1505.04597"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2111.07355",
+          "2004.07064",
+          "1505.04597",
+          "2007.06252",
+          "1804.10812"
+        ],
+        "relevantRetrieved": [
+          "1505.04597"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2111.07355",
+          "2004.07064",
+          "1505.04597",
+          "1512.03385",
+          "2007.06252"
+        ],
+        "relevantRetrieved": [
+          "1505.04597"
+        ]
+      }
+    },
+    {
+      "id": "Q09",
+      "topic": "Medical image analysis",
+      "query": "Using artificial intelligence to analyze medical images and support automated diagnosis or clinical assessment",
+      "relevantIds": [
+        "2402.04299",
+        "2004.07064",
+        "2610.32396",
+        "2111.07355"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2610.32396",
+          "2004.07064",
+          "2402.04299",
+          "2111.07355",
+          "1804.10812"
+        ],
+        "relevantRetrieved": [
+          "2610.32396",
+          "2004.07064",
+          "2402.04299",
+          "2111.07355"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2610.32396",
+          "2004.07064",
+          "2111.07355",
+          "2402.04299",
+          "1804.10812"
+        ],
+        "relevantRetrieved": [
+          "2610.32396",
+          "2004.07064",
+          "2111.07355",
+          "2402.04299"
+        ]
+      }
+    },
+    {
+      "id": "Q10",
+      "topic": "X-ray and breast imaging",
+      "query": "Image acquisition and automated analysis techniques for detecting structures and abnormalities in radiographic images",
+      "relevantIds": [
+        "1804.10812",
+        "2011.05146",
+        "2111.07355"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "1804.10812",
+          "2004.07064",
+          "2610.32396",
+          "2111.07355",
+          "2007.06252"
+        ],
+        "relevantRetrieved": [
+          "1804.10812",
+          "2111.07355"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "1804.10812",
+          "2610.32396",
+          "2004.07064",
+          "2111.07355",
+          "1505.04597"
+        ],
+        "relevantRetrieved": [
+          "1804.10812",
+          "2111.07355"
+        ]
+      }
+    },
+    {
+      "id": "Q11",
+      "topic": "Protein structure representation",
+      "query": "Machine learning representations that use three-dimensional protein geometry and structural information",
+      "relevantIds": [
+        "2309.16519",
+        "2007.06252",
+        "1902.08661"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "1902.08661",
+          "2309.16519",
+          "2007.06252",
+          "2306.11715",
+          "2512.02303"
+        ],
+        "relevantRetrieved": [
+          "1902.08661",
+          "2309.16519",
+          "2007.06252"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "1902.08661",
+          "2309.16519",
+          "2007.06252",
+          "2306.11715",
+          "2512.02303"
+        ],
+        "relevantRetrieved": [
+          "1902.08661",
+          "2309.16519",
+          "2007.06252"
+        ]
+      }
+    },
+    {
+      "id": "Q12",
+      "topic": "Drug binding prediction",
+      "query": "Geometric deep learning approaches for predicting how small molecules bind to protein targets",
+      "relevantIds": [
+        "2202.05146"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2202.05146",
+          "2007.06252",
+          "1902.08661",
+          "2309.16519",
+          "2402.04299"
+        ],
+        "relevantRetrieved": [
+          "2202.05146"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2202.05146",
+          "2007.06252",
+          "1902.08661",
+          "2309.16519",
+          "2402.04299"
+        ],
+        "relevantRetrieved": [
+          "2202.05146"
+        ]
+      }
+    },
+    {
+      "id": "Q13",
+      "topic": "Geometric equivariance",
+      "query": "Learning representations that remain consistent when three-dimensional objects are rotated or transformed",
+      "relevantIds": [
+        "2512.02303",
+        "2007.06252",
+        "2202.05146"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2512.02303",
+          "2010.11929",
+          "2103.00020",
+          "1902.08661",
+          "2309.16519"
+        ],
+        "relevantRetrieved": [
+          "2512.02303"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2103.00020",
+          "2512.02303",
+          "2309.16519",
+          "1902.08661",
+          "2010.11929"
+        ],
+        "relevantRetrieved": [
+          "2512.02303"
+        ]
+      }
+    },
+    {
+      "id": "Q14",
+      "topic": "Active learning",
+      "query": "Selecting the most informative samples from a dataset to improve machine learning with limited labeling resources",
+      "relevantIds": [
+        "2306.11715"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "1803.09010",
+          "2103.00020",
+          "2306.11715",
+          "2610.32396",
+          "1902.08661"
+        ],
+        "relevantRetrieved": [
+          "2306.11715"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "1803.09010",
+          "2103.00020",
+          "2306.11715",
+          "2610.32396",
+          "2005.14165"
+        ],
+        "relevantRetrieved": [
+          "2306.11715"
+        ]
+      }
+    },
+    {
+      "id": "Q15",
+      "topic": "Quantum machine learning",
+      "query": "Combining quantum computing and machine learning to build neural models and intelligent learning systems",
+      "relevantIds": [
+        "2602.11092",
+        "2110.03861",
+        "2510.23237",
+        "2306.09912"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2411.00230",
+          "2602.11092",
+          "2306.09912",
+          "2110.03861",
+          "2501.15893"
+        ],
+        "relevantRetrieved": [
+          "2602.11092",
+          "2306.09912",
+          "2110.03861"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2411.00230",
+          "2306.09912",
+          "2602.11092",
+          "2110.03861",
+          "2501.15893"
+        ],
+        "relevantRetrieved": [
+          "2306.09912",
+          "2602.11092",
+          "2110.03861"
+        ]
+      }
+    },
+    {
+      "id": "Q16",
+      "topic": "Quantum reinforcement learning",
+      "query": "Using reinforcement learning algorithms to solve optimization and decision-making problems on quantum computers",
+      "relevantIds": [
+        "2501.15893",
+        "2411.00230"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2411.00230",
+          "2501.15893",
+          "2306.09912",
+          "2602.11092",
+          "2110.03861"
+        ],
+        "relevantRetrieved": [
+          "2411.00230",
+          "2501.15893"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2411.00230",
+          "2501.15893",
+          "2306.09912",
+          "2510.23237",
+          "2110.03861"
+        ],
+        "relevantRetrieved": [
+          "2411.00230",
+          "2501.15893"
+        ]
+      }
+    },
+    {
+      "id": "Q17",
+      "topic": "Quantum federated learning",
+      "query": "Distributed machine learning across multiple participants using quantum computing and federated optimization",
+      "relevantIds": [
+        "2306.09912"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2306.09912",
+          "2602.11092",
+          "2411.00230",
+          "2501.15893",
+          "2110.03861"
+        ],
+        "relevantRetrieved": [
+          "2306.09912"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2306.09912",
+          "2602.11092",
+          "2411.00230",
+          "2501.15893",
+          "2306.11715"
+        ],
+        "relevantRetrieved": [
+          "2306.09912"
+        ]
+      }
+    },
+    {
+      "id": "Q18",
+      "topic": "Dataset documentation",
+      "query": "Methods for documenting datasets to improve transparency, accountability, and responsible machine learning",
+      "relevantIds": [
+        "1803.09010"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "1803.09010",
+          "2610.32396",
+          "2306.11715",
+          "1902.08661",
+          "2103.00020"
+        ],
+        "relevantRetrieved": [
+          "1803.09010"
+        ]
+      },
+      "reranked": {
+        "retrievedIds": [
+          "1803.09010",
+          "2610.32396",
+          "2103.00020",
+          "2306.11715",
+          "1902.08661"
+        ],
+        "relevantRetrieved": [
+          "1803.09010"
+        ]
+      }
+    }
+  ],
+  "notes": [
+    "Queries use topic descriptions instead of original paper titles.",
+    "Ground truth is an initial manually curated label set based on paper titles and research topics.",
+    "Ground truth has not been independently validated by domain experts.",
+    "A query can have multiple relevant papers.",
+    "Precision@5 uses 5 as the denominator.",
+    "Recall@5 measures retrieved relevant documents divided by known relevant documents.",
+    "MRR@5 measures the reciprocal rank of the first relevant document.",
+    "HitRate@5 measures the proportion of queries with at least one relevant result.",
+    "External providers are disabled.",
+    "This evaluates retrieval and reranking, not answer generation."
+  ]
+}

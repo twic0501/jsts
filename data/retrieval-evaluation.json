@@ -1,0 +1,439 @@
+{
+  "benchmark": "Paper Galaxy Retrieval Evaluation",
+  "dataset": {
+    "paperCount": 30,
+    "queryCount": 15
+  },
+  "topK": 5,
+  "baseline": {
+    "metrics": {
+      "precisionAt5": 0.2,
+      "recallAt5": 1,
+      "mrrAt5": 1
+    },
+    "counters": {
+      "embedCalls": 55,
+      "embeddedTexts": 95,
+      "rerankCalls": 0
+    }
+  },
+  "reranked": {
+    "metrics": {
+      "precisionAt5": 0.2,
+      "recallAt5": 1,
+      "mrrAt5": 1
+    },
+    "counters": {
+      "embedCalls": 15,
+      "embeddedTexts": 15,
+      "rerankCalls": 15
+    }
+  },
+  "comparison": {
+    "precisionAt5": 0,
+    "recallAt5": 0,
+    "mrrAt5": 0
+  },
+  "queries": [
+    {
+      "query": "Learning Transferable Visual Models From Natural Language Supervision",
+      "relevantIds": [
+        "2103.00020"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2103.00020",
+          "2005.14165",
+          "2106.09685",
+          "1902.08661",
+          "1706.03762"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2103.00020",
+          "2005.14165",
+          "2106.09685",
+          "1902.08661",
+          "2010.11929"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "Attention Is All You Need",
+      "relevantIds": [
+        "1706.03762"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "1706.03762",
+          "2010.11929",
+          "2103.00020",
+          "1505.04597",
+          "2402.04299"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "1706.03762",
+          "2010.11929",
+          "2103.00020",
+          "2402.04299",
+          "2306.11715"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      "relevantIds": [
+        "1810.04805"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "1810.04805",
+          "2106.09685",
+          "2010.11929",
+          "1902.08661",
+          "2103.00020"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "1810.04805",
+          "2106.09685",
+          "2010.11929",
+          "2103.00020",
+          "1902.08661"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "Generative Adversarial Networks",
+      "relevantIds": [
+        "1406.2661"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "1406.2661",
+          "2510.23237",
+          "1505.04597",
+          "1602.07360",
+          "1512.03385"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "1406.2661",
+          "2510.23237",
+          "1505.04597",
+          "2602.11092",
+          "1602.07360"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "U-Net: Convolutional Networks for Biomedical Image Segmentation",
+      "relevantIds": [
+        "1505.04597"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "1505.04597",
+          "2004.07064",
+          "2402.04299",
+          "2010.11929",
+          "1512.03385"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "1505.04597",
+          "2004.07064",
+          "2010.11929",
+          "2402.04299",
+          "1512.03385"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "LoRA: Low-Rank Adaptation of Large Language Models",
+      "relevantIds": [
+        "2106.09685"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2106.09685",
+          "2005.14165",
+          "2510.23237",
+          "2103.00020",
+          "2006.11239"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2106.09685",
+          "2005.14165",
+          "2103.00020",
+          "2510.23237",
+          "1810.04805"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "Multi-Fidelity Active Learning with GFlowNets",
+      "relevantIds": [
+        "2306.11715"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2306.11715",
+          "2610.32396",
+          "2007.06252",
+          "1512.03385",
+          "1902.08661"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2306.11715",
+          "2610.32396",
+          "2007.06252",
+          "1512.03385",
+          "2510.23237"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "Intrinsic-Extrinsic Convolution and Pooling for Learning on 3D Protein Structures",
+      "relevantIds": [
+        "2007.06252"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2007.06252",
+          "2309.16519",
+          "1902.08661",
+          "2512.02303",
+          "1505.04597"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2007.06252",
+          "2309.16519",
+          "1902.08661",
+          "2512.02303",
+          "1505.04597"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "Training Dynamics of Learning 3D-Rotational Equivariance",
+      "relevantIds": [
+        "2512.02303"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2512.02303",
+          "2006.11239",
+          "2007.06252",
+          "1406.2661",
+          "2510.23237"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2512.02303",
+          "2007.06252",
+          "1406.2661",
+          "2006.11239",
+          "2202.05146"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "Translating the future: Image-to-image translation for the prediction of future brain metabolism",
+      "relevantIds": [
+        "2402.04299"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2402.04299",
+          "1902.08661",
+          "2610.32396",
+          "2103.00020",
+          "2010.11929"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2402.04299",
+          "1902.08661",
+          "2103.00020",
+          "2610.32396",
+          "2010.11929"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "Fully Automated Myocardial Strain Estimation from CMR Tagged Images using a Deep Learning Framework in the UK Biobank",
+      "relevantIds": [
+        "2004.07064"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2004.07064",
+          "2610.32396",
+          "2111.07355",
+          "1505.04597",
+          "2402.04299"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2004.07064",
+          "2610.32396",
+          "2111.07355",
+          "1505.04597",
+          "1512.03385"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "Interactive image diagnosis using test-time backpropagation from the auxiliary task",
+      "relevantIds": [
+        "2610.32396"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2610.32396",
+          "2004.07064",
+          "2103.00020",
+          "2402.04299",
+          "2005.14165"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2610.32396",
+          "2004.07064",
+          "2402.04299",
+          "1406.2661",
+          "2103.00020"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "MerLin: A Discovery Engine for Photonic and Hybrid Quantum Machine Learning",
+      "relevantIds": [
+        "2602.11092"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2602.11092",
+          "2306.09912",
+          "2110.03861",
+          "2411.00230",
+          "2306.11715"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2602.11092",
+          "2306.09912",
+          "2306.11715",
+          "2411.00230",
+          "2110.03861"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "Robust Iterative Learning Hidden Quantum Markov Models",
+      "relevantIds": [
+        "2510.23237"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2510.23237",
+          "2602.11092",
+          "2411.00230",
+          "2110.03861",
+          "2512.02303"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2510.23237",
+          "2602.11092",
+          "2411.00230",
+          "2110.03861",
+          "2512.02303"
+        ],
+        "hit": true
+      }
+    },
+    {
+      "query": "Reinforcement learning with learned gadgets to tackle hard quantum problems on real hardware",
+      "relevantIds": [
+        "2411.00230"
+      ],
+      "baseline": {
+        "retrievedIds": [
+          "2411.00230",
+          "2501.15893",
+          "2602.11092",
+          "2306.09912",
+          "2309.16519"
+        ],
+        "hit": true
+      },
+      "reranked": {
+        "retrievedIds": [
+          "2411.00230",
+          "2501.15893",
+          "2602.11092",
+          "2306.09912",
+          "2110.03861"
+        ],
+        "hit": true
+      }
+    }
+  ],
+  "notes": [
+    "Queries are generated from paper titles.",
+    "Each source paper ID is treated as the relevant document.",
+    "This is an initial automatic evaluation, not human-verified ground truth.",
+    "Precision@5 uses 5 as the denominator.",
+    "Recall@5 measures retrieved relevant documents divided by known relevant documents.",
+    "MRR@5 measures the reciprocal rank of the first relevant document.",
+    "External providers are disabled.",
+    "This evaluates retrieval and reranking, not answer generation."
+  ]
+}
