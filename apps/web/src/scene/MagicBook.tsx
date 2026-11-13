@@ -62,11 +62,13 @@ export default function MagicBook({
   viewPref,
   setViewPref,
   net,
+  suspended,
 }: {
   viewMode: '3d' | '2d'
   viewPref: 'auto' | '3d' | '2d'
   setViewPref: (v: 'auto' | '3d' | '2d') => void
   net: 'good' | 'poor' | 'offline'
+  suspended: boolean
   theme: 'light' | 'dark'
   toggleTheme: () => void
   openBook: boolean
@@ -98,7 +100,7 @@ export default function MagicBook({
     reducedMotion = useRef(
       typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
     )
-  pause2D.current = want2D && dir2d === 'idle'
+  pause2D.current = suspended || (want2D && dir2d === 'idle')
   useEffect(() => {
     if (!canvas.current) return
     try {
@@ -138,8 +140,8 @@ export default function MagicBook({
     scene.current?.inspect(openBook ? null : paper)
   }, [paper, openBook, papers, castId])
   useEffect(() => {
-    scene.current?.setPaused(paused || (want2D && dir2d === 'idle'))
-  }, [paused, want2D, dir2d, papers])
+    scene.current?.setPaused(paused || suspended || (want2D && dir2d === 'idle'))
+  }, [paused, suspended, want2D, dir2d, papers])
   useEffect(() => {
     scene.current?.focusPage(focus)
   }, [focus, papers])
