@@ -20,16 +20,76 @@ import { launchDelay, flightProgress, arcPoint, orderLetters } from './letter-fl
 import { createKnowledgePortal } from './knowledge-portal'
 import { sparseSemanticLinks, type SemanticLink } from './semantic-links'
 
+/* ===== Sửa lỗi dấu tiếng Việt khi vẽ chữ lên trang sách (canvas) =====
+ * Phông chữ gốc thiếu một số chữ có hai dấu (ế, ố, ằ...) nên dấu bị rời ra. Đoạn này:
+ *  1) đổi MỌI họ phông (có chân / không chân) sang bộ phông đủ tiếng Việt, giữ nguyên cỡ, đậm, nghiêng;
+ *  2) chuẩn hoá chữ về dạng NFC trước khi vẽ;
+ *  3) áp dụng cho cả canvas thường và OffscreenCanvas.
+ * Có thể xoá khi đã sửa phông trực tiếp trong book-pages.ts.
+ * Kiểm tra: mở DevTools > Console, gõ document.documentElement.dataset.vnCanvasFont → phải ra "on". */
+;(() => {
+  const SERIF = '"Times New Roman","Noto Serif","DejaVu Serif",Georgia,serif',
+    SANS = '"Segoe UI",Arial,"Noto Sans","DejaVu Sans",sans-serif'
+  const fixFont = (value: string) => {
+    const m =
+      /^(.*?\b\d+(?:\.\d+)?(?:px|pt|em|rem)(?:\s*\/\s*[\d.]+(?:px|pt|em|rem)?)?)\s+(.+)$/.exec(
+        value
+      )
+    if (!m) return value
+    const family = m[2]!
+    if (/mono/i.test(family)) return value
+    return `${m[1]} ${/sans-serif|system-ui|-apple-system|segoe|arial|helvetica|verdana|tahoma|calibri|roboto|\binter\b/i.test(family) ? SANS : SERIF}`
+  }
+  const patch = (proto: object | undefined) => {
+    if (!proto) return
+    const target = proto as Record<string, unknown> & { __vnFont?: boolean }
+    if (target.__vnFont) return
+    target.__vnFont = true
+    const desc = Object.getOwnPropertyDescriptor(proto, 'font')
+    if (desc?.get && desc.set) {
+      const getFont = desc.get,
+        setFont = desc.set
+      Object.defineProperty(proto, 'font', {
+        configurable: true,
+        enumerable: desc.enumerable,
+        get(this: unknown) {
+          return getFont.call(this)
+        },
+        set(this: unknown, value: string) {
+          setFont.call(this, typeof value === 'string' ? fixFont(value) : value)
+        },
+      })
+    }
+    for (const name of ['fillText', 'strokeText', 'measureText']) {
+      const original = target[name] as
+        | ((this: unknown, text: string, ...rest: number[]) => unknown)
+        | undefined
+      if (typeof original === 'function')
+        target[name] = function (this: unknown, text: string, ...rest: number[]) {
+          return original.call(
+            this,
+            typeof text === 'string' ? text.normalize('NFC') : text,
+            ...rest
+          )
+        }
+    }
+  }
+  if (typeof CanvasRenderingContext2D !== 'undefined') patch(CanvasRenderingContext2D.prototype)
+  if (typeof OffscreenCanvasRenderingContext2D !== 'undefined')
+    patch(OffscreenCanvasRenderingContext2D.prototype)
+  if (typeof document !== 'undefined') document.documentElement.dataset.vnCanvasFont = 'on'
+})()
+
 /* ===== Kế hoạch lan tỏa tri thức (đã gộp vào file này) ===== */
 /**
  * Kế hoạch "lan tỏa tri thức": bài giống câu hỏi nhất xuất hiện đầu tiên, rồi các đường nối
  * được vẽ dần sang những bài tiếp theo. Toàn bộ là hàm thuần (không đụng tới Three.js) để
  * kiểm tra được bằng test.
  */
-type SpreadStep = { id: string; parent: string | null; score: number }
+export type SpreadStep = { id: string; parent: string | null; score: number }
 
 /** Thời gian (giây) của hiệu ứng. Chỉnh ở đây để đổi nhịp lan tỏa. */
-const SPREAD = {
+export const SPREAD = {
   rootAt: 1.1, // bài số 1 hiện ra sau khi đốm sáng bay từ sách tới nơi
   linkDur: 0.7, // thời gian một đường nối được vẽ xong
   popDur: 0.55, // thời gian một đốm sáng nở ra
@@ -43,22 +103,22 @@ function spreadStep(n: number) {
 }
 
 /** Lúc đường nối dẫn tới bài thứ i bắt đầu được vẽ (i >= 1). */
-function linkStartAt(i: number, n: number) {
+export function linkStartAt(i: number, n: number) {
   return SPREAD.rootAt + (i - 1) * spreadStep(n)
 }
 
 /** Lúc bài thứ i bắt đầu hiện ra (đường nối vừa chạm tới). */
-function appearAt(i: number, n: number) {
+export function appearAt(i: number, n: number) {
   return i === 0 ? SPREAD.rootAt : linkStartAt(i, n) + SPREAD.linkDur * 0.85
 }
 
 /** Tổng thời gian của cả đợt lan tỏa. */
-function spreadDuration(n: number) {
+export function spreadDuration(n: number) {
   return appearAt(Math.max(0, n - 1), n) + SPREAD.popDur + 0.4
 }
 
 /** 0 → 1 với một chút "nảy" ở cuối (đỉnh khoảng 1.1). */
-function popCurve(x: number) {
+export function popCurve(x: number) {
   if (!Number.isFinite(x) || x <= 0) return 0
   if (x >= 1) return 1
   return 1 - Math.pow(1 - x, 3) + Math.sin(x * Math.PI) * 0.12
@@ -132,12 +192,29 @@ function planSpread(
   return steps
 }
 
+/** Dữ liệu cảnh 3D chia sẻ cho bản đồ 2D (vị trí màn hình hiện tại, toạ độ PCA, điểm cosine, kế hoạch lan tỏa). */
+export type Export2D = {
+  width: number
+  height: number
+  anchorId: string | null
+  focusIds: string[]
+  nodes: {
+    id: string
+    visible: boolean
+    home: Point3
+    score: number | null
+    screen: { x: number; y: number } | null
+  }[]
+  plan: SpreadStep[]
+  links: SemanticLink[]
+}
 export type ReadingState = { phase: Phase; spread: number; spreads: number }
 export type SpatialHover = { paper: Paper; score: number | null } | null
 export type BookSceneHandle = {
   select: (paper: Paper | null) => void
   startSearch: () => void
   showResults: () => void
+  export2D: () => Export2D
   inspect: (paper: Paper | null) => void
   empty: () => void
   turn: (direction: number) => void
@@ -778,6 +855,8 @@ export function createBookScene(
   const GALAXY = { inner: 1.4, outer: 4.4, flatten: 0.55, minGap: 0.95 },
     AUTO_ZOOM = 0.72,
     NODE_ZOOM = 0.6
+  /** Độ đậm của quầng sáng quanh mỗi đốm: 1 = như cũ, 0.5 = nhạt hơn, 0 = tắt hẳn quầng sáng. */
+  const HALO_STRENGTH = 2
   const CURVE_SEG = 14,
     _up = new THREE.Vector3(0, 1, 0),
     _m = new THREE.Vector3(),
@@ -1052,6 +1131,13 @@ export function createBookScene(
   }
   updateEdges(null)
   updateNetwork()
+  const repaintOnFonts = () => {
+    if (!disposed) paintPages()
+  }
+  if (typeof document !== 'undefined' && document.fonts) {
+    void document.fonts.ready.then(repaintOnFonts)
+    document.fonts.addEventListener?.('loadingdone', repaintOnFonts)
+  }
   function animate(now: number) {
     if (disposed) return
     const dt = Math.min(0.05, Math.max(0, (now - last) / 1000))
@@ -1364,7 +1450,8 @@ export function createBookScene(
         isRoot = id === anchorId && scoreValues.size > 0,
         apc = Math.min(1, ap),
         strength = scoreValues.has(id) ? similarityStrength(scoreValues.get(id)!) : 0.6
-      halo.visible = node.visible
+      halo.visible = node.visible && HALO_STRENGTH > 0
+      halo.position.copy(node.position)
       halo.scale.setScalar(
         (id === focusedId ? 0.7 : isRoot ? 0.62 : 0.43) *
           (1 + 0.06 * Math.sin(elapsed * 0.9 + haloIndex++) + pulse * 0.65) *
@@ -1374,7 +1461,8 @@ export function createBookScene(
       halo.material.opacity =
         ((active ? 0.4 : 0.24) * (0.45 + 0.9 * strength) + pulse * 0.4) *
         (0.12 + 0.88 * apc) *
-        (isRoot ? 1.5 : 1)
+        (isRoot ? 1.5 : 1) *
+        HALO_STRENGTH
       node.scale.setScalar(
         (id === focusedId ? 1.5 : isRoot ? 1.55 : 1) *
           (1 + pulse * 0.12) *
@@ -1506,6 +1594,35 @@ export function createBookScene(
       camZoomTarget = AUTO_ZOOM
       startSpread()
     },
+    export2D() {
+      const w = canvas.clientWidth || 1,
+        h = canvas.clientHeight || 1,
+        v = new THREE.Vector3()
+      return {
+        width: w,
+        height: h,
+        anchorId,
+        focusIds: [...focusSet],
+        nodes: [...mapNodes].map(([id, node]) => {
+          const wp = worldNodes.get(id),
+            home = homePos.get(id)!
+          let screen: { x: number; y: number } | null = null
+          if (wp) {
+            v.set(wp.x, wp.y, wp.z).project(camera)
+            if (v.z > -1 && v.z < 1) screen = { x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h }
+          }
+          return {
+            id,
+            visible: node.visible,
+            home: { x: home.x, y: home.y, z: home.z },
+            score: scoreValues.get(id) ?? null,
+            screen,
+          }
+        }),
+        plan: plan.map((step) => ({ ...step })),
+        links: links.map((link) => ({ ...link })),
+      }
+    },
     inspect(paper) {
       focusId = paper?.id ?? ''
       focusSet = paper
@@ -1596,6 +1713,7 @@ export function createBookScene(
     dispose() {
       if (disposed) return
       disposed = true
+      document.fonts?.removeEventListener?.('loadingdone', repaintOnFonts)
       cancelAnimationFrame(frame)
       resize.disconnect()
       canvas.removeEventListener('pointerdown', down)

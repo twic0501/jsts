@@ -17,9 +17,11 @@ import { GROUPS, type Paper, type SemanticSnapshot, type Point3 } from '@paper-g
 import {
   createBookScene,
   type BookSceneHandle,
+  type Export2D,
   type ReadingState,
   type SpatialHover,
 } from './create-book-scene'
+import MapView2D from './MapView2D'
 import type { PageFocus } from './spatial-layout'
 import { SIMILARITY_BANDS, similarityTone } from './ritual'
 const phaseLabels = {
@@ -55,10 +57,20 @@ export default function MagicBook({
   theme,
   toggleTheme,
   openBook,
+  nextPaper,
+  viewMode,
+  viewPref,
+  setViewPref,
+  net,
 }: {
+  viewMode: '3d' | '2d'
+  viewPref: 'auto' | '3d' | '2d'
+  setViewPref: (v: 'auto' | '3d' | '2d') => void
+  net: 'good' | 'poor' | 'offline'
   theme: 'light' | 'dark'
   toggleTheme: () => void
   openBook: boolean
+  nextPaper: Paper | null
   paper: Paper | null
   snapshot: SemanticSnapshot
   papers: Paper[]
@@ -77,6 +89,16 @@ export default function MagicBook({
     [focus, setFocus] = useState<PageFocus>('auto'),
     [hover, setHover] = useState<SpatialHover>(null)
   const [reading, setReading] = useState<ReadingState>({ phase: 'idle', spread: 0, spreads: 1 })
+  const [snap2d, setSnap2d] = useState<Export2D | null>(null),
+    [show2D, setShow2D] = useState(false),
+    [dir2d, setDir2d] = useState<'in' | 'out' | 'idle'>('idle')
+  const want2D = viewMode === '2d',
+    prevWant = useRef(false),
+    pause2D = useRef(false),
+    reducedMotion = useRef(
+      typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    )
+  pause2D.current = want2D && dir2d === 'idle'
   useEffect(() => {
     if (!canvas.current) return
     try {
@@ -101,7 +123,7 @@ export default function MagicBook({
   useEffect(() => {
     if (castId) {
       setPaused(false)
-      scene.current?.setPaused(false)
+      scene.current?.setPaused(pause2D.current)
       scene.current?.startSearch()
     }
   }, [castId, papers])
@@ -116,8 +138,8 @@ export default function MagicBook({
     scene.current?.inspect(openBook ? null : paper)
   }, [paper, openBook, papers, castId])
   useEffect(() => {
-    scene.current?.setPaused(paused)
-  }, [paused, papers])
+    scene.current?.setPaused(paused || (want2D && dir2d === 'idle'))
+  }, [paused, want2D, dir2d, papers])
   useEffect(() => {
     scene.current?.focusPage(focus)
   }, [focus, papers])
@@ -141,8 +163,29 @@ export default function MagicBook({
     shown.current = castId
     scene.current?.showResults()
   }, [searching, castId, scores, papers])
-  const isReading = reading.phase === 'reading',
-    selectedIndex = visibleIds.indexOf(paper?.id ?? '')
+  useEffect(() => {
+    if (prevWant.current === want2D) return
+    prevWant.current = want2D
+    setSnap2d(scene.current?.export2D() ?? null)
+    if (want2D) {
+      setShow2D(true)
+      setDir2d(reducedMotion.current ? 'idle' : 'in')
+      requestAnimationFrame(() => setSnap2d((prev) => prev ?? scene.current?.export2D() ?? null))
+    } else if (reducedMotion.current) {
+      setShow2D(false)
+      setDir2d('idle')
+    } else setDir2d('out')
+  }, [want2D])
+  useEffect(() => {
+    if (!show2D || !want2D || dir2d !== 'idle') return
+    const id = requestAnimationFrame(() => setSnap2d(scene.current?.export2D() ?? null))
+    return () => cancelAnimationFrame(id)
+  }, [show2D, want2D, dir2d, scores, visibleIds, paper, castId, searching, papers])
+  function end2D() {
+    if (dir2d === 'out') setShow2D(false)
+    setDir2d('idle')
+  }
+  const isReading = reading.phase === 'reading'
   function close() {
     scene.current?.empty()
     onSelect(null)
@@ -166,7 +209,7 @@ export default function MagicBook({
     return () => window.removeEventListener('keydown', key)
   }, [onSelect])
   return (
-    <div className="magic-viewport" data-theme={theme} ref={container}>
+    <div className={`magic-viewport${want2D ? ' is-2d' : ''}`} data-theme={theme} ref={container}>
       <div className="scene-heading">
         <div>
           <span className="scene-eyebrow">
@@ -175,6 +218,32 @@ export default function MagicBook({
           <h2>Tri thức luôn kết nối.</h2>
         </div>
         <div className="scene-actions">
+          <span className="view-switch" role="group" aria-label="Chế độ hiển thị">
+            {(['auto', '3d', '2d'] as const).map((v) => (
+              <button
+                key={v}
+                className={viewPref === v ? 'active' : ''}
+                aria-pressed={viewPref === v}
+                title={
+                  v === 'auto'
+                    ? 'Tự chuyển sang 2D khi mạng yếu hoặc mất kết nối'
+                    : v === '3d'
+                      ? 'Luôn dùng không gian 3D'
+                      : 'Luôn dùng bản đồ 2D (nhẹ hơn)'
+                }
+                onClick={() => setViewPref(v)}
+              >
+                {v === 'auto' ? 'Tự động' : v.toUpperCase()}
+              </button>
+            ))}
+          </span>
+          {net !== 'good' && (
+            <span className={`net-pill ${net}`} role="status">
+              <i />
+              {net === 'offline' ? 'Mất kết nối' : 'Mạng yếu'}
+              {want2D ? ' · 2D' : ''}
+            </span>
+          )}
           <button
             className="scene-icon theme-toggle"
             title={theme === 'dark' ? 'Chế độ sáng' : 'Chế độ tối'}
@@ -205,10 +274,23 @@ export default function MagicBook({
       </div>
       <canvas
         ref={canvas}
-        className="book-canvas"
+        className={`book-canvas${want2D ? ' is-2d' : ''}`}
         data-testid="magic-book"
         aria-label="Cuốn sách ma thuật 3D. Kéo chuột để xoay, cuộn để phóng to."
       />
+      {show2D && (
+        <MapView2D
+          snap={snap2d}
+          dir={dir2d}
+          onEnd={end2D}
+          papers={papers}
+          selectedId={paper?.id ?? null}
+          onSelect={onSelect}
+          theme={theme}
+          searching={searching}
+          castId={castId}
+        />
+      )}
       {status === 'failed' && (
         <div className="scene-fallback">
           <Sparkles size={36} />
@@ -329,10 +411,10 @@ export default function MagicBook({
             <span className="reader-divider" />
             <button
               className="next-paper"
-              disabled={!isReading || selectedIndex < 0 || selectedIndex >= visibleIds.length - 1}
+              title={nextPaper ? `Tiếp theo: ${nextPaper.title}` : undefined}
+              disabled={!isReading || !nextPaper}
               onClick={() => {
-                const next = papers.find((p) => p.id === visibleIds[selectedIndex + 1])
-                if (next) onSelect(next)
+                if (nextPaper) onSelect(nextPaper)
               }}
             >
               Bài tiếp theo
