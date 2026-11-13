@@ -13,6 +13,7 @@ import {
   type Group,
   type Paper,
   type SearchResult,
+  type DocumentSearchFilters,
 } from '@paper-galaxy/core'
 import corpusFile from '../../../data/corpus.json'
 import snapshotFile from '../../../data/semantic-snapshot.json'
@@ -25,6 +26,9 @@ import Sidebar from './components/layout/Sidebar'
 import SearchHero from './components/layout/SearchHero'
 import ResultsPanel from './components/layout/ResultsPanel'
 import Modals from './components/layout/Modals'
+import HistoryPanel from './features/search/HistoryPanel'
+import {saveDeviceHistory} from './features/search/device-history'
+import {createSearchSubmission, saveAccountHistory, type HistoryAccess, type SearchSubmission} from './features/search/client'
 import './light-theme.css'
 
 const MagicBook = lazy(() => import('./scene/MagicBook'))
@@ -32,7 +36,11 @@ const initialCorpus = corpusSchema.parse(corpusFile)
 const snapshot = validateSnapshot(initialCorpus, snapshotFile)
 type Source = 'connecting' | 'api-json' | 'api-mongodb' | 'local'
 
-export default function App() {
+export default function App({historyAccess}: {historyAccess?: HistoryAccess} = {}) {
+  const [historyOpen,setHistoryOpen] = useState(false), [historyRefresh,setHistoryRefresh] = useState(0)
+  const [unsavedHistory,setUnsavedHistory] = useState<{owner:string;submission:SearchSubmission} | null>(null)
+  const historyOwner = useRef(historyAccess?.accountId)
+  historyOwner.current = historyAccess?.accountId
   const [corpus, setCorpus] = useState<Corpus>(initialCorpus),
     [source, setSource] = useState<Source>('connecting')
 
@@ -282,7 +290,23 @@ export default function App() {
           : [],
     [selected, index, activeCorpus.papers.length, query, result, completedQuery, searching]
   )
-  function search(value: string) {
+  async function recordHistory(submission: SearchSubmission) {
+    const owner = historyAccess?.accountId ?? 'device:guest'
+    try {
+      if (historyAccess) await saveAccountHistory(submission,historyAccess.send)
+      else await saveDeviceHistory(submission.history)
+      if ((historyOwner.current ?? 'device:guest') === owner) {setHistoryRefresh(n=>n+1);setUnsavedHistory(null)}
+    } catch {
+      if ((historyOwner.current ?? 'device:guest') === owner) {
+        setUnsavedHistory({owner,submission})
+        setNotice('Chưa lưu được lịch sử. Mở History để thử lưu lại, không tạo lượt trùng.')
+      }
+    }
+  }
+  function search(value: string, restored?: DocumentSearchFilters) {
+    if (restored && (restored.yearTo !== undefined || restored.documentIds || (restored.subjects?.length ?? 0)>1 || restored.kinds?.some(k=>k!=='paper'))) {
+      setNotice('Bộ lọc của lượt này cần ghép FR19 trước khi tìm lại.');return
+    }
     const parsed = searchSchema.safeParse({ query: value, topK: 50 })
     if (!parsed.success) {
       setNotice('Câu tìm kiếm tối đa 300 ký tự.')
@@ -302,6 +326,13 @@ export default function App() {
     setDraft(value)
     setSavedOnly(false)
     setNotice('')
+    const filters = restored ?? {...(group!=='all'?{subjects:[group]}:{}),...(year!=='all'?{yearFrom:Number(year)}:{})}
+    if (restored) {setGroup(restored.subjects?.[0]??'all');setYear(restored.yearFrom?.toString()??'all')}
+    if (next) {
+      try {void recordHistory(createSearchSubmission(next,filters))}
+      catch {setNotice('Lịch sử chỉ lưu câu tìm kiếm từ 2 đến 300 ký tự.')}
+    }
+    setHistoryOpen(false)
   }
   async function bookmark(paper: Paper) {
     const next = !saved.includes(paper.id)
@@ -331,6 +362,8 @@ export default function App() {
       {/* Đưa Header ra bên ngoài, nằm trên cùng với z-index cao để hiển thị rõ ràng */}
       <div className="sticky top-0 z-50 w-full px-4 pt-2">
         <Header
+          historyOpen={historyOpen}
+          onHistory={()=>setHistoryOpen(open=>!open)}
           savedOnly={savedOnly}
           setSavedOnly={setSavedOnly}
           savedCount={saved.length}
@@ -535,6 +568,9 @@ export default function App() {
         setHelp={setHelp}
         totalPapers={corpus.papers.length}
       />
+      <HistoryPanel key={historyAccess?.accountId??'guest'} open={historyOpen} close={()=>setHistoryOpen(false)}
+        access={historyAccess} refresh={historyRefresh} repeat={row=>search(row.query,row.filters)}
+        retrySave={unsavedHistory && (historyAccess?.accountId??'device:guest')===unsavedHistory.owner ? ()=>void recordHistory(unsavedHistory.submission) : undefined} />
     </div>
   )
 }

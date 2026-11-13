@@ -8,6 +8,7 @@ import {
   WifiOff,
   Sun,
   Moon,
+  History,
 } from 'lucide-react'
 import { Paper } from '@paper-galaxy/core'
 
@@ -30,6 +31,8 @@ interface HeaderProps {
   selectPaper: (paper: Paper | null) => void
   theme: 'light' | 'dark'
   toggleTheme: () => void
+  historyOpen: boolean
+  onHistory: () => void
 }
 
 export default function Header({
@@ -51,6 +54,8 @@ export default function Header({
   selectPaper,
   theme,
   toggleTheme,
+  historyOpen,
+  onHistory,
 }: HeaderProps) {
   return (
     <header className="w-full flex items-center justify-between px-6 py-3 my-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl shadow-lg transition-colors duration-300">
@@ -110,6 +115,10 @@ export default function Header({
       </nav>
 
       <div className="flex items-center gap-3">
+        <button type="button" onClick={onHistory} aria-expanded={historyOpen} aria-controls="search-history-panel"
+          className="history-trigger">
+          <History size={17} /><span>History</span>
+        </button>
         <div className="hidden lg:flex items-center gap-1 mr-2 border-r border-slate-300 dark:border-slate-700 pr-3">
           <button
             className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors cursor-pointer ${

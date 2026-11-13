@@ -5,3 +5,4 @@ export * from './vector';
 export * from './semantic';
 export * from './online';
 export * from './rag';
+export * from './unified-search';
