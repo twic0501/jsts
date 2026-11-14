@@ -1,6 +1,7 @@
 import {z} from 'zod';
 
-const clean=z.string().trim();
+const noControls=z.string().refine(value=>!/[\u0000-\u001f\u007f]/.test(value),'Không được có ký tự điều khiển.');
+const clean=noControls.trim();
 export const collectionInputSchema=z.object({
  name:clean.min(1).max(100).refine(value=>!/[\u0000-\u001f\u007f]/.test(value),'Tên không được có ký tự điều khiển.'),
  description:clean.max(500).nullable().optional()
