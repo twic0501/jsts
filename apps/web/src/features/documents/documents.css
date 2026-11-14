@@ -23,8 +23,11 @@
   background: #080d234d;
 }
 
-.document-import-close {
-  float: right;
+.document-import-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
 }
 
 .document-import h2 {
@@ -35,24 +38,34 @@
 }
 
 .document-import p,
-.document-import input,
+.document-import-picker,
 .document-import [role="status"],
 .document-import-preview {
   margin-top: .5rem;
 }
 
-.document-import input {
-  max-width: 100%;
-}
-
-.document-import input::file-selector-button {
-  margin-inline-end: .5rem;
-  padding: .4rem .7rem;
+.document-import .document-import-picker,
+.document-import .document-import-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .45rem .75rem;
   border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
   border-radius: .6rem;
   background: color-mix(in srgb, currentColor 7%, transparent);
   color: inherit;
   cursor: pointer;
+  text-decoration: none;
+}
+
+.document-import .document-import-close {
+  padding: .4rem;
+  border-radius: 50%;
+}
+
+.document-import .document-import-picker:disabled {
+  opacity: .55;
+  cursor: wait;
 }
 
 .document-import ul {

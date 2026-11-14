@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
-import { FileUp } from 'lucide-react'
+import { FileUp, X } from 'lucide-react'
 import { deleteDocument, importDocument, listDocuments, type ImportedDocument } from './library'
 import './documents.css'
 
@@ -14,6 +14,7 @@ export default function DocumentImport() {
   const [loading, setLoading] = useState(true)
   const busy = useRef(false)
   const dialog = useRef<HTMLDialogElement>(null)
+  const fileInput = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     let active = true
@@ -81,15 +82,20 @@ export default function DocumentImport() {
         <FileUp aria-hidden="true" size={17} />
       </button>
       <dialog ref={dialog} className="document-import" aria-labelledby="document-import-title">
-      <button className="document-import-close" type="button" onClick={() => dialog.current?.close()}>
-        Đóng
-      </button>
-      <h2 id="document-import-title"><FileUp aria-hidden="true" size={20} /> Nhập tài liệu</h2>
+      <div className="document-import-heading">
+        <h2 id="document-import-title"><FileUp aria-hidden="true" size={20} /> Nhập tài liệu</h2>
+        <button className="document-import-close" type="button" aria-label="Đóng" title="Đóng"
+          onClick={() => dialog.current?.close()}>
+          <X aria-hidden="true" size={17} />
+        </button>
+      </div>
       <p id="document-import-limits">
         Tệp .txt hoặc .md (UTF-8), tối đa 5 MiB mỗi tệp và 20 MiB cho thư viện.
         Tài liệu chỉ lưu trên trình duyệt này.
       </p>
       <input
+        ref={fileInput}
+        hidden
         type="file"
         aria-label="Chọn tài liệu"
         aria-describedby="document-import-limits"
@@ -97,6 +103,10 @@ export default function DocumentImport() {
         disabled={loading || Boolean(progress)}
         onChange={chooseFile}
       />
+      <button className="document-import-picker" type="button" aria-describedby="document-import-limits"
+        disabled={loading || Boolean(progress)} onClick={() => fileInput.current?.click()}>
+        Chọn tệp
+      </button>
       <div role="status">{loading ? 'Đang mở thư viện…' : progress || status}</div>
       {error && <p className="document-import-error" role="alert">{error}</p>}
       {documents.length > 0 && (
