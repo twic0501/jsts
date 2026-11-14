@@ -78,6 +78,10 @@ research có plan, retrieval, mode, claims, evidence, gaps, traceId, model và m
 
 Lỗi có error.code, error.message và requestId; không trả stack hay secret. JSON HTTP không thể biểu diễn NaN/Infinity hợp lệ; validator vẫn kiểm hữu hạn ở các hàm toán và dữ liệu không đi qua JSON. Model sinh/planner/reranker lỗi có thể trả fallback200 kèm cảnh báo; không có nghĩa đã sinh câu trả lời thành công.
 
+## FR15 / FR16 writable APIs
+
+`/api/v1/collections` provides collection CRUD, membership routes, and the reverse Paper lookup. `/api/v1/notes` provides note CRUD and revision-conflict responses. MongoDB stores `collections` (case-insensitive unique `name`), `collectionPapers` (unique `collectionId,paperId`) and `notes` (indexed by `paperId,createdAt`). These are the first write APIs and must be placed behind the documented Nginx/Basic Auth protection because application authentication is not yet available.
+
 ## MongoDB
 
 | Collection | Dữ liệu | Khóa/index và ghi chú |

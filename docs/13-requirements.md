@@ -25,6 +25,10 @@ Kho dữ liệu mục tiêu gồm5.000–20.000 abstract về AI, sinh học, y 
 | Schema | Quy tắc kiểm tên trường, kiểu, độ dài, phạm vi |
 | Offline | Không gọi Internet cho nhiệm vụ dùng dữ liệu/model đã cài |
 
+## FR15 và FR16
+
+FR15 bổ sung backend Bộ sưu tập: CRUD collection, membership Paper–Collection, và xóa collection chỉ xóa membership, không xóa Paper. FR16 bổ sung backend Ghi chú: CRUD theo Paper/chunk/version, trạng thái anchor và optimistic concurrency bằng revision.
+
 ## Input và output
 
 Input chính gồm câu hỏi2..300 ký tự, phạm vi thư viện/trực tuyến/kết hợp, topK và bộ lọc lĩnh vực/năm. Query rỗng ở APIv1 có nghĩa duyệt thư viện. Nguồn ngoài được coi là dữ liệu không đáng tin cho tới khi qua schema; bài thiếu abstract được đánh dấu chỉ có tiêu đề.
