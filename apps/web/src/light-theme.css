@@ -352,3 +352,63 @@ body,
   color: #e7e9fa;
   box-shadow: 0 20px 60px rgba(40, 50, 110, 0.35);
 }
+
+/* ==========================================================
+   MAGIC BOOK - 2D MAP LIGHT THEME
+   ========================================================== */
+
+:root[data-theme='light'] .map2d {
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(139, 124, 246, 0.13), transparent 68%),
+    linear-gradient(145deg, #f1f3fc 0%, #e8edfb 55%, #f5f6fc 100%);
+}
+
+:root[data-theme='light'] .map2d .n2d-label {
+  fill: #283451;
+  stroke: #f1f3fc;
+  stroke-width: 3.5px;
+}
+
+:root[data-theme='light'] .map2d-controls {
+  border-color: rgba(72, 85, 120, 0.18);
+  background: rgba(255, 255, 255, 0.86);
+  color: #26334f;
+  box-shadow: 0 5px 20px rgba(55, 65, 100, 0.10);
+}
+
+:root[data-theme='light'] .map2d-controls button {
+  border-color: rgba(72, 85, 120, 0.14);
+  background: rgba(99, 112, 160, 0.07);
+  color: #34415e;
+}
+
+:root[data-theme='light'] .map2d-controls button:hover {
+  background: rgba(99, 112, 160, 0.15);
+}
+
+:root[data-theme='light'] .map2d-zoom {
+  color: #53617e;
+}
+
+:root[data-theme='light'] .map2d-tip {
+  border-color: rgba(72, 85, 120, 0.18);
+  background: rgba(255, 255, 255, 0.96);
+  color: #26334f;
+  box-shadow: 0 8px 28px rgba(55, 65, 100, 0.14);
+}
+
+:root[data-theme='light'] .view-switch {
+  border-color: rgba(72, 85, 120, 0.18);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+:root[data-theme='light'] .view-switch button {
+  color: #53617e;
+}
+
+:root[data-theme='light'] .view-switch button.active {
+  background: rgba(119, 105, 225, 0.18);
+  color: #493e9b;
+  box-shadow: 0 0 0 1px rgba(119, 105, 225, 0.35);
+}
+
