@@ -1,0 +1,104 @@
+.document-import {
+  inset: 5rem 1rem auto auto;
+  width: min(25rem, calc(100% - 2rem));
+  max-height: calc(100dvh - 6rem);
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid #8995c3;
+  border-radius: 1rem;
+  background: #f8f9ff;
+  color: #212947;
+  pointer-events: auto;
+  overflow-wrap: anywhere;
+  box-shadow: 0 12px 36px #10163038;
+  font-size: .875rem;
+}
+
+:root[data-theme='dark'] .document-import {
+  background: #1b2340;
+  color: #f3f4ff;
+}
+
+.document-import::backdrop {
+  background: #080d234d;
+}
+
+.document-import-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+}
+
+.document-import h2 {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-weight: 650;
+}
+
+.document-import p,
+.document-import-picker,
+.document-import [role="status"],
+.document-import-preview {
+  margin-top: .5rem;
+}
+
+.document-import .document-import-picker,
+.document-import .document-import-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .45rem .75rem;
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+  border-radius: .6rem;
+  background: color-mix(in srgb, currentColor 7%, transparent);
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.document-import .document-import-close {
+  padding: .4rem;
+  border-radius: 50%;
+}
+
+.document-import .document-import-picker:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
+.document-import ul {
+  padding: 0;
+  list-style: none;
+}
+
+.document-import li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  align-items: baseline;
+  padding: .5rem 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.document-import button {
+  text-decoration: underline;
+  text-align: left;
+}
+
+.document-import-error {
+  color: #ac252c;
+}
+
+:root[data-theme='dark'] .document-import-error {
+  color: #ff9da4;
+}
+
+.document-import-preview pre {
+  max-height: 16rem;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+}

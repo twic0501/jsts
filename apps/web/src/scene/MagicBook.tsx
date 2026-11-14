@@ -22,6 +22,7 @@ import {
   type SpatialHover,
 } from './create-book-scene'
 import MapView2D from './MapView2D'
+import DocumentImport from '../features/documents/DocumentImport'
 import type { PageFocus } from './spatial-layout'
 import { SIMILARITY_BANDS, similarityTone } from './ritual'
 const phaseLabels = {
@@ -220,6 +221,7 @@ export default function MagicBook({
           <h2>Tri thức luôn kết nối.</h2>
         </div>
         <div className="scene-actions">
+          <DocumentImport />
           <span className="view-switch" role="group" aria-label="Chế độ hiển thị">
             {(['auto', '3d', '2d'] as const).map((v) => (
               <button
