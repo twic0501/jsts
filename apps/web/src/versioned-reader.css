@@ -1,0 +1,40 @@
+.versioned-reader {
+  width: min(44rem, calc(100% - 2rem));
+  max-height: min(80vh, 50rem);
+  margin: auto;
+  padding: 0;
+  color: CanvasText;
+  background: Canvas;
+  border: 1px solid color-mix(in srgb, CanvasText 24%, Canvas);
+  border-radius: 1rem;
+}
+.versioned-reader::backdrop { background: rgb(15 23 42 / 65%); }
+.versioned-reader-body { display: grid; gap: .9rem; padding: 1.5rem; }
+.versioned-reader-header { display: flex; align-items: center; gap: 1rem; }
+.versioned-reader h2 { font-size: 1.35rem; font-weight: 650; }
+.versioned-reader ul { display: grid; gap: .5rem; list-style: none; }
+.versioned-reader li button { width: 100%; text-align: left; }
+.versioned-reader button {
+  padding: .45rem .75rem;
+  border: 1px solid color-mix(in srgb, CanvasText 24%, Canvas);
+  border-radius: .5rem;
+  cursor: pointer;
+}
+.versioned-reader button:hover:not(:disabled) { background: color-mix(in srgb, CanvasText 8%, Canvas); }
+.versioned-reader button:disabled { opacity: .5; cursor: default; }
+.versioned-reader-close { justify-self: end; }
+.versioned-reader-text { margin: .8rem 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.versioned-reader-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+.versioned-reader-source { text-decoration: underline; }
+.versioned-reader details { padding: .6rem; border: 1px solid color-mix(in srgb, CanvasText 20%, Canvas); border-radius: .5rem; }
+.versioned-reader summary { cursor: pointer; }
+.versioned-reader details fieldset { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .5rem; }
+.versioned-reader details legend { margin-bottom: .3rem; }
+.versioned-reader details input:not([type=checkbox]), .versioned-reader details select {
+  padding: .25rem .4rem; border: 1px solid color-mix(in srgb, CanvasText 25%, Canvas); border-radius: .3rem;
+}
+.versioned-reader-header-layer { position: sticky; top: 0; z-index: 50; }
+.versioned-header-action { color: CanvasText; font-size: .8rem; padding: .35rem .5rem; white-space: nowrap; }
+.versioned-header-action:hover { text-decoration: underline; }
+.versioned-account-status { position: fixed; inset: auto 1rem 1rem auto; z-index: 60; background: Canvas; color: CanvasText; padding: .75rem 1rem; border: 1px solid; border-radius: .5rem; }
+.versioned-account-status button { margin-left: .75rem; }

@@ -1,0 +1,948 @@
+{
+  "date": "2026-11-14T12:08:46.231Z",
+  "designDate": "2026-11-14",
+  "status": "design-contract-validation",
+  "passed": 232,
+  "total": 232,
+  "dtoExamples": 47,
+  "publishedExamples": 14,
+  "operations": 54,
+  "paths": 38,
+  "schemas": 60,
+  "checks": [
+    {
+      "name": "DTO: valid search",
+      "passed": true
+    },
+    {
+      "name": "DTO: strict topK type",
+      "passed": true
+    },
+    {
+      "name": "DTO: bounded topK",
+      "passed": true
+    },
+    {
+      "name": "DTO: empty search rejected",
+      "passed": true
+    },
+    {
+      "name": "DTO: caller cannot inject owner",
+      "passed": true
+    },
+    {
+      "name": "DTO: arbitrary query rejected",
+      "passed": true
+    },
+    {
+      "name": "DTO: bounded filter IDs",
+      "passed": true
+    },
+    {
+      "name": "DTO: subject enum",
+      "passed": true
+    },
+    {
+      "name": "DTO: collection create",
+      "passed": true
+    },
+    {
+      "name": "DTO: empty collection name",
+      "passed": true
+    },
+    {
+      "name": "DTO: collection owner not caller defined",
+      "passed": true
+    },
+    {
+      "name": "DTO: collection response",
+      "passed": true
+    },
+    {
+      "name": "DTO: empty partial update rejected",
+      "passed": true
+    },
+    {
+      "name": "DTO: registration DTO",
+      "passed": true
+    },
+    {
+      "name": "DTO: registration rejects malformed data",
+      "passed": true
+    },
+    {
+      "name": "DTO: registration role injection",
+      "passed": true
+    },
+    {
+      "name": "DTO: unanchored note",
+      "passed": true
+    },
+    {
+      "name": "DTO: empty note rejected",
+      "passed": true
+    },
+    {
+      "name": "DTO: note partial update",
+      "passed": true
+    },
+    {
+      "name": "DTO: note patch cannot change target",
+      "passed": true
+    },
+    {
+      "name": "DTO: bookmark set",
+      "passed": true
+    },
+    {
+      "name": "DTO: bookmark removal uses DELETE",
+      "passed": true
+    },
+    {
+      "name": "DTO: source with provenance",
+      "passed": true
+    },
+    {
+      "name": "DTO: HTTPS source URL",
+      "passed": true
+    },
+    {
+      "name": "DTO: document read DTO",
+      "passed": true
+    },
+    {
+      "name": "DTO: no persistence secret fields",
+      "passed": true
+    },
+    {
+      "name": "DTO: abstract citation with page null",
+      "passed": true
+    },
+    {
+      "name": "DTO: cosine bounds",
+      "passed": true
+    },
+    {
+      "name": "DTO: page index starts at 1",
+      "passed": true
+    },
+    {
+      "name": "DTO: search response",
+      "passed": true
+    },
+    {
+      "name": "DTO: projection point complete",
+      "passed": true
+    },
+    {
+      "name": "DTO: answer references search resource",
+      "passed": true
+    },
+    {
+      "name": "DTO: no client prompt override",
+      "passed": true
+    },
+    {
+      "name": "DTO: 202 job acknowledgment",
+      "passed": true
+    },
+    {
+      "name": "DTO: sync tombstone",
+      "passed": true
+    },
+    {
+      "name": "DTO: deleted record cannot leak payload",
+      "passed": true
+    },
+    {
+      "name": "DTO: reading progress",
+      "passed": true
+    },
+    {
+      "name": "DTO: reading progress bounded",
+      "passed": true
+    },
+    {
+      "name": "DTO: reading page starts at one",
+      "passed": true
+    },
+    {
+      "name": "DTO: reading revision is server-managed",
+      "passed": true
+    },
+    {
+      "name": "DTO: replacement base revision",
+      "passed": true
+    },
+    {
+      "name": "DTO: missing replacement base revision",
+      "passed": true
+    },
+    {
+      "name": "DTO: replacement DTO revision is a number after multipart decoding",
+      "passed": true
+    },
+    {
+      "name": "DTO: replacement revision must be integer",
+      "passed": true
+    },
+    {
+      "name": "DTO: replacement revision must be positive",
+      "passed": true
+    },
+    {
+      "name": "DTO: replacement revision must be safe",
+      "passed": true
+    },
+    {
+      "name": "DTO: no preferences sync events",
+      "passed": true
+    },
+    {
+      "name": "OpenAPI 3.1 metadata",
+      "passed": true
+    },
+    {
+      "name": "OpenAPI matches generator",
+      "passed": true
+    },
+    {
+      "name": "Schema references resolve",
+      "passed": true
+    },
+    {
+      "name": "Every registry route has contract",
+      "passed": true
+    },
+    {
+      "name": "Status POST /api/v4/users",
+      "passed": true
+    },
+    {
+      "name": "Location POST /api/v4/users",
+      "passed": true
+    },
+    {
+      "name": "Request schema POST /api/v4/users",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/users/me",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/users/me",
+      "passed": true
+    },
+    {
+      "name": "Status PATCH /api/v4/users/me",
+      "passed": true
+    },
+    {
+      "name": "Request schema PATCH /api/v4/users/me",
+      "passed": true
+    },
+    {
+      "name": "Status POST /api/v4/sessions",
+      "passed": true
+    },
+    {
+      "name": "Request schema POST /api/v4/sessions",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/sessions/current",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/sessions/current",
+      "passed": true
+    },
+    {
+      "name": "Status DELETE /api/v4/sessions/current",
+      "passed": true
+    },
+    {
+      "name": "204 has no body /api/v4/sessions/current",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/documents",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/documents",
+      "passed": true
+    },
+    {
+      "name": "Status POST /api/v4/documents",
+      "passed": true
+    },
+    {
+      "name": "Location POST /api/v4/documents",
+      "passed": true
+    },
+    {
+      "name": "Request schema POST /api/v4/documents",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/documents/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/documents/{id} id",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/documents/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status PATCH /api/v4/documents/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter PATCH /api/v4/documents/{id} id",
+      "passed": true
+    },
+    {
+      "name": "Request schema PATCH /api/v4/documents/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status DELETE /api/v4/documents/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter DELETE /api/v4/documents/{id} id",
+      "passed": true
+    },
+    {
+      "name": "204 has no body /api/v4/documents/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/documents/{id}/chunks",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/documents/{id}/chunks id",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/documents/{id}/chunks",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/documents/{id}/source",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/documents/{id}/source id",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/documents/{id}/source",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/documents/{id}/neighbors",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/documents/{id}/neighbors id",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/documents/{id}/neighbors",
+      "passed": true
+    },
+    {
+      "name": "Status POST /api/v4/documents/{id}/versions",
+      "passed": true
+    },
+    {
+      "name": "Path parameter POST /api/v4/documents/{id}/versions id",
+      "passed": true
+    },
+    {
+      "name": "Location POST /api/v4/documents/{id}/versions",
+      "passed": true
+    },
+    {
+      "name": "Request schema POST /api/v4/documents/{id}/versions",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/documents/{id}/versions/{versionId}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/documents/{id}/versions/{versionId} id",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/documents/{id}/versions/{versionId} versionId",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/documents/{id}/versions/{versionId}",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/documents/{id}/versions/{versionId}/chunks",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/documents/{id}/versions/{versionId}/chunks id",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/documents/{id}/versions/{versionId}/chunks versionId",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/documents/{id}/versions/{versionId}/chunks",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/documents/{id}/versions/{versionId}/source",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/documents/{id}/versions/{versionId}/source id",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/documents/{id}/versions/{versionId}/source versionId",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/documents/{id}/versions/{versionId}/source",
+      "passed": true
+    },
+    {
+      "name": "Status POST /api/v4/searches",
+      "passed": true
+    },
+    {
+      "name": "Location POST /api/v4/searches",
+      "passed": true
+    },
+    {
+      "name": "Request schema POST /api/v4/searches",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/searches/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/searches/{id} id",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/searches/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/graph",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/graph",
+      "passed": true
+    },
+    {
+      "name": "Status POST /api/v4/answers",
+      "passed": true
+    },
+    {
+      "name": "Location POST /api/v4/answers",
+      "passed": true
+    },
+    {
+      "name": "Request schema POST /api/v4/answers",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/answers/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/answers/{id} id",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/answers/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/jobs/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/jobs/{id} id",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/jobs/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/users/me/bookmarks",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/users/me/bookmarks",
+      "passed": true
+    },
+    {
+      "name": "Status PUT /api/v4/users/me/bookmarks/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter PUT /api/v4/users/me/bookmarks/{documentId} documentId",
+      "passed": true
+    },
+    {
+      "name": "Request schema PUT /api/v4/users/me/bookmarks/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Status DELETE /api/v4/users/me/bookmarks/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter DELETE /api/v4/users/me/bookmarks/{documentId} documentId",
+      "passed": true
+    },
+    {
+      "name": "204 has no body /api/v4/users/me/bookmarks/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/collections",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/collections",
+      "passed": true
+    },
+    {
+      "name": "Status POST /api/v4/collections",
+      "passed": true
+    },
+    {
+      "name": "Location POST /api/v4/collections",
+      "passed": true
+    },
+    {
+      "name": "Request schema POST /api/v4/collections",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/collections/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/collections/{id} id",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/collections/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status PATCH /api/v4/collections/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter PATCH /api/v4/collections/{id} id",
+      "passed": true
+    },
+    {
+      "name": "Request schema PATCH /api/v4/collections/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status DELETE /api/v4/collections/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter DELETE /api/v4/collections/{id} id",
+      "passed": true
+    },
+    {
+      "name": "204 has no body /api/v4/collections/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status PUT /api/v4/collections/{id}/items/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter PUT /api/v4/collections/{id}/items/{documentId} id",
+      "passed": true
+    },
+    {
+      "name": "Path parameter PUT /api/v4/collections/{id}/items/{documentId} documentId",
+      "passed": true
+    },
+    {
+      "name": "Request schema PUT /api/v4/collections/{id}/items/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Status DELETE /api/v4/collections/{id}/items/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter DELETE /api/v4/collections/{id}/items/{documentId} id",
+      "passed": true
+    },
+    {
+      "name": "Path parameter DELETE /api/v4/collections/{id}/items/{documentId} documentId",
+      "passed": true
+    },
+    {
+      "name": "204 has no body /api/v4/collections/{id}/items/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/notes",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/notes",
+      "passed": true
+    },
+    {
+      "name": "Status POST /api/v4/notes",
+      "passed": true
+    },
+    {
+      "name": "Location POST /api/v4/notes",
+      "passed": true
+    },
+    {
+      "name": "Request schema POST /api/v4/notes",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/notes/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/notes/{id} id",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/notes/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status PATCH /api/v4/notes/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter PATCH /api/v4/notes/{id} id",
+      "passed": true
+    },
+    {
+      "name": "Request schema PATCH /api/v4/notes/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status DELETE /api/v4/notes/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter DELETE /api/v4/notes/{id} id",
+      "passed": true
+    },
+    {
+      "name": "204 has no body /api/v4/notes/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/users/me/search-history",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/users/me/search-history",
+      "passed": true
+    },
+    {
+      "name": "Status POST /api/v4/users/me/search-history",
+      "passed": true
+    },
+    {
+      "name": "Location POST /api/v4/users/me/search-history",
+      "passed": true
+    },
+    {
+      "name": "Request schema POST /api/v4/users/me/search-history",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/users/me/search-history/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/users/me/search-history/{id} id",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/users/me/search-history/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status DELETE /api/v4/users/me/search-history/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter DELETE /api/v4/users/me/search-history/{id} id",
+      "passed": true
+    },
+    {
+      "name": "204 has no body /api/v4/users/me/search-history/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/users/me/reading-states",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/users/me/reading-states",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/users/me/reading-states/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/users/me/reading-states/{documentId} documentId",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/users/me/reading-states/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Status PUT /api/v4/users/me/reading-states/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter PUT /api/v4/users/me/reading-states/{documentId} documentId",
+      "passed": true
+    },
+    {
+      "name": "Creation status and Location /api/v4/users/me/reading-states/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Update omits Location /api/v4/users/me/reading-states/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Request schema PUT /api/v4/users/me/reading-states/{documentId}",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/sync/bootstrap",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/sync/bootstrap",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/sync/changes",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/sync/changes",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/capabilities",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/capabilities",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/health/live",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/health/live",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/health/ready",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/health/ready",
+      "passed": true
+    },
+    {
+      "name": "Status POST /api/v4/datasets",
+      "passed": true
+    },
+    {
+      "name": "Location POST /api/v4/datasets",
+      "passed": true
+    },
+    {
+      "name": "Request schema POST /api/v4/datasets",
+      "passed": true
+    },
+    {
+      "name": "Status GET /api/v4/datasets/{id}",
+      "passed": true
+    },
+    {
+      "name": "Path parameter GET /api/v4/datasets/{id} id",
+      "passed": true
+    },
+    {
+      "name": "GET no request body /api/v4/datasets/{id}",
+      "passed": true
+    },
+    {
+      "name": "Status POST /api/v4/documents/{id}/index-jobs",
+      "passed": true
+    },
+    {
+      "name": "Path parameter POST /api/v4/documents/{id}/index-jobs id",
+      "passed": true
+    },
+    {
+      "name": "Location POST /api/v4/documents/{id}/index-jobs",
+      "passed": true
+    },
+    {
+      "name": "Request schema POST /api/v4/documents/{id}/index-jobs",
+      "passed": true
+    },
+    {
+      "name": "Operation counts match",
+      "passed": true
+    },
+    {
+      "name": "Reading ETag comes from GET only",
+      "passed": true
+    },
+    {
+      "name": "Reading 404 and 422 are distinguishable",
+      "passed": true
+    },
+    {
+      "name": "Replacement uses the body revision, not If-Match",
+      "passed": true
+    },
+    {
+      "name": "Replacement revision errors match contract",
+      "passed": true
+    },
+    {
+      "name": "Version-specific source and chunk reads exist",
+      "passed": true
+    },
+    {
+      "name": "No server preferences mapping",
+      "passed": true
+    },
+    {
+      "name": "DTO: queued creation references the same job",
+      "passed": true
+    },
+    {
+      "name": "DTO: ready version requires derived fields",
+      "passed": true
+    },
+    {
+      "name": "DTO: creation cannot return a ready version",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: POST /api/v4/documents/{id}/versions 201 example",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: POST /api/v4/documents/{id}/versions 409 example",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: POST /api/v4/documents/{id}/versions request example",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: GET /api/v4/documents/{id}/versions/{versionId} 200 queued",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: GET /api/v4/documents/{id}/versions/{versionId} 200 ready",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: POST /api/v4/searches request example",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: POST /api/v4/collections 201 example",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: POST /api/v4/collections request example",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: GET /api/v4/users/me/reading-states/{documentId} 200 example",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: PUT /api/v4/users/me/reading-states/{documentId} 200 example",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: PUT /api/v4/users/me/reading-states/{documentId} 201 example",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: PUT /api/v4/users/me/reading-states/{documentId} 404 example",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: PUT /api/v4/users/me/reading-states/{documentId} 422 example",
+      "passed": true
+    },
+    {
+      "name": "Published DTO: PUT /api/v4/users/me/reading-states/{documentId} request example",
+      "passed": true
+    },
+    {
+      "name": "Session JSON excludes raw tokens",
+      "passed": true
+    },
+    {
+      "name": "All schemas compile with installed Zod",
+      "passed": true
+    },
+    {
+      "name": "Main design document local links resolve",
+      "passed": true
+    }
+  ],
+  "sha256": "a0d1d0cc3074d24ab0169d4a831e09f08f7b2d62d8024994fecfb99d318abbe0",
+  "limitations": [
+    "JSON schema/examples and package consistency only, not an independent full OpenAPI conformance validator.",
+    "Authorization, revision and receipt ordering, multipart decoding and worker concurrency require runtime tests.",
+    "No API v4 HTTP requests, DB migration or application E2E executed."
+  ]
+}

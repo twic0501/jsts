@@ -46,6 +46,11 @@ Output gồm danh sách bài được xếp hạng, điểm cosine, node3D, liê
 | FR09 | RAG có đoạn minh chứng | Có offsets/citation; ID hợp lệ chưa chứng minh entailment |
 | FR10 | Hoạt động khi mất mạng | Thư viện/model local hoạt động; bài mới trên Internet không lấy được |
 | FR11 | Log AI theo module và log prompt runtime | Có README/log phát triển; runtime ghi plan/synthesis và accepted |
+| FR17 | Lưu vị trí đọc | Thiết kế đích. Lưu theo tài khoản và tài liệu, đọc lại đúng phiên bản, xử lý xung đột theo revision. |
+| FR20 | Quản lý tài liệu đã nhập | Thiết kế đích. Sửa metadata, thay file có tiến độ xử lý, xóa chặn tất cả phiên bản. |
+| FR24 | Lưu thiết lập | Thiết kế đích. Theme, cỡ chữ, giảm chuyển động và chất lượng cảnh lưu theo hồ sơ trình duyệt. |
+
+Chi tiết yêu cầu đích của ba FR trong [phạm vi tính năng](20-feature-scope.md) và [hợp đồng API v4](design/README.md).
 
 ## Yêu cầu phi chức năng
 

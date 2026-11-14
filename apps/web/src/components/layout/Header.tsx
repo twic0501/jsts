@@ -30,6 +30,10 @@ interface HeaderProps {
   selectPaper: (paper: Paper | null) => void
   theme: 'light' | 'dark'
   toggleTheme: () => void
+  onOpenReader: () => void
+  accountName: string | null
+  accountBusy: boolean
+  onAccountAction: () => void
 }
 
 export default function Header({
@@ -51,6 +55,10 @@ export default function Header({
   selectPaper,
   theme,
   toggleTheme,
+  onOpenReader,
+  accountName,
+  accountBusy,
+  onAccountAction,
 }: HeaderProps) {
   return (
     <header className="w-full flex items-center justify-between px-6 py-3 my-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl shadow-lg transition-colors duration-300">
@@ -209,9 +217,10 @@ export default function Header({
         >
           <Layers size={18} />
         </button>
-        <div className="flex items-center justify-center w-8 h-8 text-xs font-bold text-white bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-md">
-          PM
-        </div>
+        <button type="button" className="versioned-header-action" onClick={onOpenReader}>Tài liệu</button>
+        <button type="button" className="versioned-header-action" disabled={accountBusy} onClick={onAccountAction}>
+          {accountName ? `Đăng xuất (${accountName})` : 'Đăng nhập'}
+        </button>
       </div>
     </header>
   )

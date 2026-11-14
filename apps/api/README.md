@@ -14,3 +14,7 @@ Cập nhật0.6: docs/10-online-running.md mô tả v2 search thật arXiv/OpenA
 
 
 Mốc0.7: POST /api/v3/research dùng module lib/rag; giữv1/v2 tương thích. Model sinh và reranker chạy local bằng Transformers.js, khôngPython hoặc dịch vụAI ngoài. Cache Mongo có onlinePapers/onlineEmbeddings và ragRunsTTL7ngày. Xem lib/rag/README.md và docs12. Log prompt runtime cục bộ có input/output thật; không có endpointpublic. Không tự train model.
+
+FR17 thêm API v4 lưu mốc theo tài khoản và đọc nội dung theo phiên bản. Phần ghi cần MongoDB replica set và phiên FR12. Xem [tích hợp FR17](lib/reading-states/README.md) để biết cấu hình, dữ liệu đầu vào và lệnh kiểm thử.
+
+FR20 thêm sửa metadata, thay file qua worker nền và xóa tài liệu đã nhập. Xem [cấu hình worker FR20](lib/document-management/README.md).

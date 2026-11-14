@@ -6,6 +6,7 @@ Cập nhật ngày 04/11/2026 theo mã nguồn mốc 0.7.0. Văn bản mô tả 
 
 | Nội dung | Tài liệu |
 |---|---|
+| Thiết kế API v4 và mô hình dữ liệu đích cho FR17, FR20 và FR24 | [docs/design](design/README.md) |
 | Đặc tả, định nghĩa, yêu cầu và điều kiện nghiệm thu | [13-requirements.md](13-requirements.md) |
 | Kiến trúc thống nhất, API, CSDL và flow | [14-architecture-api-database.md](14-architecture-api-database.md) |
 | Hàm, biến, công thức và null/undefined | [03-ham-bien-toan.md](03-ham-bien-toan.md) |

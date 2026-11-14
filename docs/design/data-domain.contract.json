@@ -1,0 +1,248 @@
+{
+  "status": "design",
+  "date": "2026-11-14",
+  "entities": [
+    {
+      "name": "User",
+      "store": "mongo",
+      "key": "id",
+      "rules": [
+        "email canonical unique",
+        "password hash only",
+        "principal from session"
+      ]
+    },
+    {
+      "name": "Dataset",
+      "store": "mongo",
+      "key": "id+datasetVersion",
+      "rules": [
+        "manifest/checksum/counts",
+        "no raw private user documents in public dataset"
+      ]
+    },
+    {
+      "name": "Document",
+      "store": "mongo",
+      "key": "id",
+      "rules": [
+        "kind paper|study",
+        "study owner required",
+        "private default for upload",
+        "activeVersionId and revision",
+        "accepting a replacement bumps revision and sets latestReplacementVersionId atomically",
+        "tombstone blocks all version reads and worker publication"
+      ]
+    },
+    {
+      "name": "DocumentVersion",
+      "store": "mongo",
+      "key": "documentId+versionId",
+      "rules": [
+        "content immutable once ready",
+        "queued coverage/textHash/parserRevision/index generation may be unknown; ready requires them",
+        "publish only for the latest replacement with a current worker lease and a matching content and metadata index generation",
+        "historical content readable only if previously activated, retained and currently authorized"
+      ]
+    },
+    {
+      "name": "Chunk",
+      "store": "mongo",
+      "key": "id",
+      "rules": [
+        "versionId exists",
+        "ordinal/page/section/offset provenance",
+        "hash matches text"
+      ]
+    },
+    {
+      "name": "Embedding",
+      "store": "cassandra",
+      "key": "scope+targetKind+targetId+modelRevision+pipelineRevision+generation",
+      "rules": [
+        "document and chunk targets distinct",
+        "384D normalized for current E5",
+        "Mongo authority rechecked"
+      ]
+    },
+    {
+      "name": "Summary",
+      "store": "mongo",
+      "key": "versionId+language+generatorRevision",
+      "rules": [
+        "derived only",
+        "sourceCoverage and review status",
+        "never replace original evidence"
+      ]
+    },
+    {
+      "name": "Bookmark",
+      "store": "mongo",
+      "key": "ownerId+documentId",
+      "rules": [
+        "set not toggle",
+        "revision and ownership"
+      ]
+    },
+    {
+      "name": "Collection",
+      "store": "mongo",
+      "key": "id",
+      "rules": [
+        "owner scope",
+        "delete does not delete source Document"
+      ]
+    },
+    {
+      "name": "CollectionItem",
+      "store": "mongo",
+      "key": "collectionId+documentId",
+      "rules": [
+        "membership only",
+        "document permission rechecked"
+      ]
+    },
+    {
+      "name": "Note",
+      "store": "mongo",
+      "key": "id",
+      "rules": [
+        "owner scope",
+        "versioned anchor",
+        "conflict keeps local draft"
+      ]
+    },
+    {
+      "name": "SearchRun",
+      "store": "mongo",
+      "key": "id",
+      "rules": [
+        "principal/scope fingerprint",
+        "TTL",
+        "not personal history",
+        "evidence revision"
+      ]
+    },
+    {
+      "name": "SearchHistory",
+      "store": "mongo",
+      "key": "ownerId+queryId",
+      "rules": [
+        "one explicit submit",
+        "offline replay idempotent"
+      ]
+    },
+    {
+      "name": "ReadingState",
+      "store": "mongo",
+      "key": "ownerId+documentId",
+      "rules": [
+        "owner is the session principal",
+        "one state per owner and document",
+        "version belongs to a readable document; page/chunk anchors and progress belong to that version",
+        "revision protects replacement; replays do not advance revision",
+        "IndexedDB stores per-account drafts and outbox"
+      ]
+    },
+    {
+      "name": "BrowserSettings",
+      "store": "indexeddb",
+      "key": "browser profile (singleton per app origin)",
+      "rules": [
+        "theme/fontScale/reducedMotion/sceneQuality",
+        "guest and signed-in users share the profile settings",
+        "local only; no account dependency, API or sync events"
+      ]
+    },
+    {
+      "name": "Answer",
+      "store": "mongo",
+      "key": "id",
+      "rules": [
+        "searchId",
+        "authorized original evidence",
+        "grounded|extractive|insufficient"
+      ]
+    },
+    {
+      "name": "ClientOutbox",
+      "store": "indexeddb",
+      "key": "profileId+operationId",
+      "rules": [
+        "same REST resource write path",
+        "no tokens/passwords",
+        "preserve pending until acknowledged"
+      ]
+    }
+  ],
+  "relationships": [
+    [
+      "Document",
+      "DocumentVersion",
+      "one-to-many"
+    ],
+    [
+      "DocumentVersion",
+      "Chunk",
+      "one-to-many"
+    ],
+    [
+      "Chunk",
+      "Embedding",
+      "one-to-many by model/generation"
+    ],
+    [
+      "DocumentVersion",
+      "Embedding",
+      "one-to-many document target"
+    ],
+    [
+      "DocumentVersion",
+      "Summary",
+      "one-to-many"
+    ],
+    [
+      "Collection",
+      "CollectionItem",
+      "one-to-many"
+    ],
+    [
+      "Document",
+      "CollectionItem",
+      "one-to-many"
+    ],
+    [
+      "SearchRun",
+      "Answer",
+      "one-to-many"
+    ],
+    [
+      "User",
+      "ReadingState",
+      "one-to-many"
+    ],
+    [
+      "Document",
+      "ReadingState",
+      "one-to-many across owners"
+    ],
+    [
+      "DocumentVersion",
+      "ReadingState",
+      "one-to-many across owners"
+    ]
+  ],
+  "sourceRules": {
+    "originalTextRequired": true,
+    "summaryIsDerived": true,
+    "rightsBeforeFulltextDownload": true,
+    "privateUploadDefault": true
+  },
+  "evaluation": {
+    "pilotDocuments": 100,
+    "proposedQuestions": 60,
+    "labelsRequired": true,
+    "trainingRequired": false
+  },
+  "runtimeChanged": false
+}

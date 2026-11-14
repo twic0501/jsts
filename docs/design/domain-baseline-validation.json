@@ -1,0 +1,112 @@
+{
+  "date": "2026-11-14T11:55:26.083Z",
+  "designDate": "2026-11-14",
+  "kind": "design consistency only",
+  "passed": 20,
+  "total": 20,
+  "endpointCount": 54,
+  "entityCount": 17,
+  "checks": [
+    {
+      "name": "Unique method/path",
+      "passed": true
+    },
+    {
+      "name": "One target namespace",
+      "passed": true
+    },
+    {
+      "name": "No generic sync write path",
+      "passed": true
+    },
+    {
+      "name": "GET read only",
+      "passed": true
+    },
+    {
+      "name": "Creation has Location",
+      "passed": true
+    },
+    {
+      "name": "Reading creation and replacement are distinct",
+      "passed": true
+    },
+    {
+      "name": "File replacement uses multipart document revision",
+      "passed": true
+    },
+    {
+      "name": "Browser settings are local only",
+      "passed": true
+    },
+    {
+      "name": "Async 202 points to job",
+      "passed": true
+    },
+    {
+      "name": "DELETE no response body",
+      "passed": true
+    },
+    {
+      "name": "Sensitive sessions not replayed",
+      "passed": true
+    },
+    {
+      "name": "Updates protected by revision",
+      "passed": true
+    },
+    {
+      "name": "Roles are explicit",
+      "passed": true
+    },
+    {
+      "name": "Public mutations limited to identity",
+      "passed": true
+    },
+    {
+      "name": "Document and chunk embeddings distinct",
+      "passed": true
+    },
+    {
+      "name": "Summary not original evidence",
+      "passed": true
+    },
+    {
+      "name": "No runtime change claimed",
+      "passed": true
+    },
+    {
+      "name": "Entity relationship targets exist",
+      "passed": true
+    },
+    {
+      "name": "Raw audit data excluded from git",
+      "passed": true
+    },
+    {
+      "name": "Local document links resolve",
+      "passed": true
+    }
+  ],
+  "hashes": [
+    {
+      "path": "docs/26-data-domain-baseline.md",
+      "sha256": "9e84c3196feb6f93e41859e51fcbc1776123a4307bbd0cd37b07757e8b118921"
+    },
+    {
+      "path": "docs/27-backend-domain-baseline.md",
+      "sha256": "21fa2052f91734ea75b88df0f21ad8427150982b01419470c95b1ac93657f61c"
+    },
+    {
+      "path": "docs/28-design-decisions-and-verification.md",
+      "sha256": "052467527e72e7c133969a30b285987324e3839ff2958c2293d7dae4e01c5630"
+    }
+  ],
+  "runtimeTest": false,
+  "limitations": [
+    "No API routes created or executed.",
+    "No Cassandra/Mongo migration.",
+    "Catalog is not complete DTO/OpenAPI conformance validation.",
+    "No corpus replaced or new data collected."
+  ]
+}

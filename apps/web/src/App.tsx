@@ -25,6 +25,8 @@ import Sidebar from './components/layout/Sidebar'
 import SearchHero from './components/layout/SearchHero'
 import ResultsPanel from './components/layout/ResultsPanel'
 import Modals from './components/layout/Modals'
+import { useAuth } from './features/auth/context/AuthProvider'
+import VersionedReader from './VersionedReader'
 import './light-theme.css'
 
 const MagicBook = lazy(() => import('./scene/MagicBook'))
@@ -33,6 +35,8 @@ const snapshot = validateSnapshot(initialCorpus, snapshotFile)
 type Source = 'connecting' | 'api-json' | 'api-mongodb' | 'local'
 
 export default function App() {
+  const auth = useAuth()
+  const [versionedReaderOpen, setVersionedReaderOpen] = useState(false)
   const [corpus, setCorpus] = useState<Corpus>(initialCorpus),
     [source, setSource] = useState<Source>('connecting')
 
@@ -329,7 +333,7 @@ export default function App() {
       <div className="ambient-wash" aria-hidden="true" />
 
       {/* Đưa Header ra bên ngoài, nằm trên cùng với z-index cao để hiển thị rõ ràng */}
-      <div className="sticky top-0 z-50 w-full px-4 pt-2">
+      <div className="versioned-reader-header-layer sticky top-0 z-50 w-full px-4 pt-2">
         <Header
           savedOnly={savedOnly}
           setSavedOnly={setSavedOnly}
@@ -349,8 +353,19 @@ export default function App() {
           selectPaper={selectPaper}
           theme={theme}
           toggleTheme={toggleTheme}
+          onOpenReader={() => setVersionedReaderOpen(true)}
+          accountName={auth.state.session?.user.displayName ?? null}
+          accountBusy={auth.busy || auth.state.status === 'loading'}
+          onAccountAction={() => auth.state.session ? void auth.logout() : auth.openLogin()}
         />
       </div>
+      {versionedReaderOpen && <VersionedReader onClose={() => setVersionedReaderOpen(false)} />}
+      {auth.notice && (
+        <div className="versioned-account-status" role="status">
+          <span>{auth.notice}</span>
+          <button type="button" onClick={auth.dismissNotice} aria-label="Đóng thông báo tài khoản">×</button>
+        </div>
+      )}
 
       <Sidebar
         sidebar={sidebar}
