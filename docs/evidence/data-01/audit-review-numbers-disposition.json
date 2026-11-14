@@ -1,0 +1,327 @@
+[
+  {
+    "id": "2611.03020",
+    "title": "The Tower of Babel in artificial intelligence: who should speak, and when it pays to listen",
+    "mismatchedNumbers": [
+      "18",
+      "22"
+    ],
+    "summary": "Nghiên cứu phân tích sự phối hợp giữa các bộ phân loại gửi thông điệp ngắn, cho thấy thiết kế thông điệp cùng nhau cải thiện độ chính xác 18–22 điểm phần trăm so với thiết kế riêng.",
+    "closestAbstractSentence": "On three digit datasets, messages designed together beat messages designed apart by 18.07 to 22.68 percentage points on average with two-bit messages, with gains in all 24 configurations.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "On three digit datasets, messages designed together beat messages designed apart by 18.07 to 22.68 percentage points on average with two-bit messages, with gains in all 24 configurations.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2611.06258",
+    "title": "CrossPressor: Scalable Cross-View Fusion for Feed-Forward 3D Gaussian Splatting",
+    "mismatchedNumbers": [
+      "26"
+    ],
+    "summary": "Bài báo đề xuất CrossPressor, phương pháp không cần huấn luyện để hợp nhất đa khung nhìn có thể mở rộng cho 3D Gaussian Splatting feed-forward, giữ chất lượng tái tạo gần hợp nhất dày đặc với tốc độ hợp nhất nhanh hơn tới 26 lần.",
+    "closestAbstractSentence": "CrossPressor maintains reconstruction quality close to dense fusion while achieving up to $26.12\\times$ faster cross-view fusion and $1.43\\times$ end-to-end acceleration on long input sequences.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "CrossPressor maintains reconstruction quality close to dense fusion while achieving up to $26.12\\times$ faster cross-view fusion and $1.43\\times$ end-to-end acceleration on long input sequences.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2611.10802",
+    "title": "Evaluating Jev on Arabic: Comparing Decision Models and LLMs Across Arabic Tasks and Dialects",
+    "mismatchedNumbers": [
+      "66"
+    ],
+    "summary": "Bài báo đánh giá Jev so với 66 hệ thống khác trên 43 tác vụ tiếng Ả Rập theo giao thức zero-shot, so sánh hiệu năng giữa tiếng Ả Rập chuẩn và phương ngữ.",
+    "closestAbstractSentence": "We evaluate 67 systems, including 47 decision models and 20 large language models (LLMs), on 43 tasks across 9 task families using a shared zero-shot protocol.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "We evaluate 67 systems, including 47 decision models and 20 large language models (LLMs), on 43 tasks across 9 task families using a shared zero-shot protocol.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2610.31930",
+    "title": "Synthetic-to-Real Text-Based Person Anomaly Search via Multi-Model Retrieval Fusion and Cross-Encoder Reranking",
+    "mismatchedNumbers": [
+      "94,78"
+    ],
+    "summary": "Bài báo đề xuất khung truy hồi và xếp hạng lại đa mô hình cho tìm kiếm dị thường người dựa trên văn bản, kết hợp Qwen3-VL, SigLIP2 và cross-encoder để cải thiện chuyển giao tổng hợp sang thực, đạt 94,78% mAP.",
+    "closestAbstractSentence": "The final system achieves 94.7815% mAP and 90.8493% R@1 under the official AI City Challenge 2026 Track 4 test setting, with a reported eighth-place finish on the public leaderboard.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "The final system achieves 94.7815% mAP and 90.8493% R@1 under the official AI City Challenge 2026 Track 4 test setting, with a reported eighth-place finish on the public leaderboard.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2611.01974",
+    "title": "MUPA${}^2$S: Multimodal Unified Perception with Asymmetric Attention for Stress Assessment",
+    "mismatchedNumbers": [
+      "69,6"
+    ],
+    "summary": "Bài báo giới thiệu MUPA²S, khung đa phương thức đánh giá căng thẳng tự động kết hợp video khuôn mặt và tín hiệu ECG qua biểu diễn token chung và attention bất đối xứng, đạt độ chính xác khoảng 69,6%.",
+    "closestAbstractSentence": "Unified Video-ECG fusion achieves a test accuracy of 69.58% at approximately half the number of parameters of feature-level fusion, with negligible additional computational cost.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "Unified Video-ECG fusion achieves a test accuracy of 69.58% at approximately half the number of parameters of feature-level fusion, with negligible additional computational cost.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2611.10866",
+    "title": "The Surprising Effectiveness of Deleting Weights in LLM Post-Training",
+    "mismatchedNumbers": [
+      "0"
+    ],
+    "summary": "Bài báo đề xuất Deletion Tuning, chỉ đặt về 0 dưới 0,05% trọng số của LLM đã huấn luyện trước, đạt hiệu quả tương đương fine-tuning toàn phần trong ba chế độ hậu huấn luyện và giảm quên kiến thức cũ.",
+    "closestAbstractSentence": "We find that zeroing fewer than 0.05% of its weights, with no other modification, matches full fine-tuning (FFT) at scale across three LLM post-training regimes: reinforcement learning with verifiable rewards, supervised fine-tuning, and on-policy distillation.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "We find that zeroing fewer than 0.05% of its weights, with no other modification, matches full fine-tuning (FFT) at scale across three LLM post-training regimes: reinforcement learning with verifiable rewards, supervised fine-tuning, and on-policy distillation.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2611.10145",
+    "title": "TrialJev: Open-Weight Single Pass Eligibility Scoring for Patient Trial Screening",
+    "mismatchedNumbers": [
+      "81"
+    ],
+    "summary": "TrialJev là bộ chấm điểm điều kiện tham gia thử nghiệm lâm sàng dùng Qwen LoRA và pointer head, chấm một lượt đạt độ chính xác khoảng 81% và nhanh hơn sinh kết luận.",
+    "closestAbstractSentence": "Under a common development-fitted decision correction, the two 27B TrialJev models reach 80.99% and 81.88% accuracy, compared with 81.28% for the proprietary hosted Jev API; paired confidence intervals include zero.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "Under a common development-fitted decision correction, the two 27B TrialJev models reach 80.99% and 81.88% accuracy, compared with 81.28% for the proprietary hosted Jev API; paired confidence intervals include zero.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2611.00681",
+    "title": "ROD-Dataset: A Pedestrian-Perspective Benchmark of Urban Obstacle Classes for YOLO-Based Detection",
+    "mismatchedNumbers": [
+      "29"
+    ],
+    "summary": "ROD-Dataset cung cấp hơn 24.000 ảnh và 40.000 chướng ngại vật thuộc 25 lớp từ góc nhìn người đi bộ, hợp nhất 29 bộ dữ liệu công khai và đánh giá sáu mô hình YOLO nhẹ.",
+    "closestAbstractSentence": "Six lightweight YOLO detectors (nano and tiny variants) benchmarked on ROD all exceed 0.86 recall; YOLO12n attains the highest recall (0.889), YOLO26n the highest precision (0.925), and YOLOv9t the best mAP@0.50 (0.882) with the fewest parameters.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "Six lightweight YOLO detectors (nano and tiny variants) benchmarked on ROD all exceed 0.86 recall; YOLO12n attains the highest recall (0.889), YOLO26n the highest precision (0.925), and YOLOv9t the best mAP@0.50 (0.882) with the fewest parameters.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2611.11296",
+    "title": "Single-Radar Bilateral 3D Near-Field Imaging for Mobile Robots",
+    "mismatchedNumbers": [
+      "5"
+    ],
+    "summary": "Bài báo đề xuất khung tái tạo cấu trúc 3D hai bên đường đi của robot di động chỉ bằng một radar sóng milimét gắn phía trước, kết hợp mô hình trường gần, tổng hợp phát hai bên và back-projection cửa sổ trượt, đạt sai số định vị khoảng 5 cm.",
+    "closestAbstractSentence": "Experiments in controlled, office/study, and corridor environments produce mean lateral-forward localization errors of 4.65, 5.63, and 5.98 cm, respectively, with peak-to-background ratios (PBRs) exceeding 13 dB.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "Experiments in controlled, office/study, and corridor environments produce mean lateral-forward localization errors of 4.65, 5.63, and 5.98 cm, respectively, with peak-to-background ratios (PBRs) exceeding 13 dB.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2611.00140",
+    "title": "Toward Contrast-Free Breast MRI: Improving Cancer Detection With Virtual Contrast Enhanced Imaging",
+    "mismatchedNumbers": [
+      "60"
+    ],
+    "summary": "Nghiên cứu phát triển khung kết hợp dự đoán MRI không cản quang và MRI cản quang ảo để phát hiện ung thư vú, cho thấy có thể giảm khoảng 60% ca chụp cản quang mà vẫn giữ hiệu năng chẩn đoán.",
+    "closestAbstractSentence": "This simulation suggests that diagnostic performance can be largely preserved while limiting acquired CE imaging to approximately 40% of patients.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "This simulation suggests that diagnostic performance can be largely preserved while limiting acquired CE imaging to approximately 40% of patients.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2610.27155",
+    "title": "A Hybrid TFT-NBEATS Framework for Robust Multi-Horizon Photovoltaic Power Forecasting",
+    "mismatchedNumbers": [
+      "35",
+      "40"
+    ],
+    "summary": "Nghiên cứu đề xuất khung học sâu lai TFT-NBEATS với hợp nhất chú ý để dự báo công suất quang điện đa chân trời, đạt RMSE thấp hơn 35–40% so với baseline và MAPE dưới 5%.",
+    "closestAbstractSentence": "The proposed model achieves RMSE values of 42.35, 46.27, 52.29, and 48.11 across the 20162017, 2023, 2024, and 20252026 datasets, respectively, corresponding to a 3540% reduction compared to the best baseline (TFT).",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "The proposed model achieves RMSE values of 42.35, 46.27, 52.29, and 48.11 across the 20162017, 2023, 2024, and 20252026 datasets, respectively, corresponding to a 3540% reduction compared to the best baseline (TFT).",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2610.20668",
+    "title": "CascadeLedger: Counterfactual Auditing of Information and Resource Integrity in LLM Cascades",
+    "mismatchedNumbers": [
+      "0,998"
+    ],
+    "summary": "Bài báo giới thiệu CascadeLedger, khung kiểm toán thực thi phản thực tế cho cascade mô hình ngôn ngữ có ngân sách, với tính hợp lệ vết tương đương tổng hợp, CPNI và CIF, đạt tỷ lệ dương tính giả 0,0000 và phát hiện khoảng 0,998 lỗi.",
+    "closestAbstractSentence": "Across frozen-cache, independently generated, and serving evaluations, the two-layer audit reports a clean false-positive rate of 0.0000, detects 0.9983 of serialized faults and 0.9982 of unlogged hidden-read faults, and changes 0.3403 of corrupted quality-resource conclusions after deterministic recomputation.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "Across frozen-cache, independently generated, and serving evaluations, the two-layer audit reports a clean false-positive rate of 0.0000, detects 0.9983 of serialized faults and 0.9982 of unlogged hidden-read faults, and changes 0.3403 of corrupted quality-resource conclusions after deterministic recomputation.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2610.40284",
+    "title": "LoRe-MIM: Lost-or-Replaced Masked Image Modeling for Self-Supervised Representation Learning in Whole-Body PET/CT",
+    "mismatchedNumbers": [
+      "0"
+    ],
+    "summary": "Bài báo đề xuất LoRe-MIM, khung tự giám sát che khuất ảnh PET/CT toàn thân bằng cách thay vùng ảnh bằng số 0 hoặc mô thức bổ trợ, đạt kết quả tốt hơn các baseline trên nhiều tác vụ hạ nguồn.",
+    "closestAbstractSentence": "To address these limitations, we curate a heterogeneous, multi-tracer, multi-institutional cohort comprising 6,531 whole-body PET/CT scans and propose LoRe-MIM (Lost-Or-Replaced Masked Image Modelling), a novel self-supervised framework designed to learn multimodal representations through masked image reconstruction.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "To address these limitations, we curate a heterogeneous, multi-tracer, multi-institutional cohort comprising 6,531 whole-body PET/CT scans and propose LoRe-MIM (Lost-Or-Replaced Masked Image Modelling), a novel self-supervised framework designed to learn multimodal representations through masked image reconstruction.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2610.22657",
+    "title": "Secondhand Stress: How Stressful Disclosures Affect Psychosocial Wellbeing in Online Graduate Admissions Communities",
+    "mismatchedNumbers": [
+      "1,1"
+    ],
+    "summary": "Nghiên cứu phân tích hơn 1,1 triệu bình luận Reddit cho thấy việc tiếp xúc với chia sẻ căng thẳng trong tuyển sinh sau đại học liên quan đến biểu hiện lo âu, trầm cảm và mức tham gia cao hơn.",
+    "closestAbstractSentence": "We analyze 171,981 posts and 1,130,413 comments from two Reddit communities across three admissions cycles, using propensity-score stratification and baseline-adjusted comparisons.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "We analyze 171,981 posts and 1,130,413 comments from two Reddit communities across three admissions cycles, using propensity-score stratification and baseline-adjusted comparisons.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2611.13486",
+    "title": "Hand-Object Contact Transition Detection in Egocentric Video",
+    "mismatchedNumbers": [
+      "16.575"
+    ],
+    "summary": "Bài báo giải quyết phát hiện chuyển tiếp tiếp xúc tay–vật trong video góc nhìn thứ nhất bằng khung hợp nhất mô hình hóa tay và vật, kèm bộ dữ liệu ContactTransition gồm 4.021 video và 16.575 nhãn.",
+    "closestAbstractSentence": "To support this task, we present ContactTransition, a dataset comprising 4,021 egocentric videos with 8,498 touch and 8,077 release annotations, together with object-of-interest supervision.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "To support this task, we present ContactTransition, a dataset comprising 4,021 egocentric videos with 8,498 touch and 8,077 release annotations, together with object-of-interest supervision.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2611.05911",
+    "title": "Autonomous agents for electricity-system planning",
+    "mismatchedNumbers": [
+      "40"
+    ],
+    "summary": "Bài báo trình bày khung tác tử tự động lập kế hoạch hệ thống điện qua đề xuất, đánh giá số, phản hồi và chọn phương án, kiểm chứng trên 40 quỹ đạo có ràng buộc carbon ở năm hệ thống điện.",
+    "closestAbstractSentence": "Twenty-eight of forty matched reference designs exceed the new scenario ceilings.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "Twenty-eight of forty matched reference designs exceed the new scenario ceilings.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2611.05744",
+    "title": "Text-Only Domain Adaptation for Low-Resource Medical ASR: Shallow Fusion and Density Ratio Rescoring for Hausa",
+    "mismatchedNumbers": [
+      "23,3",
+      "23,6"
+    ],
+    "summary": "Nghiên cứu thích ứng miền chỉ bằng văn bản cho ASR y khoa tiếng Hausa, dùng Shallow Fusion và Density Ratio với mô hình ngôn ngữ 4-gram, giảm WER từ 29,56% xuống khoảng 23,3–23,6%.",
+    "closestAbstractSentence": "Under prompt-disjoint five-fold cross-validation, SF and DRA reduce WER from 29.56% to 23.55% and 23.33%, respectively.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "Under prompt-disjoint five-fold cross-validation, SF and DRA reduce WER from 29.56% to 23.55% and 23.33%, respectively.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2610.33730",
+    "title": "Learning Representative Port Subsets for Efficient Fluid Antenna Systems",
+    "mismatchedNumbers": [
+      "10"
+    ],
+    "summary": "Bài báo nghiên cứu nén không gian cổng ứng viên của hệ ăng-ten chất lỏng một lần để tái sử dụng, và trên DeepMIMO 7x7 cho thấy 27 cổng đại diện giữ được 99,995% độ lợi công suất.",
+    "closestAbstractSentence": "On a DeepMIMO 7-by-7 FAS with 49 candidate ports, 120 training realizations yield 27 representative ports on average while retaining 99.995% of the channel power gain achieved by exhaustive port selection.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "Summary nguồn có từ “ăng-ten”. Regex chuyển số chữ tiếng Anh khớp “ten” sau dấu gạch nối và tạo “ăng-10”.",
+    "conclusion": "false-positive",
+    "confidence": "high",
+    "disposition": "Cảnh báo giả do bộ dò số đọc “ăng-ten” thành “ăng-10”. Giữ nguyên summary nguồn."
+  },
+  {
+    "id": "2610.27993",
+    "title": "Building Telecom Language Models with RSOD: Domain Data, Specialist Post-Training, Memory-Conscious Distillation, and Networking Evaluation",
+    "mismatchedNumbers": [
+      "21,71"
+    ],
+    "summary": "Bài báo trình bày khung xây dựng mô hình ngôn ngữ viễn thông gồm dữ liệu tổng hợp, sáu giáo viên LoRA chuyên biệt và chưng cất RSOD hợp nhất thành một adapter triển khai được, đạt 21,71/25.",
+    "closestAbstractSentence": "Under the primary route-conditioned evaluation over 2,850 held-out questions, the raw Meta-Llama-3.1-8B-Instruct model scores 12.8661/25 micro (13.0172/25 macro), the combined routed six-teacher system scores 21.7641/25 micro, and the consolidated RSOD student, released as Llama-CalixCLM v1, reaches 21.7112/25 micro (21.8006/25 macro) on the same five dimension LLM-judge rubric.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "Under the primary route-conditioned evaluation over 2,850 held-out questions, the raw Meta-Llama-3.1-8B-Instruct model scores 12.8661/25 micro (13.0172/25 macro), the combined routed six-teacher system scores 21.7641/25 micro, and the consolidated RSOD student, released as Llama-CalixCLM v1, reaches 21.7112/25 micro (21.8006/25 macro) on the same five dimension LLM-judge rubric.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2610.36956",
+    "title": "Mining the Nineteenth Century for the Thirteenth: Register-Scale Forced Alignment and HTR Bootstrapping via Legacy Regesta and Antiquarian Editions",
+    "mismatchedNumbers": [
+      "19"
+    ],
+    "summary": "Bài báo khai thác regesta và ấn bản thế kỷ 19 để hỗ trợ nhận dạng chữ viết tay cho các sổ đăng ký của Giáo hoàng Honorius III, đánh giá đóng góp ở ba tầng chính tả, từ vựng và cấu trúc.",
+    "closestAbstractSentence": "9.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "9.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2611.08048",
+    "title": "Performance metrics in machine learning: a scenario-based guide from the confusion matrix to calibration, regression and uncertainty",
+    "mismatchedNumbers": [
+      "22"
+    ],
+    "summary": "Bài hướng dẫn phương pháp luận phân tích ảnh hưởng của độ phổ biến lớp, ngưỡng quyết định, quy tắc tổng hợp và quy ước phần mềm tới các metric học máy qua 22 metric ma trận nhầm lẫn và 15 kịch bản, kèm bảng metric và checklist báo cáo.",
+    "closestAbstractSentence": "Twenty-two confusion-matrix metrics are organized in a prevalence-coded map.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "Twenty-two confusion-matrix metrics are organized in a prevalence-coded map.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2611.02643",
+    "title": "SearchInject: Retrieval Exposure Control for Indirect Prompt Injection in Language-Model Search",
+    "mismatchedNumbers": [
+      "83"
+    ],
+    "summary": "Bài báo giới thiệu SearchInject, cơ chế kiểm soát tiếp nhận trang truy xuất nhằm giảm phơi nhiễm tấn công chèn lệnh gián tiếp trong tìm kiếm bằng mô hình ngôn ngữ, giảm khoảng 83% mà gần như không mất chất lượng.",
+    "closestAbstractSentence": "These are relative reductions of 83.2-83.7%; the largest absolute change in clean normalized discounted cumulative gain at rank 10 is 0.0018.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "These are relative reductions of 83.2-83.7%; the largest absolute change in clean normalized discounted cumulative gain at rank 10 is 0.0018.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  },
+  {
+    "id": "2610.33065",
+    "title": "ProtoEEG: Structured Prototype Alignment for EEG Visual Decoding",
+    "mismatchedNumbers": [
+      "2"
+    ],
+    "summary": "ProtoEEG đề xuất căn chỉnh EEG–ảnh qua codebook nguyên mẫu học được, đạt 64,0% Top-1 trên THINGS-EEG2 và đứng đầu bảy chỉ số tái tạo, cho thấy mục tiêu căn chỉnh có cấu trúc hiệu quả hơn tăng dung lượng mô hình.",
+    "closestAbstractSentence": "Across five seeds, ProtoEEG reaches 64.0\\% Top-1 and 91.5\\% Top-5 on THINGS-EEG2 200-way retrieval.",
+    "issueType": "numeric-summary-mismatch-heuristic",
+    "sourceEvidence": "Across five seeds, ProtoEEG reaches 64.0\\% Top-1 and 91.5\\% Top-5 on THINGS-EEG2 200-way retrieval.",
+    "conclusion": "unresolved",
+    "confidence": "low",
+    "disposition": "Giữ nguyên summary; chưa đủ nguồn HTML/PDF để kết luận đúng hoặc hallucination."
+  }
+]

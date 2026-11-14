@@ -9,7 +9,6 @@ import {
   searchResultSchema,
   documentFallbackReport,
   type ResearchReport,
-  type Corpus,
   type Group,
   type Paper,
   type SearchResult,
@@ -17,7 +16,8 @@ import {
 import corpusFile from '../../../data/corpus.json'
 import snapshotFile from '../../../data/semantic-snapshot.json'
 import { embedQueryLocal } from './semantic/client'
-import { loadBookmarks, loadCorpus, saveCorpus, setBookmark } from './storage'
+import { loadBookmarks, loadLibrary, saveLibrary, setBookmark } from './storage'
+import { readLibrary, type LibraryDataset } from './library-dataset'
 import { SIMILARITY_BANDS } from './scene/ritual'
 import PaperDossier from './PaperDossier'
 import Header from './components/layout/Header'
@@ -29,12 +29,14 @@ import './light-theme.css'
 
 const MagicBook = lazy(() => import('./scene/MagicBook'))
 const initialCorpus = corpusSchema.parse(corpusFile)
-const snapshot = validateSnapshot(initialCorpus, snapshotFile)
+const initialSnapshot = validateSnapshot(initialCorpus, snapshotFile)
+const initialLibrary: LibraryDataset = { dataset: { corpus: initialCorpus, snapshot: initialSnapshot } }
 type Source = 'connecting' | 'api-json' | 'api-mongodb' | 'local'
 
 export default function App() {
-  const [corpus, setCorpus] = useState<Corpus>(initialCorpus),
+  const [library, setLibrary] = useState<LibraryDataset>(initialLibrary),
     [source, setSource] = useState<Source>('connecting')
+  const { corpus, snapshot: activeSnapshot } = library.dataset
 
   // Quản lý trạng thái Sáng / Tối
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -72,7 +74,7 @@ export default function App() {
     [savedOnly, setSavedOnly] = useState(false),
     [searching, setSearching] = useState(false)
   const [result, setResult] = useState<SearchResult>(() =>
-    new SemanticIndex(initialCorpus, snapshot).search({ query: '', topK: 50 })
+    new SemanticIndex(initialCorpus, initialSnapshot).search({ query: '', topK: 50 })
   )
   const [completedQuery, setCompletedQuery] = useState('')
   const [research, setResearch] = useState<ResearchReport | null>(null),
@@ -109,13 +111,11 @@ export default function App() {
     [sidebar, setSidebar] = useState(false),
     [notice, setNotice] = useState('')
   const searchRef = useRef<HTMLInputElement>(null)
-  const baseIndex = useMemo(() => new SemanticIndex(corpus, snapshot), [corpus])
-  // Chỉ dùng bộ dữ liệu cục bộ (đã bỏ tìm kiếm trên mạng)
-  const activeCorpus = corpus,
-    activeSnapshot = snapshot
+  const libraryRequest = useRef<Promise<{ raw: unknown; parsed: ReturnType<typeof readLibrary> }> | null>(null)
+  const baseIndex = useMemo(() => new SemanticIndex(corpus, activeSnapshot), [corpus, activeSnapshot])
+  const activeCorpus = corpus
   const index = baseIndex
   useEffect(() => {
-    const abort = new AbortController()
     let active = true
     loadBookmarks()
       .then((ids) => {
@@ -126,23 +126,26 @@ export default function App() {
       })
     ;(async () => {
       try {
-        const response = await fetch('/api/v1/papers', { signal: abort.signal })
-        if (!response.ok) throw new Error('API unavailable')
-        const raw: unknown = await response.json()
-        const data = corpusSchema.parse(raw)
+        libraryRequest.current ??= fetch('/api/v1/dataset', { signal: AbortSignal.timeout(120_000) }).then(async response => {
+          if (!response.ok) throw new Error('API unavailable')
+          const raw: unknown = await response.json()
+          return { raw, parsed: readLibrary(raw) }
+        })
+        const { raw, parsed: { library: next, storage } } = await libraryRequest.current
         if (!active) return
-        setCorpus(data)
-        const storage = raw && typeof raw === 'object' && 'storage' in raw ? raw.storage : 'json'
+        setLibrary(next)
+        selectPaper(null)
         setSource(storage === 'mongodb' ? 'api-mongodb' : 'api-json')
-        saveCorpus(data).catch(() =>
-          setNotice('Không lưu được bản sao offline. Bộ dữ liệu đóng gói vẫn dùng được.')
-        )
+        saveLibrary(raw).catch(() => {
+          if (active) setNotice('Không lưu được bản sao offline. Bộ dữ liệu đóng gói vẫn dùng được.')
+        })
       } catch {
-        if (abort.signal.aborted || !active) return
+        if (!active) return
         try {
-          const local = await loadCorpus()
+          const local = await loadLibrary()
           if (active) {
-            setCorpus(local || initialCorpus)
+            setLibrary(local ?? initialLibrary)
+            selectPaper(null)
             setSource('local')
           }
         } catch {
@@ -152,9 +155,8 @@ export default function App() {
     })()
     return () => {
       active = false
-      abort.abort()
     }
-  }, [])
+  }, [selectPaper])
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
@@ -181,6 +183,7 @@ export default function App() {
       ...(group !== 'all' ? { group } : {}),
       ...(year !== 'all' ? { yearFrom: Number(year) } : {}),
     })
+    if (source === 'connecting') return () => abort.abort()
     setSearching(true)
     const timer = window.setTimeout(async () => {
       const local = async () => {
@@ -211,7 +214,7 @@ export default function App() {
           if (active) setSearching(false)
         }
       }
-      if (source === 'local' || source === 'connecting') {
+      if (source === 'local') {
         await local()
         return
       }
@@ -246,6 +249,7 @@ export default function App() {
       window.clearTimeout(timer)
     }
   }, [query, group, year, baseIndex, source, corpus.version, searchEpoch])
+  const currentItems = result.datasetVersion === corpus.version ? result.items : []
   const hits =
     savedOnly && !query
       ? activeCorpus.papers
@@ -257,8 +261,8 @@ export default function App() {
           )
           .map((paper) => ({ paper, score: 0 }))
       : savedOnly
-        ? result.items.filter((hit) => saved.includes(hit.paper.id))
-        : result.items
+        ? currentItems.filter((hit) => saved.includes(hit.paper.id))
+        : currentItems
   const counts = useMemo(
     () =>
       Object.fromEntries(
@@ -271,7 +275,7 @@ export default function App() {
   const visualScores = useMemo(
     () =>
       query
-        ? completedQuery === query && !searching
+        ? completedQuery === query && !searching && result.datasetVersion === corpus.version
           ? result.items.map((h) => ({ id: h.paper.id, score: h.score }))
           : []
         : selected
@@ -280,7 +284,7 @@ export default function App() {
               .map((h) => ({ id: h.paper.id, score: h.score }))
               .concat({ id: selected.id, score: 1 })
           : [],
-    [selected, index, activeCorpus.papers.length, query, result, completedQuery, searching]
+    [selected, index, activeCorpus.papers.length, query, result, completedQuery, searching, corpus.version]
   )
   function search(value: string) {
     const parsed = searchSchema.safeParse({ query: value, topK: 50 })
@@ -325,6 +329,7 @@ export default function App() {
   return (
     <div
       className={`app-shell immersive ${libraryOpen ? 'library-open' : ''} ${detailsOpen && !reading ? 'details-open' : ''} ${selected && reading ? 'has-reader' : ''}`}
+      data-dataset-version={corpus.version}
     >
       <div className="ambient-wash" aria-hidden="true" />
 
@@ -393,11 +398,14 @@ export default function App() {
               <MagicBook
                 paper={selected}
                 snapshot={activeSnapshot}
+                neighborRows={library.neighbors}
                 papers={activeCorpus.papers}
                 onSelect={selectPaper}
                 visibleIds={hits.map((h) => h.paper.id)}
                 queryPoint={
-                  !searching && completedQuery === query ? (result.queryPoint ?? null) : null
+                  !searching && completedQuery === query && result.datasetVersion === corpus.version
+                    ? (result.queryPoint ?? null)
+                    : null
                 }
                 castId={castId}
                 searching={searching}

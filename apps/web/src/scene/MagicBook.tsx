@@ -23,6 +23,7 @@ import {
 } from './create-book-scene'
 import MapView2D from './MapView2D'
 import type { PageFocus } from './spatial-layout'
+import type { NeighborRow } from '../library-dataset'
 import { SIMILARITY_BANDS, similarityTone } from './ritual'
 const phaseLabels = {
   idle: 'Một câu hỏi mới đang chờ bạn.',
@@ -47,6 +48,7 @@ const phaseLabels = {
 export default function MagicBook({
   paper,
   snapshot,
+  neighborRows,
   papers,
   onSelect,
   visibleIds,
@@ -57,24 +59,25 @@ export default function MagicBook({
   theme,
   toggleTheme,
   openBook,
-  nextPaper,
-  viewMode,
-  viewPref,
+  nextPaper: nextPaperFromParent,
+  viewMode = '3d',
+  viewPref = '3d',
   setViewPref,
-  net,
-  suspended,
+  net = 'good',
+  suspended = false,
 }: {
-  viewMode: '3d' | '2d'
-  viewPref: 'auto' | '3d' | '2d'
-  setViewPref: (v: 'auto' | '3d' | '2d') => void
-  net: 'good' | 'poor' | 'offline'
-  suspended: boolean
+  viewMode?: '3d' | '2d'
+  viewPref?: 'auto' | '3d' | '2d'
+  setViewPref?: (v: 'auto' | '3d' | '2d') => void
+  net?: 'good' | 'poor' | 'offline'
+  suspended?: boolean
   theme: 'light' | 'dark'
   toggleTheme: () => void
   openBook: boolean
-  nextPaper: Paper | null
+  nextPaper?: Paper | null
   paper: Paper | null
   snapshot: SemanticSnapshot
+  neighborRows: NeighborRow[] | undefined
   papers: Paper[]
   onSelect: (paper: Paper | null) => void
   visibleIds: string[]
@@ -111,7 +114,8 @@ export default function MagicBook({
         papers,
         onSelect,
         setReading,
-        setHover
+        setHover,
+        neighborRows
       )
     } catch (error) {
       console.error('Book scene initialization failed', error)
@@ -121,7 +125,7 @@ export default function MagicBook({
       scene.current?.dispose()
       scene.current = null
     }
-  }, [snapshot, papers, onSelect])
+  }, [snapshot, papers, onSelect, neighborRows])
   useEffect(() => {
     if (castId) {
       setPaused(false)
@@ -188,6 +192,10 @@ export default function MagicBook({
     setDir2d('idle')
   }
   const isReading = reading.phase === 'reading'
+  const selectedIndex = visibleIds.indexOf(paper?.id ?? '')
+  const nextPaper = nextPaperFromParent === undefined
+    ? (selectedIndex < 0 ? null : papers.find(candidate => candidate.id === visibleIds[selectedIndex + 1]) ?? null)
+    : nextPaperFromParent
   function close() {
     scene.current?.empty()
     onSelect(null)
@@ -220,7 +228,7 @@ export default function MagicBook({
           <h2>Tri thức luôn kết nối.</h2>
         </div>
         <div className="scene-actions">
-          <span className="view-switch" role="group" aria-label="Chế độ hiển thị">
+          {setViewPref && <span className="view-switch" role="group" aria-label="Chế độ hiển thị">
             {(['auto', '3d', '2d'] as const).map((v) => (
               <button
                 key={v}
@@ -238,7 +246,7 @@ export default function MagicBook({
                 {v === 'auto' ? 'Tự động' : v.toUpperCase()}
               </button>
             ))}
-          </span>
+          </span>}
           {net !== 'good' && (
             <span className={`net-pill ${net}`} role="status">
               <i />

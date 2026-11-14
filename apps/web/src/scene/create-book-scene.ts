@@ -19,6 +19,7 @@ import { toLibraryPoint, readingCamera, PAGE_WIDTH_SCALE, type PageFocus } from 
 import { launchDelay, flightProgress, arcPoint, orderLetters } from './letter-flight'
 import { createKnowledgePortal } from './knowledge-portal'
 import { sparseSemanticLinks, type SemanticLink } from './semantic-links'
+import type { NeighborRow } from '../library-dataset'
 
 /* ===== Sửa lỗi dấu tiếng Việt khi vẽ chữ lên trang sách (canvas) =====
  * Phông chữ gốc thiếu một số chữ có hai dấu (ế, ố, ằ...) nên dấu bị rời ra. Đoạn này:
@@ -273,7 +274,8 @@ export function createBookScene(
   papers: Paper[],
   onSelect: (paper: Paper) => void,
   onReading: (state: ReadingState) => void,
-  onHover: (hover: SpatialHover) => void
+  onHover: (hover: SpatialHover) => void,
+  precomputedNeighbors?: NeighborRow[]
 ): BookSceneHandle {
   const renderer = new THREE.WebGLRenderer({
     canvas,
@@ -443,6 +445,12 @@ export function createBookScene(
     { version: snapshot.corpusVersion, title: '', fetchedAt: '', papers },
     snapshot
   )
+  const knownNeighbors = new Map(precomputedNeighbors?.map(row => [row.id, row.neighbors]))
+  const neighborsFor = (paper: Paper, count: number) => {
+    const known = knownNeighbors.get(paper.id)
+    return known ? known.slice(0, count)
+      : semanticIndex.neighbors(paper, count).map(hit => ({ id: hit.paper.id, score: hit.score }))
+  }
   const haloCanvas = document.createElement('canvas')
   haloCanvas.width = haloCanvas.height = 64
   const haloContext = haloCanvas.getContext('2d')!
@@ -453,11 +461,12 @@ export function createBookScene(
   haloContext.fillStyle = haloWash
   haloContext.fillRect(0, 0, 64, 64)
   const haloTexture = new THREE.CanvasTexture(haloCanvas)
+  const nodeGeometry = new THREE.SphereGeometry(0.085, 16, 12)
   for (const embedding of snapshot.papers) {
     const paper = mapPaper.get(embedding.paperId)
     if (!paper) continue
     const mesh = new THREE.Mesh(
-      new THREE.SphereGeometry(0.085, 16, 12),
+      nodeGeometry,
       new THREE.MeshBasicMaterial({
         color: GROUPS[paper.group].color,
         toneMapped: false,
@@ -537,12 +546,14 @@ export function createBookScene(
   linkLights.frustumCulled = false
   map.add(network, linkLights)
   let links: SemanticLink[] = []
-  const neighborRows = papers.map((paper) => ({
-    id: paper.id,
-    neighbors: semanticIndex
-      .neighbors(paper, papers.length - 1)
-      .map((hit) => ({ id: hit.paper.id, score: hit.score })),
-  }))
+  // Keep the starter graph available offline. Large bundles without an
+  // optional graph can still render points and rank neighbors on selection.
+  const neighborRows = precomputedNeighbors ?? (papers.length <= 50
+    ? papers.map(paper => ({ id: paper.id, neighbors: neighborsFor(paper, papers.length - 1) }))
+    : [])
+  canvas.dataset.datasetVersion = snapshot.corpusVersion
+  canvas.dataset.datasetPoints = String(mapNodes.size)
+  canvas.dataset.neighborSource = precomputedNeighbors ? 'precomputed' : 'local'
   function updateNetwork() {
     const visible = new Set([...mapNodes].filter(([, node]) => node.visible).map(([id]) => id))
     rebuildPlan(visible)
@@ -580,8 +591,8 @@ export function createBookScene(
     if (paper) {
       const source = mapNodes.get(paper.id)
       if (source)
-        for (const neighbor of semanticIndex.neighbors(paper, 5)) {
-          const target = mapNodes.get(neighbor.paper.id)
+        for (const neighbor of neighborsFor(paper, 5)) {
+          const target = mapNodes.get(neighbor.id)
           if (target && target.visible) curveSegments(source.position, target.position, points)
         }
     }
@@ -1626,7 +1637,7 @@ export function createBookScene(
     inspect(paper) {
       focusId = paper?.id ?? ''
       focusSet = paper
-        ? new Set([paper.id, ...semanticIndex.neighbors(paper, 5).map((n) => n.paper.id)])
+        ? new Set([paper.id, ...neighborsFor(paper, 5).map(n => n.id)])
         : new Set<string>()
       updateEdges(paper)
       if (paper) {
