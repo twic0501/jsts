@@ -1,0 +1,662 @@
+{
+  "source": {
+    "date": "2026-11-13",
+    "kind": "design-only",
+    "openapiSha256": "c058c255114449f6e3f382b2ffac495c1fb4f12a70de7d2c1bddf70158d6f595",
+    "files": [
+      "docs/27-backend-domain-baseline.md",
+      "docs/29-software-design.md",
+      "docs/design/resource-api.registry.json",
+      "docs/design/software-api.openapi.json"
+    ]
+  },
+  "endpoints": [
+    {
+      "id": "identity.POST..users",
+      "module": "identity",
+      "method": "POST",
+      "path": "/api/v4/users",
+      "description": "Tạo tài khoản",
+      "access": "public",
+      "success": 201,
+      "idempotency": "required",
+      "precondition": "none",
+      "location": "/api/v4/users/me",
+      "body": "email, password, displayName",
+      "status": "design",
+      "bodyLimitBytes": 65536,
+      "parameters": [
+        {
+          "name": "Idempotency-Key",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": "Giữ cùng key/body/precondition khi retry; principal/path/method ràng buộc receipt."
+        },
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 512
+          },
+          "description": "Bắt buộc khi sử dụng cookie; pre-auth/login/register kiểm Origin và token theo policy. Không lưu token vào outbox."
+        }
+      ],
+      "requestSchema": "#/components/schemas/RegisterInput",
+      "responseSchema": "#/components/schemas/User",
+      "successHeaders": {
+        "X-Request-Id": {
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": "ID kiểm trace, không chứa secret"
+        },
+        "Cache-Control": {
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": "private, no-store cho dữ liệu tài khoản"
+        },
+        "Location": {
+          "schema": {
+            "type": "string"
+          },
+          "description": "/api/v4/users/me"
+        },
+        "ETag": {
+          "schema": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 100
+          },
+          "description": "Nếu response có revision, trả strong entity ETag. Không dùng ETag entity giả cho list/search/job."
+        }
+      },
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        410,
+        412,
+        413,
+        415,
+        422,
+        428,
+        429,
+        503
+      ]
+    },
+    {
+      "id": "identity.GET..users.me",
+      "module": "identity",
+      "method": "GET",
+      "path": "/api/v4/users/me",
+      "description": "Hồ sơ tài khoản hiện tại",
+      "access": "user",
+      "success": 200,
+      "idempotency": "none",
+      "precondition": "none",
+      "location": null,
+      "body": "none",
+      "status": "design",
+      "bodyLimitBytes": 65536,
+      "parameters": [],
+      "requestSchema": null,
+      "responseSchema": "#/components/schemas/User",
+      "successHeaders": {
+        "X-Request-Id": {
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": "ID kiểm trace, không chứa secret"
+        },
+        "Cache-Control": {
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": "private, no-store cho dữ liệu tài khoản"
+        },
+        "ETag": {
+          "schema": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 100
+          },
+          "description": "Nếu response có revision, trả strong entity ETag. Không dùng ETag entity giả cho list/search/job."
+        }
+      },
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        410,
+        412,
+        413,
+        415,
+        422,
+        428,
+        429,
+        503
+      ]
+    },
+    {
+      "id": "identity.PATCH..users.me",
+      "module": "identity",
+      "method": "PATCH",
+      "path": "/api/v4/users/me",
+      "description": "Sửa hồ sơ",
+      "access": "user",
+      "success": 200,
+      "idempotency": "required",
+      "precondition": "If-Match",
+      "location": null,
+      "body": "displayName",
+      "status": "design",
+      "bodyLimitBytes": 65536,
+      "parameters": [
+        {
+          "name": "Idempotency-Key",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": "Giữ cùng key/body/precondition khi retry; principal/path/method ràng buộc receipt."
+        },
+        {
+          "name": "If-Match",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 100
+          },
+          "description": "ETag revision hiện tại, ví dụ \"1\"."
+        },
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 512
+          },
+          "description": "Bắt buộc khi sử dụng cookie; pre-auth/login/register kiểm Origin và token theo policy. Không lưu token vào outbox."
+        }
+      ],
+      "requestSchema": "#/components/schemas/ProfilePatch",
+      "responseSchema": "#/components/schemas/User",
+      "successHeaders": {
+        "X-Request-Id": {
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": "ID kiểm trace, không chứa secret"
+        },
+        "Cache-Control": {
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": "private, no-store cho dữ liệu tài khoản"
+        },
+        "ETag": {
+          "schema": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 100
+          },
+          "description": "Nếu response có revision, trả strong entity ETag. Không dùng ETag entity giả cho list/search/job."
+        }
+      },
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        410,
+        412,
+        413,
+        415,
+        422,
+        428,
+        429,
+        503
+      ]
+    },
+    {
+      "id": "identity.POST..sessions",
+      "module": "identity",
+      "method": "POST",
+      "path": "/api/v4/sessions",
+      "description": "Đăng nhập và cấp cookie",
+      "access": "public",
+      "success": 200,
+      "idempotency": "none",
+      "precondition": "none",
+      "location": null,
+      "body": "email, password",
+      "status": "design",
+      "bodyLimitBytes": 65536,
+      "parameters": [
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 512
+          },
+          "description": "Bắt buộc khi sử dụng cookie; pre-auth/login/register kiểm Origin và token theo policy. Không lưu token vào outbox."
+        }
+      ],
+      "requestSchema": "#/components/schemas/LoginInput",
+      "responseSchema": "#/components/schemas/Session",
+      "successHeaders": {
+        "X-Request-Id": {
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": "ID kiểm trace, không chứa secret"
+        },
+        "Cache-Control": {
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": "private, no-store cho dữ liệu tài khoản"
+        },
+        "ETag": {
+          "schema": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 100
+          },
+          "description": "Nếu response có revision, trả strong entity ETag. Không dùng ETag entity giả cho list/search/job."
+        },
+        "Set-Cookie": {
+          "schema": {
+            "type": "string"
+          },
+          "description": "Opaque session HttpOnly/Secure/SameSite, không trả raw token trong JSON."
+        }
+      },
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        410,
+        412,
+        413,
+        415,
+        422,
+        428,
+        429,
+        503
+      ]
+    },
+    {
+      "id": "identity.GET..sessions.current",
+      "module": "identity",
+      "method": "GET",
+      "path": "/api/v4/sessions/current",
+      "description": "Đọc phiên và token CSRF",
+      "access": "optional",
+      "success": 200,
+      "idempotency": "none",
+      "precondition": "none",
+      "location": null,
+      "body": "none",
+      "status": "design",
+      "bodyLimitBytes": 65536,
+      "parameters": [],
+      "requestSchema": null,
+      "responseSchema": "#/components/schemas/Session",
+      "successHeaders": {
+        "X-Request-Id": {
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": "ID kiểm trace, không chứa secret"
+        },
+        "Cache-Control": {
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": "private, no-store cho dữ liệu tài khoản"
+        },
+        "ETag": {
+          "schema": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 100
+          },
+          "description": "Nếu response có revision, trả strong entity ETag. Không dùng ETag entity giả cho list/search/job."
+        }
+      },
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        410,
+        412,
+        413,
+        415,
+        422,
+        428,
+        429,
+        503
+      ]
+    },
+    {
+      "id": "identity.DELETE..sessions.current",
+      "module": "identity",
+      "method": "DELETE",
+      "path": "/api/v4/sessions/current",
+      "description": "Thu hồi phiên",
+      "access": "user",
+      "success": 204,
+      "idempotency": "none",
+      "precondition": "none",
+      "location": null,
+      "body": "none",
+      "status": "design",
+      "bodyLimitBytes": 65536,
+      "parameters": [
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 512
+          },
+          "description": "Bắt buộc khi sử dụng cookie; pre-auth/login/register kiểm Origin và token theo policy. Không lưu token vào outbox."
+        }
+      ],
+      "requestSchema": null,
+      "responseSchema": null,
+      "successHeaders": {
+        "X-Request-Id": {
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": "ID kiểm trace, không chứa secret"
+        },
+        "Cache-Control": {
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": "private, no-store cho dữ liệu tài khoản"
+        }
+      },
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        410,
+        412,
+        413,
+        415,
+        422,
+        428,
+        429,
+        503
+      ]
+    }
+  ],
+  "schemas": {
+    "User": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "user",
+            "admin"
+          ]
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "displayName",
+        "email",
+        "role",
+        "revision",
+        "updatedAt"
+      ]
+    },
+    "Error": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "error": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "message": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            "details": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 200
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500
+                  }
+                },
+                "required": [
+                  "path",
+                  "reason"
+                ]
+              },
+              "maxItems": 30
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ]
+        },
+        "requestId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "error",
+        "requestId"
+      ],
+      "examples": [
+        {
+          "error": {
+            "code": "REVISION_MISMATCH",
+            "message": "Ghi chú đã có phiên bản mới. Bản nháp cục bộ được giữ để đối chiếu."
+          },
+          "requestId": "4e4ea11e-c826-48cc-9c37-6937559b1068"
+        }
+      ]
+    },
+    "RegisterInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254
+        },
+        "password": {
+          "type": "string",
+          "minLength": 12,
+          "maxLength": 256
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "email",
+        "password",
+        "displayName"
+      ]
+    },
+    "ProfilePatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      },
+      "required": [],
+      "minProperties": 1
+    },
+    "Session": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "user": {
+          "anyOf": [
+            {
+              "$ref": "#/components/schemas/User"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "csrfToken": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 512
+        },
+        "expiresAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "user",
+        "csrfToken",
+        "expiresAt"
+      ]
+    },
+    "LoginInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254
+        },
+        "password": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ]
+    }
+  },
+  "securitySchemes": {
+    "sessionCookie": {
+      "type": "apiKey",
+      "in": "cookie",
+      "name": "__Host-pm_session",
+      "description": "Cookie opaque, HttpOnly/Secure/SameSite. Role và resource ownership vẫn kiểm trong service."
+    }
+  }
+}

@@ -1,0 +1,25 @@
+# Authentication UI / development demo
+
+**Stage 7.3:** [FR12 hardening report](../../../../api/src/modules/identity/STAGE_7_3.md) describes strict API response validation, AuthActionResult, cross-tab verification, Backend changes and remaining rollout decisions.
+
+**Stage 6:** [STAGE_6.md](STAGE_6.md) records the runtime FR12/FR14 audit, improved bookmark availability/error states and remaining FR14/mapping dependencies. Account bookmark persistence is still unavailable; no FR14 Backend was created.
+
+**Stage 5.4:** real FR12 authentication is now the default, including production. See [REAL_AUTH.md](REAL_AUTH.md) for current configuration, API flows and verification. The notes below describe the earlier demo stages; removing `VITE_AUTH_MODE` now selects real auth, and explicit `disabled` is development-only. Real registration does not sign in. Real bookmarks await FR14.
+
+Enable: copy `apps/web/.env.example` to `apps/web/.env.development.local`, then restart the frontend dev server. Alternatively set `VITE_AUTH_MODE=mock` for the Vite dev process. Disable: remove the variable or set it to `disabled`, then restart. Production builds always disable mock auth, even if the variable is `mock`.
+
+Fictional development account: `demo@papermagic.local` / `Demo@123456`, display name `Paper Magic Demo`, role `user`. Do not use a real password in this demo. Newly registered accounts and sessions live only in module memory, disappear on reload/restart, and are not backend accounts. Registration also signs into the newly created mock account. Logout clears the mock session but retains registered accounts for the current page session. Neither operation touches IndexedDB bookmarks.
+
+`AuthClient` in `types/auth.types.ts` is an application interface, not a finalized FR12 DTO. The mock service implements it without network requests, cookies, tokens, or browser storage. A future FR12 adapter must map the agreed backend DTOs into this interface, use backend cookie/CSRF handling, and set session source to `backend`. The disabled adapter fails closed until that real adapter exists; there is no fallback from backend errors to mock success. No protected APIs should accept or use a `source: mock` session.
+
+FR12 integration targets (not implemented here): POST `/api/v4/users`, POST `/api/v4/sessions`, GET/PATCH `/api/v4/users/me`, GET/DELETE `/api/v4/sessions/current`. Verify payloads, registration/session behavior, and errors against the team's current contract before implementation.
+
+`AuthProvider` owns the account state and modal and remains mounted above App. It never calls search, routing, storage or scene methods. Stage 4 adds a one-shot callback for a pending bookmark intent, consumed explicitly when login/registration resolves. Close discards the intent and aborts the operation. UI components only use context/interface types. Errors are displayed as safe user-facing messages without logging credentials. The demo UI gate does not grant access to real protected APIs. Production must not present the demo as real authentication.
+
+Stage 4 behavior supersedes the Stage 3 local-bookmark UI: guests must sign in to save, and demo bookmarks live in a separate memory store per user. Existing IndexedDB bookmarks are preserved but are never imported into the demo or shown as an account's data. Details, file inventory, FR14 mapping and reproducible checks: [PROTECTED_BOOKMARKS.md](PROTECTED_BOOKMARKS.md).
+
+Checks: `pnpm --filter @paper-galaxy/web typecheck`, `pnpm --filter @paper-galaxy/web build`, `pnpm exec vitest run tests/auth.unit.test.ts` (7 auth tests). There is currently no lint script configured in this workspace.
+
+Stage 3 verification: the actual app entry was exercised in headless Edge with public corpus/search responses supplied as fixtures. Login success/failure, loading, registration and confirmation errors, logout, returning-account login, reload clearing demo accounts, Escape, focus trapping/restoration, and cancelling in-flight login passed at 320/390/768/1440px with light/dark and reduced-motion coverage. The canvas element, selected paper/focus, cast ID, search value and IndexedDB bookmarks remained unchanged through auth operations. Navigation overflow checks passed across 25 widths from 320 to 1440px in guest and authenticated states. No FR12/FR14 request, page exception or demo-password console output was observed. Disabled mode rejected the demo credentials. A production build with `VITE_AUTH_MODE=mock` contained neither mock credentials nor the mock user store.
+
+At the end of Stage 3, the workspace unit suite reported 133 passed / 1 failed: the existing `tests/ritual.unit.test.ts` expects `Tương đồng vừa`, while the unchanged scene helper returns `Tương đồng trung bình`. This unrelated test/scene code was left untouched. Current Stage 4 results are in PROTECTED_BOOKMARKS.md. The web typecheck and build pass; the build retains the existing large-chunk warning. These checks do not validate an FR12 backend, protected APIs, cross-tab sessions, or real account persistence.

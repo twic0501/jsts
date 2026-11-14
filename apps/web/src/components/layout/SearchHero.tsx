@@ -1,4 +1,4 @@
-import { Search, X, Sparkles, ArrowUpRight } from 'lucide-react'
+import { Search, X, Sparkles, ArrowUpRight, LoaderCircle } from 'lucide-react'
 
 interface SearchHeroProps {
   savedOnly: boolean
@@ -8,6 +8,7 @@ interface SearchHeroProps {
   search: (value: string) => void
   offlineReady: boolean
   searching: boolean
+  query: string
 }
 
 export default function SearchHero({
@@ -18,6 +19,7 @@ export default function SearchHero({
   search,
   offlineReady,
   searching,
+  query,
 }: SearchHeroProps) {
   return (
     <section className="intro">
@@ -42,6 +44,8 @@ export default function SearchHero({
       </p>
       <form
         className="search-bar glass"
+        role="search"
+        aria-label="Tìm trong thư viện"
         onSubmit={(e) => {
           e.preventDefault()
           search(draft)
@@ -55,6 +59,9 @@ export default function SearchHero({
           placeholder="Bạn muốn khám phá điều gì?"
           aria-label="Tìm bài báo"
           maxLength={300}
+          type="search"
+          enterKeyHint="search"
+          autoComplete="off"
         />
         {draft && (
           <button
@@ -66,23 +73,23 @@ export default function SearchHero({
             <X size={15} />
           </button>
         )}
-        <kbd>⌘ K</kbd>
-        <button className="search-submit" type="submit">
-          Tìm trong sách
-          <Sparkles size={15} />
+        <kbd>{/Mac|iPhone|iPad/.test(navigator.platform) ? '⌘ K' : 'Ctrl K'}</kbd>
+        <button className="search-submit" type="submit" disabled={searching && draft.trim() === query} aria-label={searching ? 'Đang tìm bài báo' : 'Tìm trong sách'}>
+          {searching ? 'Đang tìm…' : 'Tìm trong sách'}
+          {searching ? <LoaderCircle size={15} className="ui-spinner" /> : <Sparkles size={15} />}
         </button>
       </form>
-      <p className="search-scope-explainer">
+      <p className="search-scope-explainer" role="status">
         {offlineReady
           ? 'Tìm theo ngữ nghĩa trong các bài đã tải · Sẵn sàng dùng offline'
           : import.meta.env.PROD
-            ? 'Đang cài tài nguyên để dùng offline…'
-            : 'Tìm theo ngữ nghĩa trong các bài đã tải · Offline khả dụng ở bản build'}
+            ? 'Tìm theo ý nghĩa · Mở trang có mạng để chuẩn bị dùng ngoại tuyến'
+            : 'Tìm theo ý nghĩa trong thư viện bài báo'}
       </p>
       <div className="suggestions">
         <span>Bắt đầu từ</span>
         {['Học sâu', 'Ảnh y sinh', 'Lượng tử', 'Protein'].map((q) => (
-          <button key={q} onClick={() => search(q)}>
+          <button type="button" key={q} onClick={() => search(q)}>
             {q}
             <ArrowUpRight size={11} />
           </button>

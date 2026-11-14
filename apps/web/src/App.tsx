@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useCallback, lazy, Suspense } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, useCallback, lazy, Suspense } from 'react'
 import { BookOpen, Bookmark, Sparkles, Check, Orbit } from 'lucide-react'
 import {
   GROUPS,
@@ -17,10 +17,22 @@ import {
 import corpusFile from '../../../data/corpus.json'
 import snapshotFile from '../../../data/semantic-snapshot.json'
 import { embedQueryLocal } from './semantic/client'
-import { loadBookmarks, loadCorpus, saveCorpus, setBookmark } from './storage'
+import { loadCorpus, saveCorpus } from './storage'
+import { useProtectedBookmarks } from './features/auth/context/useProtectedBookmarks'
 import { SIMILARITY_BANDS } from './scene/ritual'
+import { useNetworkQuality } from './useNetworkQuality'
 import PaperDossier from './PaperDossier'
-import Header from './components/layout/Header'
+import TopNav, { type Page } from './components/layout/TopNav'
+import FilterPanel from './components/layout/FilterPanel'
+import SavedPage from './components/layout/SavedPage'
+import {
+  NO_FILTERS,
+  activeFilterCount,
+  applyFilters,
+  scoreBounds,
+  yearBounds,
+  type Filters,
+} from './filters'
 import Sidebar from './components/layout/Sidebar'
 import SearchHero from './components/layout/SearchHero'
 import ResultsPanel from './components/layout/ResultsPanel'
@@ -38,8 +50,12 @@ export default function App() {
 
   // Quản lý trạng thái Sáng / Tối
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    const stored = localStorage.getItem('paper-magic-theme')
-    if (stored === 'light' || stored === 'dark') return stored
+    try {
+      const stored = localStorage.getItem('paper-magic-theme')
+      if (stored === 'light' || stored === 'dark') return stored
+    } catch {
+      // Vẫn dùng giao diện theo hệ điều hành nếu trình duyệt chặn lưu trữ.
+    }
     // Lần đầu vào trang: theo cài đặt của hệ điều hành
     return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
   })
@@ -63,12 +79,17 @@ export default function App() {
   )
 
   const [searchEpoch, setSearchEpoch] = useState(0)
+  // Trang đang xem (đồng bộ với #saved trên thanh địa chỉ để nút Back của trình duyệt dùng được) và bộ lọc
+  const [page, setPage] = useState<Page>(() =>
+    typeof window !== 'undefined' && window.location.hash === '#saved' ? 'saved' : 'explore'
+  )
+  const [filters, setFilters] = useState<Filters>(NO_FILTERS)
+  const [filterOpen, setFilterOpen] = useState(false)
   const [draft, setDraft] = useState(''),
     [query, setQuery] = useState(''),
     [group, setGroup] = useState<Group | 'all'>('all'),
-    [year, setYear] = useState('all')
+    [year] = useState('all')
   const [selected, setSelected] = useState<Paper | null>(null),
-    [saved, setSaved] = useState<string[]>([]),
     [savedOnly, setSavedOnly] = useState(false),
     [searching, setSearching] = useState(false)
   const [result, setResult] = useState<SearchResult>(() =>
@@ -87,13 +108,26 @@ export default function App() {
     return () => window.removeEventListener('paper-magic-offline-ready', update)
   }, [])
   const [castId, setCastId] = useState(0)
+  const filterReplayTimer = useRef<number | undefined>(undefined)
+  const cancelFilterReplay = useCallback(() => {
+    window.clearTimeout(filterReplayTimer.current)
+    filterReplayTimer.current = undefined
+  }, [])
+  useEffect(() => cancelFilterReplay, [cancelFilterReplay])
   const pendingOpen = useRef<string | null>(null)
-  const [libraryOpen, setLibraryOpen] = useState(false),
+  const [libraryOpen, setLibraryOpen] = useState(() => window.matchMedia('(min-width: 1100px)').matches),
     [detailsOpen, setDetailsOpen] = useState(false)
   const [reading, setReading] = useState(false) // true = đang mở sách 3D để đọc từng trang
+  const dossierPanelRef = useRef<HTMLElement>(null)
+  useLayoutEffect(() => {
+    if (dossierPanelRef.current) dossierPanelRef.current.scrollTop = 0
+  }, [selected?.id])
+  const visited = useRef<Set<string>>(new Set()) // các bài đã xem trong lượt khám phá này
   const selectPaper = useCallback((paper: Paper | null) => {
+    cancelFilterReplay()
     pendingOpen.current = null
     setSelected(paper)
+    if (paper) visited.current.add(paper.id)
     if (paper) {
       setLibraryOpen(false)
       setDetailsOpen(true) // bấm đốm sáng → mở bảng thông tin ở góc phải
@@ -101,13 +135,74 @@ export default function App() {
       setDetailsOpen(false)
       setReading(false)
     }
-  }, [])
+  }, [cancelFilterReplay])
   useEffect(() => {
-    if (!selected) setReading(false)
+    if (!selected) {
+      setReading(false)
+      visited.current.clear()
+    }
   }, [selected])
+
+  // Chế độ hiển thị: tự chuyển 2D khi mạng yếu / mất kết nối, hoặc người dùng tự chọn 3D / 2D
+  const { quality: net } = useNetworkQuality()
+  const [viewPref, setViewPref] = useState<'auto' | '3d' | '2d'>(() => {
+    try {
+      const saved = localStorage.getItem('paper-magic-view')
+      return saved === '3d' || saved === '2d' ? saved : 'auto'
+    } catch {
+      return 'auto'
+    }
+  })
+  useEffect(() => {
+    try {
+      localStorage.setItem('paper-magic-view', viewPref)
+    } catch {
+      /* bỏ qua nếu trình duyệt chặn localStorage */
+    }
+  }, [viewPref])
+  const viewMode: '3d' | '2d' = viewPref === 'auto' ? (net === 'good' ? '3d' : '2d') : viewPref
+  useEffect(() => {
+    if (viewMode === '2d' && reading) setReading(false) // sách 3D chỉ có ở chế độ 3D
+  }, [viewMode, reading])
+  const prevMode = useRef(viewMode)
+  useEffect(() => {
+    if (prevMode.current !== viewMode && viewPref === 'auto') {
+      setNotice(
+        viewMode === '2d'
+          ? net === 'offline'
+            ? 'Mất kết nối: đã chuyển sang bản đồ 2D để chạy nhẹ hơn.'
+            : 'Mạng yếu: đã chuyển sang bản đồ 2D để chạy nhẹ hơn.'
+          : 'Kết nối đã ổn định: quay lại không gian 3D.'
+      )
+    }
+    prevMode.current = viewMode
+  }, [viewMode, viewPref, net])
+
+  useEffect(() => {
+    const sync = () => setPage(window.location.hash === '#saved' ? 'saved' : 'explore')
+    window.addEventListener('hashchange', sync)
+    window.addEventListener('popstate', sync)
+    return () => {
+      window.removeEventListener('hashchange', sync)
+      window.removeEventListener('popstate', sync)
+    }
+  }, [])
+  const goPage = useCallback((next: Page) => {
+    cancelFilterReplay()
+    setPage(next)
+    setFilterOpen(false)
+    setLibraryOpen(false)
+    setResearchOpen(false)
+    if (next === 'saved') setDetailsOpen(false)
+    const hash = next === 'saved' ? '#saved' : ''
+    if (window.location.hash !== hash) {
+      window.history.pushState(null, '', hash || window.location.pathname + window.location.search)
+    }
+  }, [cancelFilterReplay])
   const [help, setHelp] = useState(false),
     [sidebar, setSidebar] = useState(false),
     [notice, setNotice] = useState('')
+  const { saved, busyIds: bookmarkBusy, setSaved: setAccountBookmark, isMockAccount, status: bookmarkStatus, message: bookmarkMessage } = useProtectedBookmarks(setNotice)
   const searchRef = useRef<HTMLInputElement>(null)
   const baseIndex = useMemo(() => new SemanticIndex(corpus, snapshot), [corpus])
   // Chỉ dùng bộ dữ liệu cục bộ (đã bỏ tìm kiếm trên mạng)
@@ -117,13 +212,6 @@ export default function App() {
   useEffect(() => {
     const abort = new AbortController()
     let active = true
-    loadBookmarks()
-      .then((ids) => {
-        if (active) setSaved(ids)
-      })
-      .catch(() => {
-        if (active) setNotice('Không đọc được bài đã lưu. Kiểm tra quyền lưu trữ trình duyệt.')
-      })
     ;(async () => {
       try {
         const response = await fetch('/api/v1/papers', { signal: abort.signal })
@@ -159,7 +247,9 @@ export default function App() {
     const listener = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault()
-        searchRef.current?.focus()
+        if (document.querySelector('[aria-modal="true"]')) return
+        goPage('explore')
+        requestAnimationFrame(() => searchRef.current?.focus())
       }
       if (e.key === 'Escape') {
         setHelp(false)
@@ -167,11 +257,12 @@ export default function App() {
         setLibraryOpen(false)
         setDetailsOpen(false)
         setResearchOpen(false)
+        setFilterOpen(false)
       }
     }
     window.addEventListener('keydown', listener)
     return () => window.removeEventListener('keydown', listener)
-  }, [])
+  }, [goPage])
   useEffect(() => {
     const abort = new AbortController()
     let active = true
@@ -246,19 +337,23 @@ export default function App() {
       window.clearTimeout(timer)
     }
   }, [query, group, year, baseIndex, source, corpus.version, searchEpoch])
-  const hits =
-    savedOnly && !query
-      ? activeCorpus.papers
-          .filter(
-            (paper) =>
-              saved.includes(paper.id) &&
-              (group === 'all' || paper.group === group) &&
-              (year === 'all' || paper.year >= Number(year))
-          )
-          .map((paper) => ({ paper, score: 0 }))
-      : savedOnly
-        ? result.items.filter((hit) => saved.includes(hit.paper.id))
-        : result.items
+  // Kết quả sau khi lọc: năm → ngưỡng cosine → số lượng. Cảnh 3D/2D và danh sách đều dùng đúng tập này.
+  const hits = useMemo(
+    () => applyFilters(result.items, filters, Boolean(query)),
+    [result, filters, query]
+  )
+  // Account/modal updates must not send a new filter array to the scene.
+  const visiblePaperIds = useMemo(() => hits.map(hit => hit.paper.id), [hits])
+  const years = useMemo(() => yearBounds(activeCorpus.papers), [activeCorpus.papers])
+  const scoreRange = useMemo(() => (query ? scoreBounds(result.items) : null), [query, result])
+  const paperById = useMemo(
+    () => new Map(activeCorpus.papers.map((p) => [p.id, p])),
+    [activeCorpus.papers]
+  )
+  const savedPapers = useMemo(
+    () => saved.map((id) => paperById.get(id)).filter((p): p is Paper => Boolean(p)),
+    [saved, paperById]
+  )
   const counts = useMemo(
     () =>
       Object.fromEntries(
@@ -268,6 +363,12 @@ export default function App() {
   )
 
   const neighbors = useMemo(() => (selected ? index.neighbors(selected, 5) : []), [selected, index])
+  // "Bài tiếp theo" = bài gần nhất (cosine) trong "Theo dấu những kết nối" mà bạn chưa xem; tránh quay vòng A ↔ B
+  const nextPaper = useMemo(() => {
+    if (!selected) return null
+    const fresh = neighbors.find((n) => !visited.current.has(n.paper.id))
+    return (fresh ?? neighbors[0])?.paper ?? null
+  }, [selected, neighbors])
   const visualScores = useMemo(
     () =>
       query
@@ -288,13 +389,13 @@ export default function App() {
       setNotice('Câu tìm kiếm tối đa 300 ký tự.')
       return
     }
+    cancelFilterReplay()
     const next = parsed.data.query
     pendingOpen.current = next || null
     if (next) setCastId((id) => id + 1)
     setSelected(null)
     setSearching(true)
     setSearchEpoch((n) => n + 1)
-    setLibraryOpen(false)
     setDetailsOpen(false)
     setResearchOpen(false)
     setResearch(null)
@@ -302,55 +403,96 @@ export default function App() {
     setDraft(value)
     setSavedOnly(false)
     setNotice('')
+    setFilters((f) => ({ ...f, minScore: null })) // dải cosine của câu mới khác câu cũ
+    goPage('explore')
+    setLibraryOpen(true)
   }
-  async function bookmark(paper: Paper) {
-    const next = !saved.includes(paper.id)
-    try {
-      await setBookmark(paper.id, next)
-      setSaved((ids) => (next ? [...ids, paper.id] : ids.filter((id) => id !== paper.id)))
-      setNotice(next ? 'Đã cất bài vào kệ sách của bạn.' : 'Đã bỏ bài khỏi kệ sách.')
-    } catch {
-      setNotice('Chưa lưu được. Bộ nhớ trình duyệt có thể đã đầy hoặc bị chặn.')
-    }
+  /** Từ trang "Bài đã lưu": quay về không gian 3D và chọn đúng bài đó (bỏ câu tìm kiếm để bài nào cũng hiện). */
+  function openFromSaved(paper: Paper) {
+    search('')
+    setFilters(NO_FILTERS)
+    setGroup('all')
+    selectPaper(paper)
+  }
+  function bookmark(paper: Paper) {
+    setAccountBookmark(paper.id, !saved.includes(paper.id))
   }
   function chooseGroup(value: Group | 'all') {
+    if (value === group) return
+    cancelFilterReplay()
     pendingOpen.current = null
+    setSearching(true)
     setGroup(value)
     setSelected(null)
+    setReading(false)
     setDetailsOpen(false)
     setSidebar(false)
+    setCastId((id) => id + 1)
+  }
+  function changeFilters(next: Filters) {
+    if (
+      next.yearMin === filters.yearMin && next.yearMax === filters.yearMax &&
+      next.topK === filters.topK && next.minScore === filters.minScore
+    ) return
+    setFilters(next)
+    cancelFilterReplay()
+    // Filter locally right away; replay once after the user pauses dragging a slider.
+    filterReplayTimer.current = window.setTimeout(() => {
+      filterReplayTimer.current = undefined
+      pendingOpen.current = null
+      setSelected(null)
+      setReading(false)
+      setDetailsOpen(false)
+      setCastId((id) => id + 1)
+    }, 220)
   }
   const isLocal = source === 'local'
 
   return (
     <div
-      className={`app-shell immersive ${libraryOpen ? 'library-open' : ''} ${detailsOpen && !reading ? 'details-open' : ''} ${selected && reading ? 'has-reader' : ''}`}
+      className={`app-shell immersive ${libraryOpen ? 'library-open' : ''} ${detailsOpen && !reading ? 'details-open' : ''} ${selected && reading ? 'has-reader' : ''} ${page === 'saved' ? 'page-saved' : ''}`}
     >
       <div className="ambient-wash" aria-hidden="true" />
 
-      {/* Đưa Header ra bên ngoài, nằm trên cùng với z-index cao để hiển thị rõ ràng */}
-      <div className="sticky top-0 z-50 w-full px-4 pt-2">
-        <Header
-          savedOnly={savedOnly}
-          setSavedOnly={setSavedOnly}
-          savedCount={saved.length}
-          libraryOpen={libraryOpen}
-          setLibraryOpen={setLibraryOpen}
-          detailsOpen={detailsOpen}
-          setDetailsOpen={setDetailsOpen}
-          researchOpen={researchOpen}
-          setResearchOpen={setResearchOpen}
-          hasResearch={!!research}
-          isLocal={isLocal}
-          source={source}
-          setHelp={setHelp}
-          sidebar={sidebar}
-          setSidebar={setSidebar}
-          selectPaper={selectPaper}
-          theme={theme}
-          toggleTheme={toggleTheme}
+      <TopNav
+        page={page}
+        setPage={goPage}
+        savedCount={saved.length}
+        filterOpen={filterOpen}
+        setFilterOpen={setFilterOpen}
+        activeFilters={activeFilterCount(filters, Boolean(query))}
+        libraryOpen={libraryOpen}
+        setLibraryOpen={setLibraryOpen}
+        detailsOpen={detailsOpen}
+        setDetailsOpen={(open) => {
+          setDetailsOpen(open)
+          if (open) setReading(false)
+        }}
+        researchOpen={researchOpen}
+        setResearchOpen={setResearchOpen}
+        hasResearch={!!research}
+        isLocal={isLocal}
+        source={source}
+        hasSelected={!!selected}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        setHelp={(open) => {
+          setFilterOpen(false)
+          setHelp(open)
+        }}
+      />
+      {filterOpen && page === 'explore' && (
+        <FilterPanel
+          filters={filters}
+          setFilters={changeFilters}
+          years={years}
+          scores={scoreRange}
+          hasQuery={Boolean(query)}
+          shown={hits.length}
+          total={result.items.length}
+          onClose={() => setFilterOpen(false)}
         />
-      </div>
+      )}
 
       <Sidebar
         sidebar={sidebar}
@@ -360,7 +502,7 @@ export default function App() {
         totalPapers={corpus.papers.length}
       />
 
-      <main>
+      <main id="explore-content" inert={page === 'saved'}>
         <SearchHero
           draft={draft}
           setDraft={setDraft}
@@ -368,6 +510,7 @@ export default function App() {
           search={search}
           offlineReady={offlineReady}
           searching={searching}
+          query={query}
           savedOnly={savedOnly}
         />
 
@@ -395,7 +538,7 @@ export default function App() {
                 snapshot={activeSnapshot}
                 papers={activeCorpus.papers}
                 onSelect={selectPaper}
-                visibleIds={hits.map((h) => h.paper.id)}
+                visibleIds={visiblePaperIds}
                 queryPoint={
                   !searching && completedQuery === query ? (result.queryPoint ?? null) : null
                 }
@@ -403,8 +546,13 @@ export default function App() {
                 searching={searching}
                 scores={visualScores}
                 theme={theme}
-                toggleTheme={toggleTheme}
                 openBook={reading && !!selected}
+                nextPaper={nextPaper}
+                viewMode={viewMode}
+                viewPref={viewPref}
+                setViewPref={setViewPref}
+                net={net}
+                suspended={page === 'saved'}
               />
             </Suspense>
             <div className="under-scene">
@@ -424,15 +572,16 @@ export default function App() {
             searching={searching}
             group={group}
             chooseGroup={chooseGroup}
-            year={year}
-            setYear={setYear}
+            onResetFilters={() => changeFilters(NO_FILTERS)}
             search={search}
             setSavedOnly={setSavedOnly}
             selected={selected}
             selectPaper={selectPaper}
             setNotice={setNotice}
             saved={saved}
+            bookmarkBusy={bookmarkBusy}
             bookmark={bookmark}
+            onClose={() => setLibraryOpen(false)}
           />
         </div>
 
@@ -480,6 +629,8 @@ export default function App() {
         </div>
 
         <section
+          id="paper-details"
+          ref={dossierPanelRef}
           className={`detail-panel glass ${selected ? 'has-selection' : ''}`}
           aria-label="Thông tin bài báo"
         >
@@ -487,12 +638,16 @@ export default function App() {
             <PaperDossier
               paper={selected}
               saved={saved.includes(selected.id)}
+              bookmarkBusy={bookmarkBusy.has(selected.id)}
               onSave={() => void bookmark(selected)}
               onSelect={selectPaper}
               neighbors={neighbors}
               onNotice={setNotice}
               score={query ? (visualScores.find((s) => s.id === selected.id)?.score ?? null) : null}
-              onOpenBook={() => setReading(true)}
+              {...(viewMode === '3d' ? { onOpenBook: () => {
+                setDetailsOpen(false)
+                setReading(true)
+              } } : {})}
               onClose={() => selectPaper(null)}
             />
           ) : (
@@ -522,6 +677,19 @@ export default function App() {
           </button>
         </footer>
       </main>
+
+      {page === 'saved' && (
+        <SavedPage
+          papers={savedPapers}
+          isMockAccount={isMockAccount}
+          bookmarkStatus={bookmarkStatus}
+          bookmarkMessage={bookmarkMessage}
+          bookmarkBusy={bookmarkBusy}
+          onOpen={openFromSaved}
+          onRemove={(paper) => setAccountBookmark(paper.id, false)}
+          onBack={() => goPage('explore')}
+        />
+      )}
 
       <Modals
         researchOpen={researchOpen}

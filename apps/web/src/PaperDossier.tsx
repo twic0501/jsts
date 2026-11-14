@@ -20,6 +20,7 @@ export function paperCitation(paper: Paper) {
 export default function PaperDossier({
   paper,
   saved,
+  bookmarkBusy = false,
   onSave,
   onSelect,
   neighbors,
@@ -30,6 +31,7 @@ export default function PaperDossier({
 }: {
   paper: Paper
   saved: boolean
+  bookmarkBusy?: boolean
   onSave: () => void
   onSelect: (paper: Paper) => void
   neighbors: SearchHit[]
@@ -60,23 +62,29 @@ export default function PaperDossier({
         <span className="detail-label">
           <BookOpen size={14} /> RESEARCH DOSSIER
         </span>
-        <span className="detail-actions">
-          {onOpenBook && (
-            <button className="detail-save" onClick={onOpenBook}>
-              <BookOpen size={14} />
-              Mở trong sách 3D
-            </button>
-          )}
-          <button className={`detail-save ${saved ? 'saved' : ''}`} onClick={onSave}>
-            <Bookmark size={14} fill={saved ? 'currentColor' : 'none'} />
-            {saved ? 'Đã lưu' : 'Lưu bài báo'}
+        {onClose && (
+          <button
+            type="button"
+            className="detail-save dossier-close"
+            onClick={onClose}
+            aria-label="Đóng bảng thông tin"
+            title="Đóng bảng thông tin"
+          >
+            <X size={18} />
           </button>
-          {onClose && (
-            <button className="detail-save" onClick={onClose} aria-label="Đóng bảng thông tin">
-              <X size={14} />
-            </button>
-          )}
-        </span>
+        )}
+      </div>
+      <div className="detail-actions dossier-toolbar">
+        {onOpenBook && (
+          <button className="detail-save" onClick={onOpenBook}>
+            <BookOpen size={14} />
+            Mở trong sách 3D
+          </button>
+        )}
+        <button className={`detail-save ${saved ? 'saved' : ''}`} onClick={onSave} disabled={bookmarkBusy} aria-busy={bookmarkBusy} aria-pressed={saved}>
+          <Bookmark size={14} fill={saved ? 'currentColor' : 'none'} />
+          {saved ? 'Đã lưu' : 'Lưu bài báo'}
+        </button>
       </div>
       <div
         className="dossier-cover"

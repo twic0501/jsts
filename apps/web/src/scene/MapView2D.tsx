@@ -396,6 +396,7 @@ export default function MapView2D({
 
   const nodeEls = (snap?.nodes ?? [])
     .filter((nd) => nd.visible)
+    .sort((a, b) => Number(a.id === selectedId) - Number(b.id === selectedId))
     .map((nd) => {
       const pos = posOf(nd.id)
       if (!pos) return null
@@ -405,7 +406,11 @@ export default function MapView2D({
       const isRoot = nd.id === snap?.anchorId && plan.length > 0
       const isSel = nd.id === selectedId
       const R =
-        (5 + 8 * strength) * (isRoot ? 1.5 : 1) * (isSel ? 1.25 : 1) * (0.5 + 0.5 * ap) * zoomScale
+        (5 + 8 * strength) *
+        (isRoot && (!selectedId || isSel) ? 1.5 : 1) *
+        (isSel ? 1.9 : 1) *
+        (0.5 + 0.5 * ap) *
+        zoomScale
       const showLabel = isRoot || isSel || (dir === 'idle' && view.k >= LABEL_ZOOM)
       const color = colorOf(nd.id, nd.score)
       const dim = selectedId ? (focus.has(nd.id) ? 1 : 0.22) : 1
@@ -419,6 +424,7 @@ export default function MapView2D({
           role="button"
           tabIndex={0}
           aria-label={paper?.title ?? nd.id}
+          aria-pressed={isSel}
           onClick={open}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -429,19 +435,26 @@ export default function MapView2D({
           onPointerEnter={() => setHover({ id: nd.id, x: pos.x, y: pos.y })}
           onPointerLeave={() => setHover((h) => (h?.id === nd.id ? null : h))}
         >
-          <circle className="n2d-halo" r={R * 2.6} fill={color} opacity={0.16 + 0.2 * strength} />
+          <circle className="n2d-halo" r={R * 2.8} fill={color} opacity={isSel ? 0.26 + 0.2 * strength : 0} />
           <circle
             r={R}
             fill={color}
-            stroke={light ? '#ffffff' : 'rgba(255,255,255,.85)'}
-            strokeWidth={1.2}
+            stroke={isSel ? (light ? '#ffffff' : 'rgba(255,255,255,.85)') : 'none'}
+            strokeWidth={isSel ? 2.2 : 0}
           />
-          {(isRoot || isSel) && (
-            <circle r={R + 6} fill="none" stroke={color} strokeWidth={1.6} opacity={0.8} />
+          {isSel && (
+            <circle
+              r={R + 6}
+              fill="none"
+              stroke={light ? '#283553' : '#f7f9ff'}
+              strokeWidth={2.4}
+              opacity={0.95}
+            />
           )}
-          <circle r={R + 9} fill="transparent" />
+          {isSel && <circle r={R + 11} fill="none" stroke={color} strokeWidth={1.8} opacity={0.9} />}
+          <circle r={R + (isSel ? 14 : 9)} fill="transparent" />
           {showLabel && paper && (
-            <text y={-(R + 13)} textAnchor="middle" className="n2d-label">
+            <text y={-(R + (isSel ? 20 : 13))} textAnchor="middle" className="n2d-label">
               {short(paper.title, isRoot || isSel ? 44 : 30)}
             </text>
           )}

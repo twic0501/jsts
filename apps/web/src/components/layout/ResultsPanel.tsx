@@ -1,4 +1,4 @@
-import { BookOpen, ChevronDown, ArrowRight, ArrowUpRight, Bookmark } from 'lucide-react'
+import { BookOpen, ChevronDown, ArrowRight, ArrowUpRight, Bookmark, LoaderCircle, X } from 'lucide-react'
 import { GROUPS, Group, Paper, SearchResult } from '@paper-galaxy/core'
 import { similarityTone } from '../../scene/ritual'
 
@@ -11,15 +11,16 @@ interface ResultsPanelProps {
   searching: boolean
   group: Group | 'all'
   chooseGroup: (val: Group | 'all') => void
-  year: string
-  setYear: (val: string) => void
+  onResetFilters: () => void
   search: (val: string) => void
   setSavedOnly: (val: boolean) => void
   selected: Paper | null
   selectPaper: (paper: Paper | null) => void
   setNotice: (val: string) => void
   saved: string[]
+  bookmarkBusy: ReadonlySet<string>
   bookmark: (paper: Paper) => void
+  onClose: () => void
 }
 
 export default function ResultsPanel({
@@ -31,18 +32,20 @@ export default function ResultsPanel({
   searching,
   group,
   chooseGroup,
-  year,
-  setYear,
+  onResetFilters,
   search,
   setSavedOnly,
   selected,
   selectPaper,
   setNotice,
   saved,
+  bookmarkBusy,
   bookmark,
+  onClose,
 }: ResultsPanelProps) {
   return (
     <section
+      id="search-results"
       className="results-panel glass"
       aria-label="Kết quả tìm kiếm"
       data-search-method={result.method}
@@ -53,10 +56,12 @@ export default function ResultsPanel({
           <span className="section-kicker">YOUR NEXT DISCOVERY</span>
           <h2>
             {savedOnly ? 'Kệ sách của bạn' : query ? 'Những kết nối tìm thấy' : 'Thư viện ý tưởng'}
-            <span>{hits.length}</span>
+            <span>{searching ? '…' : hits.length}</span>
           </h2>
         </div>
-        <BookOpen size={19} />
+        <button type="button" className="panel-close" onClick={onClose} aria-label="Đóng thư viện" title="Đóng thư viện">
+          <X size={18} />
+        </button>
       </div>
       <p className="results-query">
         {searching
@@ -82,26 +87,19 @@ export default function ResultsPanel({
           </select>
           <ChevronDown size={12} />
         </label>
-        <label className="select-wrapper">
-          <select
-            aria-label="Năm xuất bản"
-            value={year}
-            onChange={(e) => {
-              setYear(e.target.value)
-              selectPaper(null)
-            }}
-          >
-            <option value="all">Mọi năm</option>
-            <option value="2020">Từ 2020</option>
-            <option value="2024">Từ 2024</option>
-            <option value="2026">Từ 2026</option>
-          </select>
-          <ChevronDown size={12} />
-        </label>
       </div>
 
-      <div className="result-list" aria-live="polite" aria-busy={searching}>
-        {hits.length === 0 ? (
+      <div className="result-list" aria-busy={searching}>
+        {searching ? (
+          <div className="results-loading" role="status">
+            <div className="results-loading-label"><LoaderCircle size={17} className="ui-spinner" /> Đang tìm những kết nối mới…</div>
+            {[0, 1, 2].map((i) => (
+              <div className="result-skeleton" key={i} aria-hidden="true">
+                <span /><strong /><strong /><p /><small />
+              </div>
+            ))}
+          </div>
+        ) : hits.length === 0 ? (
           <div className="empty-state">
             <BookOpen size={30} />
             <h3>{savedOnly ? 'Kệ sách còn trống' : 'Chưa tìm thấy bài phù hợp'}</h3>
@@ -114,7 +112,7 @@ export default function ResultsPanel({
               onClick={() => {
                 search('')
                 chooseGroup('all')
-                setYear('all')
+                onResetFilters()
                 setSavedOnly(false)
               }}
             >
@@ -130,6 +128,7 @@ export default function ResultsPanel({
                 className={`paper-card ${selected?.id === paper.id ? 'selected' : ''}`}
                 key={paper.id}
                 data-paper-id={paper.id}
+                data-testid="paper-card"
               >
                 <button
                   className="paper-select"
@@ -170,10 +169,10 @@ export default function ResultsPanel({
                         cos {score.toFixed(3)}
                       </span>
                     ) : (
-                      <span>arXiv · {paper.id}</span>
+                      <span>{paper.provenance?.provider === 'openalex' ? 'OpenAlex' : 'arXiv'} · {paper.id}</span>
                     )}
                     <span className="open-book-label">
-                      {selected?.id === paper.id ? 'Đang đọc' : 'Mở sách'}
+                      {selected?.id === paper.id ? 'Đang chọn' : 'Xem bài báo'}
                       <ArrowUpRight size={12} />
                     </span>
                   </div>
@@ -181,6 +180,10 @@ export default function ResultsPanel({
                 <span className="paper-number">{String(i + 1).padStart(2, '0')}</span>
                 <button
                   className={`save-card ${saved.includes(paper.id) ? 'saved' : ''}`}
+                  type="button"
+                  aria-pressed={saved.includes(paper.id)}
+                  disabled={bookmarkBusy.has(paper.id)}
+                  aria-busy={bookmarkBusy.has(paper.id)}
                   aria-label={`${saved.includes(paper.id) ? 'Bỏ lưu' : 'Lưu'} ${paper.title}`}
                   onClick={() => void bookmark(paper)}
                 >
@@ -191,10 +194,10 @@ export default function ResultsPanel({
           })
         )}
       </div>
-      <div className="result-footer">
+      <div className="result-footer" role="status" aria-live="polite">
         <span className="live-dot" />
-        Thư viện đã tải
-        <span>{query ? `${result.durationMs.toFixed(1)} ms` : 'Lưu trữ trên máy'}</span>
+        {searching ? 'Đang tìm trong thư viện' : `${hits.length} bài đang hiển thị`}
+        <span>{searching ? 'Vui lòng chờ' : query ? `${result.durationMs.toFixed(0)} ms` : 'Khám phá một ý tưởng'}</span>
       </div>
     </section>
   )

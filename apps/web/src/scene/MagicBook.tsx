@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import {
-  Maximize2,
   Pause,
   Play,
   RotateCcw,
@@ -10,8 +9,6 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
-  Sun,
-  Moon,
 } from 'lucide-react'
 import { GROUPS, type Paper, type SemanticSnapshot, type Point3 } from '@paper-galaxy/core'
 import {
@@ -55,7 +52,6 @@ export default function MagicBook({
   searching,
   scores,
   theme,
-  toggleTheme,
   openBook,
   nextPaper,
   viewMode,
@@ -70,7 +66,6 @@ export default function MagicBook({
   net: 'good' | 'poor' | 'offline'
   suspended: boolean
   theme: 'light' | 'dark'
-  toggleTheme: () => void
   openBook: boolean
   nextPaper: Paper | null
   paper: Paper | null
@@ -84,8 +79,7 @@ export default function MagicBook({
   scores: { id: string; score: number }[]
 }) {
   const canvas = useRef<HTMLCanvasElement>(null),
-    scene = useRef<BookSceneHandle | null>(null),
-    container = useRef<HTMLDivElement>(null)
+    scene = useRef<BookSceneHandle | null>(null)
   const [status, setStatus] = useState('loading'),
     [paused, setPaused] = useState(false),
     [focus, setFocus] = useState<PageFocus>('auto'),
@@ -211,7 +205,7 @@ export default function MagicBook({
     return () => window.removeEventListener('keydown', key)
   }, [onSelect])
   return (
-    <div className={`magic-viewport${want2D ? ' is-2d' : ''}`} data-theme={theme} ref={container}>
+    <div className={`magic-viewport${want2D ? ' is-2d' : ''}`} data-theme={theme}>
       <div className="scene-heading">
         <div>
           <span className="scene-eyebrow">
@@ -246,38 +240,19 @@ export default function MagicBook({
               {want2D ? ' · 2D' : ''}
             </span>
           )}
-          <button
-            className="scene-icon theme-toggle"
-            title={theme === 'dark' ? 'Chế độ sáng' : 'Chế độ tối'}
-            aria-label={theme === 'dark' ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối'}
-            onClick={toggleTheme}
-          >
-            {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
-          </button>
           {paper && openBook && (
             <button className="scene-icon exit-reader" onClick={close} aria-label="Thoát đọc sách">
               <X size={15} />
               Thoát
             </button>
           )}
-          <button
-            className="scene-icon"
-            title="Toàn màn hình"
-            aria-label="Toàn màn hình sách"
-            onClick={() => {
-              container.current
-                ?.requestFullscreen()
-                .catch(() => setStatus('fullscreen-unavailable'))
-            }}
-          >
-            <Maximize2 size={17} />
-          </button>
         </div>
       </div>
       <canvas
         ref={canvas}
         className={`book-canvas${want2D ? ' is-2d' : ''}`}
         data-testid="magic-book"
+        data-cast-id={castId}
         aria-label="Cuốn sách ma thuật 3D. Kéo chuột để xoay, cuộn để phóng to."
       />
       {show2D && (

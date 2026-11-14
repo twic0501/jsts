@@ -51,7 +51,7 @@ import { sparseSemanticLinks, type SemanticLink } from './semantic-links'
         setFont = desc.set
       Object.defineProperty(proto, 'font', {
         configurable: true,
-        enumerable: desc.enumerable,
+        enumerable: desc.enumerable ?? false,
         get(this: unknown) {
           return getFont.call(this)
         },
@@ -453,6 +453,29 @@ export function createBookScene(
   haloContext.fillStyle = haloWash
   haloContext.fillRect(0, 0, 64, 64)
   const haloTexture = new THREE.CanvasTexture(haloCanvas)
+  // One camera-facing outline identifies the selected paper without changing its cosine color.
+  const selectionCanvas = document.createElement('canvas')
+  selectionCanvas.width = selectionCanvas.height = 128
+  const selectionContext = selectionCanvas.getContext('2d')!
+  selectionContext.strokeStyle = '#fff'
+  selectionContext.lineWidth = 4
+  selectionContext.beginPath()
+  selectionContext.arc(64, 64, 46, 0, Math.PI * 2)
+  selectionContext.stroke()
+  const selectionMarker = new THREE.Sprite(
+    new THREE.SpriteMaterial({
+      map: new THREE.CanvasTexture(selectionCanvas),
+      color: '#f7f9ff',
+      transparent: true,
+      opacity: 0.95,
+      depthTest: false,
+      depthWrite: false,
+      toneMapped: false,
+    })
+  )
+  selectionMarker.visible = false
+  selectionMarker.renderOrder = 20
+  map.add(selectionMarker)
   for (const embedding of snapshot.papers) {
     const paper = mapPaper.get(embedding.paperId)
     if (!paper) continue
@@ -660,6 +683,7 @@ export function createBookScene(
     fog.color.set(bg)
     fog.density = isLight ? 0.016 : 0.028
     neutralInk.set(isLight ? '#3a4172' : '#d1d5ef')
+    selectionMarker.material.color.set(isLight ? '#283553' : '#f7f9ff')
     queryGlow.material.color.set(isLight ? '#f59e0b' : '#fff3ad')
     ;(queryNode.material as THREE.MeshBasicMaterial).color.set(isLight ? '#d97706' : '#fff3ad')
     ;(edges.material as THREE.LineBasicMaterial).color.set(isLight ? '#0d9488' : '#79f6dc')
@@ -694,6 +718,8 @@ export function createBookScene(
     revealMode: 'idle' | 'hold' | 'run' = 'idle',
     spreadStart = 0
   const planIndex = new Map<string, number>()
+  // Library filters can reveal neutral nodes without inventing query cosine scores.
+  const neutralRevealIndex = new Map<string, number>()
   /** Bài giống nhất được neo ở đây (toạ độ thế giới, trên quyển sách). Đổi ANCHOR để dời vị trí. */
   const ANCHOR = { x: 0, y: 3.3, z: -1.8 },
     anchorTarget = new THREE.Vector3()
@@ -736,6 +762,9 @@ export function createBookScene(
     plan = scoreValues.size ? planSpread(neighborRows, scoreValues, visible) : []
     planIndex.clear()
     plan.forEach((step, i) => planIndex.set(step.id, i))
+    neutralRevealIndex.clear()
+    if (!scoreValues.size)
+      for (const id of visible) neutralRevealIndex.set(id, neutralRevealIndex.size)
     if (!plan.length) {
       anchorId = null
       galaxyOn = false
@@ -743,10 +772,17 @@ export function createBookScene(
     if (galaxyOn) computeGalaxy()
     else cloudCenter.set(0, 4.1, -4.2)
   }
+  const revealCount = () => plan.length || neutralRevealIndex.size
+  function linkRevealIndex(link: SemanticLink) {
+    if (plan.length) return planIndex.get(link.b)
+    const a = neutralRevealIndex.get(link.a),
+      b = neutralRevealIndex.get(link.b)
+    return a === undefined || b === undefined ? undefined : Math.max(1, a, b)
+  }
   function linkDone(link: SemanticLink) {
-    const i = planIndex.get(link.b)
+    const i = linkRevealIndex(link)
     if (i === undefined || revealMode === 'idle') return true
-    return spreadClock() >= linkStartAt(i, plan.length) + SPREAD.linkDur
+    return spreadClock() >= linkStartAt(i, revealCount()) + SPREAD.linkDur
   }
   /** Vẽ lại các đường nối theo thời gian T: đầu đường nối trượt dần từ bài cha tới bài con, độ đậm theo cosine. */
   function writeNetwork(T: number) {
@@ -766,11 +802,11 @@ export function createBookScene(
       if (!na || !nb) return
       const a = na.position,
         b = nb.position,
-        i = planIndex.get(link.b),
+        i = linkRevealIndex(link),
         p =
           i === undefined || T === Infinity
             ? 1
-            : Math.max(0, Math.min(1, (T - linkStartAt(i, plan.length)) / SPREAD.linkDur)),
+            : Math.max(0, Math.min(1, (T - linkStartAt(i, revealCount())) / SPREAD.linkDur)),
         e = smooth(p)
       let k = (0.22 + 0.78 * similarityStrength(link.score)) * (p > 0 ? 1 : 0)
       if (focusId) k *= link.a === focusId || link.b === focusId ? 1.7 : 0.3
@@ -799,10 +835,10 @@ export function createBookScene(
   }
   /** Mức "đã hiện" của một đốm sáng: 0 = mờ nền, 1 = sáng đủ (có thể vọt lên ~1.1 khi nở). */
   function appearOf(id: string) {
-    if (revealMode === 'idle' || !scoreValues.size) return 1
-    const i = planIndex.get(id)
+    if (revealMode === 'idle') return 1
+    const i = planIndex.get(id) ?? neutralRevealIndex.get(id)
     if (i === undefined || revealMode === 'hold') return 0
-    return popCurve((elapsed - spreadStart - appearAt(i, plan.length)) / SPREAD.popDur)
+    return popCurve((elapsed - spreadStart - appearAt(i, revealCount())) / SPREAD.popDur)
   }
   function holdSpread() {
     if (reduced.matches) return
@@ -815,13 +851,14 @@ export function createBookScene(
   }
   function startSpread() {
     if (plan.length) anchorId = plan[0]!.id
-    if (reduced.matches || plan.length < 1) {
+    if (reduced.matches || revealCount() < 1) {
       endSpread()
       return
     }
     revealMode = 'run'
     spreadStart = elapsed
-    spark.material.color.copy(tint(similarityTone(scoreValues.get(plan[0]!.id) ?? null).color))
+    if (plan.length)
+      spark.material.color.copy(tint(similarityTone(scoreValues.get(plan[0]!.id) ?? null).color))
   }
   function tickSpread() {
     canvas.dataset.reveal = revealMode
@@ -830,13 +867,13 @@ export function createBookScene(
     spark.visible = false
     if (revealMode !== 'run') return
     const T = elapsed - spreadStart,
-      n = plan.length
+      n = revealCount()
     if (T > spreadDuration(n)) {
       endSpread()
       return
     }
     writeNetwork(T)
-    if (T < SPREAD.rootAt + 0.35) {
+    if (plan.length && T < SPREAD.rootAt + 0.35) {
       const target = worldNodes.get(plan[0]!.id)
       if (target) {
         const k = smooth(T / SPREAD.rootAt),
@@ -1450,29 +1487,39 @@ export function createBookScene(
         isRoot = id === anchorId && scoreValues.size > 0,
         apc = Math.min(1, ap),
         strength = scoreValues.has(id) ? similarityStrength(scoreValues.get(id)!) : 0.6
-      halo.visible = node.visible && HALO_STRENGTH > 0
+      halo.visible = node.visible && id === focusedId && HALO_STRENGTH > 0
       halo.position.copy(node.position)
       halo.scale.setScalar(
-        (id === focusedId ? 0.7 : isRoot ? 0.62 : 0.43) *
+        1.1 *
           (1 + 0.06 * Math.sin(elapsed * 0.9 + haloIndex++) + pulse * 0.65) *
           (0.55 + 0.45 * ap) *
           (0.8 + 0.45 * strength)
       )
-      halo.material.opacity =
+      halo.material.opacity = Math.min(
+        1,
         ((active ? 0.4 : 0.24) * (0.45 + 0.9 * strength) + pulse * 0.4) *
-        (0.12 + 0.88 * apc) *
-        (isRoot ? 1.5 : 1) *
-        HALO_STRENGTH
+          (0.12 + 0.88 * apc) *
+          (isRoot ? 1.5 : 1) *
+          HALO_STRENGTH *
+          (id === focusedId ? 1.2 : 1)
+      )
       node.scale.setScalar(
-        (id === focusedId ? 1.5 : isRoot ? 1.55 : 1) *
+        (id === focusedId ? 2.45 : !focusedId && isRoot ? 1.55 : 1) *
           (1 + pulse * 0.12) *
           (0.5 + 0.5 * ap) *
           (0.85 + 0.3 * strength)
       )
       const material = node.material as THREE.MeshBasicMaterial
-      material.color.copy(tint(base)).multiplyScalar(1 + pulse * 0.2 + (isRoot ? 0.25 : 0))
-      material.opacity = emphasis * (0.14 + 0.86 * apc)
+      material.color.copy(tint(base)).multiplyScalar(1 + pulse * 0.2 + (!focusedId && isRoot ? 0.25 : 0))
+      material.opacity = (id === focusedId ? 1 : emphasis) * (0.14 + 0.86 * apc)
       node.rotation.y = elapsed * 0.12
+    }
+    const focusedNode = mapNodes.get(focusedId)
+    selectionMarker.visible = Boolean(focusedNode?.visible && appearOf(focusedId) > 0)
+    if (focusedNode && selectionMarker.visible) {
+      selectionMarker.position.copy(focusedNode.position)
+      selectionMarker.scale.setScalar(0.32 * focusedNode.scale.x)
+      selectionMarker.material.opacity = 0.95 * Math.min(1, appearOf(focusedId))
     }
     networkMaterial.opacity = blend > 0.9 ? 0.14 : focusId ? 0.18 : 0.42
     const lightPositions = linkLights.geometry.getAttribute('position')
@@ -1562,6 +1609,12 @@ export function createBookScene(
       holdSpread()
       focusId = ''
       focusSet = new Set<string>()
+      galaxyOn = false
+      anchorId = null
+      anchorBlend = 0
+      layoutBlend = 0
+      layoutApplied = true
+      selectionMarker.visible = false
       clearLeaf()
       selected = null
       pendingScores = null
@@ -1569,6 +1622,7 @@ export function createBookScene(
       updateEdges(null)
       resetCamera()
       canvas.dataset.paper = ''
+      canvas.dataset.focus = ''
       hoverId = ''
       onHover(null)
       publish()
@@ -1583,7 +1637,8 @@ export function createBookScene(
         galaxyOn = false
         anchorId = null
         camFocusId = null
-        if (revealMode === 'hold') endSpread()
+        camZoomTarget = 1
+        startSpread()
         return
       }
       if (plan.length > 1) {

@@ -3,10 +3,11 @@ import https from'node:https';
 import fs from'node:fs';
 import path from'node:path';
 import{pipeline}from'node:stream';
+import{assertProductionTransport}from'./fr12/https-policy.mjs';
 const root=path.resolve('apps/web/dist'),host=process.env.SERVER_HOST||'127.0.0.1',port=Number(process.env.SERVER_PORT||'8080'),api=new URL(process.env.API_ORIGIN||'http://127.0.0.1:3001');
 if(api.protocol!=='http:'||!['127.0.0.1','localhost','[::1]'].includes(api.hostname))throw new Error('API_ORIGIN phải là backend HTTP nội bộ.');
-const cert=process.env.TLS_CERT_FILE,key=process.env.TLS_KEY_FILE;if(Boolean(cert)!==Boolean(key))throw new Error('Cần cả TLS_CERT_FILE và TLS_KEY_FILE.');
-if(host==='0.0.0.0'&&!cert)throw new Error('Public bind cần chứng chỉ TLS. Sau reverse proxy hãy bind loopback.');
+const cert=process.env.TLS_CERT_FILE,key=process.env.TLS_KEY_FILE;
+assertProductionTransport({host,cert,key});
 const types={'.html':'text/html;charset=utf-8','.js':'text/javascript;charset=utf-8','.mjs':'text/javascript;charset=utf-8','.css':'text/css;charset=utf-8','.json':'application/json','.wasm':'application/wasm','.onnx':'application/octet-stream','.svg':'image/svg+xml','.png':'image/png'};
 const hop=new Set(['connection','keep-alive','proxy-authenticate','proxy-authorization','te','trailer','transfer-encoding','upgrade']);
 function handle(request,response){
