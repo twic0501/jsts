@@ -106,3 +106,5 @@ Nhánh bàn giao `data/jsts-data-engineering` được dựng trên `origin/main
 Bundle JSON đầy đủ đo được khoảng **85 MB** và thời gian tới cảnh 3D đầu tiên khoảng **10,7 giây** trong môi trường dev trước tích hợp. Mốc browser là 10.741,7 ms. Kích thước JSON được đo từ response, gồm corpus, snapshot và graph. Đây là mốc dev để thiết kế API. Thiết kế API mới và tối ưu tải lần đầu thuộc công việc tiếp theo.
 
 DATA-04 là pilot HTML ar5iv với **103 bài**, **6.475 chunk** và **0 phiên bản gốc arXiv được xác minh**. Manifest xác nhận paperId và SHA-256 của nội dung tải. Phạm vi là HTML chuyển đổi đã thu được và có thể kiểm lại cục bộ. S3 chính thức cần AWS Requester Pays để làm bước xác minh phiên bản gốc.
+
+Trên checkout sạch của nhánh đích, typecheck web phát hiện hai lỗi sẵn có ở tích hợp 2D. Bản bàn giao dùng tham số mặc định cho caller 3D hiện hành và làm rõ giá trị mặc định của thuộc tính enumerable trong canvas font descriptor. Giữ nguyên code 2D của nhóm và contract API hiện có.

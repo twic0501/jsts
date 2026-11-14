@@ -52,7 +52,7 @@ import type { NeighborRow } from '../library-dataset'
         setFont = desc.set
       Object.defineProperty(proto, 'font', {
         configurable: true,
-        enumerable: desc.enumerable,
+        enumerable: desc.enumerable ?? false,
         get(this: unknown) {
           return getFont.call(this)
         },
