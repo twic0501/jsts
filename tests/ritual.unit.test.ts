@@ -1,4 +1,4 @@
-import {describe,it,expect} from 'vitest';
+﻿import {describe,it,expect} from 'vitest';
 import {BookRitual,smooth,similarityTone} from '../apps/web/src/scene/ritual';
 import {readingPages,wrapLines} from '../apps/web/src/scene/book-pages';
 import corpus from '../data/corpus.json';
@@ -18,8 +18,10 @@ describe('chuỗi phù phép',()=>{
  it('sách hạ sau khi khép, giữ nằm nghiêng rồi mới mở phẳng để đọc',()=>{const r=new BookRitual();r.start();r.resolve();advance(r,13);expect(r.phase).toBe('settling');expect(r.sample().angle).toBe(1.54);advance(r,.8);expect(r.phase).toBe('zooming');expect(r.sample().lay).toBe(1);advance(r,4);expect(r.sample().land).toBe(1);expect(r.sample().lay).toBe(0)});
 });
 describe('màu và nội dung trang',()=>{
- it('màu theo ngưỡng cosine, gồm biên và chưa có điểm',()=>{expect(similarityTone(.82).label).toBe('Tương đồng cao');expect(similarityTone(.819).label).toBe('Tương đồng vừa');expect(similarityTone(.79).label).toBe('Tương đồng vừa');expect(similarityTone(-.5).label).toBe('Tương đồng thấp hơn');expect(similarityTone(null).label).toBe('Chưa có điểm');expect(similarityTone(NaN).label).toBe('Chưa có điểm')});
+ it('màu theo ngưỡng cosine, gồm biên và chưa có điểm',()=>{expect(similarityTone(.82).label).toBe('Tương đồng cao');expect(similarityTone(.819).label).toBe('Tương đồng trung bình');expect(similarityTone(.79).label).toBe('Tương đồng trung bình');expect(similarityTone(-.5).label).toBe('Tương đồng thấp');expect(similarityTone(null).label).toBe('Chưa có điểm');expect(similarityTone(NaN).label).toBe('Chưa có điểm')});
  it('mỗi abstract giữ đủ các từ sau khi chia trang và số trang chẵn',()=>{for(const paper of corpusSchema.parse(corpus).papers){const pages=readingPages(paper);expect(pages.length%2).toBe(0);expect(pages.length).toBeGreaterThanOrEqual(4);const abstract=pages.filter(p=>p.heading.includes('ABSTRACT'));expect(abstract.every(p=>p.lines.length<=13)).toBe(true);expect(abstract.flatMap(p=>p.lines).join(' ')).toBe(paper.abstract.replace(/\s+/g,' ').trim())}});
  it('word wrap giữ văn bản và không tạo dòng rỗng',()=>{expect(wrapLines('  a  b c d  ',3)).toEqual(['a b','c d']);expect(wrapLines('',30)).toEqual([])});
  it('nguồn thiếu abstract không tạo trang abstract giả và số trang tăng theo nội dung thật',()=>{const original=corpusSchema.parse(corpus).papers[0]!;const missing={...original,provenance:{provider:'arxiv' as const,fetchedAt:'2026-11-04T00:00:00.000Z',doi:null,pdfUrl:null,abstractAvailable:false}};expect(readingPages(missing).some(page=>page.kind==='abstract')).toBe(false);const longer={...original,abstract:original.abstract+' '+original.abstract};expect(readingPages(longer).length).toBeGreaterThan(readingPages(original).length)});
 });
+
+

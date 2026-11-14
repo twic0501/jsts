@@ -1,0 +1,325 @@
+﻿.offline-paper-picker {
+  position: fixed;
+  top: 88px;
+  right: 20px;
+  z-index: 10020;
+  width: min(420px, calc(100vw - 40px));
+  color: #e8ecfa;
+}
+
+.offline-picker-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  padding: 11px 15px;
+  border: 1px solid rgba(170, 160, 255, 0.32);
+  border-radius: 13px;
+  background: rgba(25, 34, 60, 0.94);
+  color: #e9e5ff;
+  cursor: pointer;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+}
+
+.offline-picker-toggle span {
+  color: #b8c2dd;
+  font-size: 11px;
+}
+
+.offline-picker-body {
+  display: grid;
+  gap: 14px;
+  margin-top: 8px;
+  padding: 17px;
+  max-height: min(670px, calc(100dvh - 160px));
+  overflow-y: auto;
+  border: 1px solid rgba(170, 160, 255, 0.24);
+  border-radius: 18px;
+  background: rgba(18, 26, 48, 0.96);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(24px);
+}
+
+.offline-picker-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.offline-picker-heading strong {
+  font-size: 16px;
+}
+
+.offline-picker-heading p,
+.offline-picker-note {
+  margin: 5px 0 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #aab6ce;
+}
+
+.offline-picker-close {
+  border: 0;
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  padding: 5px 11px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.offline-picker-tabs,
+.offline-picker-actions {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.offline-picker-tabs button,
+.offline-picker-actions button {
+  padding: 9px 11px;
+  border: 1px solid rgba(170, 160, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.offline-picker-tabs button.active {
+  background: rgba(139, 124, 255, 0.3);
+  border-color: rgba(170, 160, 255, 0.55);
+}
+
+.offline-picker-select-all {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #cdd6e9;
+  font-size: 11px;
+}
+
+.offline-picker-list {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  max-height: 310px;
+  overflow-y: auto;
+}
+
+.offline-picker-paper {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.offline-picker-paper input,
+.offline-picker-select-all input {
+  accent-color: #a78bfa;
+  cursor: pointer;
+}
+
+.offline-picker-info {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+.offline-picker-title {
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: #ecedff;
+  text-align: left;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.offline-picker-title:hover {
+  text-decoration: underline;
+}
+
+.offline-picker-info > span {
+  font-size: 10px;
+  color: #aab6ce;
+}
+
+.offline-picker-footer {
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.offline-picker-footer strong {
+  font-size: 12px;
+}
+
+.offline-picker-actions button:first-child {
+  background: rgba(139, 124, 255, 0.3);
+}
+
+.offline-picker-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.offline-picker-actions .offline-picker-delete {
+  color: #fca5a5;
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
+.offline-picker-empty,
+.offline-picker-error,
+.offline-picker-success {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.offline-picker-error {
+  color: #fca5a5;
+}
+
+.offline-picker-success {
+  color: #86efac;
+}
+
+:root[data-theme="light"] .offline-paper-picker {
+  color: #26334f;
+}
+
+:root[data-theme="light"] .offline-picker-toggle,
+:root[data-theme="light"] .offline-picker-body {
+  background: rgba(249, 250, 255, 0.96);
+  color: #26334f;
+  border-color: rgba(90, 105, 145, 0.24);
+}
+
+:root[data-theme="light"] .offline-picker-title {
+  color: #26334f;
+}
+
+:root[data-theme="light"] .offline-picker-toggle span,
+:root[data-theme="light"] .offline-picker-info > span,
+:root[data-theme="light"] .offline-picker-heading p,
+:root[data-theme="light"] .offline-picker-note {
+  color: #65728c;
+}
+
+:root[data-theme="light"] .offline-picker-tabs button,
+:root[data-theme="light"] .offline-picker-actions button,
+:root[data-theme="light"] .offline-picker-close {
+  color: #38466a;
+  background: #eef0fa;
+}
+
+:root[data-theme="light"] .offline-picker-paper {
+  background: rgba(230, 235, 248, 0.55);
+}
+
+@media (max-width: 600px) {
+  .offline-paper-picker {
+    top: 70px;
+    right: 10px;
+    width: min(380px, calc(100vw - 20px));
+  }
+
+  .offline-picker-body {
+    max-height: calc(100dvh - 135px);
+  }
+}
+
+/* ==========================================================
+   OFFLINE PAPER PICKER - FINAL POSITION
+   ========================================================== */
+
+.offline-paper-picker {
+  position: fixed;
+  top: auto;
+  right: 24px;
+  bottom: 24px;
+  left: auto;
+
+  z-index: 10020;
+  width: min(390px, calc(100vw - 32px));
+}
+
+.offline-picker-toggle {
+  min-height: 45px;
+}
+
+.offline-picker-body {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 10px);
+
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+
+  max-height: min(620px, calc(100dvh - 110px));
+  overflow-y: auto;
+}
+
+/* Không cho quy tắc mobile cũ đẩy nút lên đầu trang */
+@media (max-width: 600px) {
+  .offline-paper-picker {
+    top: auto;
+    right: 12px;
+    bottom: 12px;
+    width: min(370px, calc(100vw - 24px));
+  }
+
+  .offline-picker-body {
+    max-height: calc(100dvh - 85px);
+  }
+}
+
+
+/* Online / Offline search mode */
+.offline-picker-mode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 14px;
+  border: 1px solid rgba(170, 185, 230, 0.2);
+  background: rgba(130, 145, 200, 0.07);
+}
+
+.offline-picker-mode > span {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.offline-picker-mode button {
+  padding: 10px 13px;
+  border-radius: 11px;
+  border: 1px solid rgba(170, 185, 230, 0.3);
+  background: rgba(120, 130, 210, 0.18);
+  color: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.offline-picker-mode button.is-offline {
+  border-color: rgba(75, 210, 180, 0.5);
+  background: rgba(47, 170, 145, 0.16);
+}
+
+.offline-picker-mode button:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}

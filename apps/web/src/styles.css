@@ -1,5 +1,5 @@
-:root {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+﻿:root {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #253047;
   background: #f3f5f9;
   font-synthesis: none;
@@ -427,7 +427,7 @@ h1 > span {
     inset 0 1px 0 #ffffff50;
 }
 .magic-viewport:after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -501,7 +501,7 @@ h1 > span {
 .scene-icon:hover {
   background: #ffffff18;
 }
-.scene-view-switch {
+.view-switch {
   position: absolute;
   z-index: 2;
   left: 28px;
@@ -514,17 +514,20 @@ h1 > span {
   padding: 3px;
   backdrop-filter: blur(20px);
 }
-.scene-view-switch button {
+.view-switch button {
   background: transparent;
   color: #8b96b0;
   padding: 7px 11px;
   border-radius: 99px;
   font-size: 9px;
 }
-.scene-view-switch button.active {
-  background: #ffffff15;
-  color: #d0d6e7;
-  box-shadow: 0 1px 3px #0002;
+.view-switch button.active {
+  background: rgba(139, 124, 255, 0.28);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow:
+    0 0 0 1px rgba(170, 155, 255, 0.45),
+    0 2px 10px rgba(120, 100, 255, 0.2);
 }
 .map-legend {
   position: absolute;
@@ -781,7 +784,7 @@ h1 > span {
   scrollbar-width: thin;
   scrollbar-color: #cfd3e1 transparent;
 }
-.result-list[aria-busy='true'] {
+.result-list[aria-busy="true"] {
   opacity: 0.5;
 }
 .paper-card {
@@ -1353,7 +1356,7 @@ h1 > span {
   .scene-heading h2 {
     font-size: 20px;
   }
-  .scene-view-switch {
+  .view-switch {
     left: 22px;
   }
   .scene-bottom {
@@ -1636,11 +1639,11 @@ h1 > span {
     font-size: 0;
     gap: 0;
   }
-  .scene-view-switch {
+  .view-switch {
     top: 91px;
     left: 20px;
   }
-  .scene-view-switch button {
+  .view-switch button {
     font-size: 8px;
     padding: 7px 9px;
   }
@@ -2700,7 +2703,7 @@ body,
   border-radius: 99px;
   padding: 7px 14px;
 }
-.search-scope button[aria-pressed='true'] {
+.search-scope button[aria-pressed="true"] {
   background: #d8dcff25;
   color: #fff;
 }
@@ -2765,7 +2768,7 @@ body,
   border: 1px solid #ffffff21;
 }
 .dossier-cover:before {
-  content: '';
+  content: "";
   position: absolute;
   z-index: -1;
   right: -55px;
@@ -2811,7 +2814,7 @@ body,
   color: #9facc9;
 }
 .immersive .detail-panel .dossier-cover h2 {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: Georgia, "Times New Roman", serif;
   font-size: 25px;
   line-height: 1.4;
   color: #f0eaf8;
@@ -2942,7 +2945,7 @@ body,
   transform: rotate(180deg);
 }
 .dossier-abstract .abstract {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: Georgia, "Times New Roman", serif;
   font-size: 14px;
   line-height: 1.95;
   color: #b7c6da;
@@ -3086,7 +3089,7 @@ body,
   background: #e2b47b08;
 }
 .immersive .paper-card h3 {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: Georgia, "Times New Roman", serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
@@ -3474,3 +3477,159 @@ body,
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: rgba(71, 85, 105, 0.5);
 }
+
+
+/* ==========================================================
+   MAGIC BOOK - 2D MAP
+   ========================================================== */
+
+.magic-viewport.is-2d .book-canvas {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.map2d {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(91, 85, 160, 0.20), transparent 68%),
+    linear-gradient(145deg, #101729 0%, #151d35 55%, #101729 100%);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: opacity 0.3s ease, background 0.3s ease;
+}
+
+.map2d svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.map2d .n2d {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.map2d .n2d-label {
+  fill: #e2e8f7;
+  font-size: 10px;
+  font-weight: 500;
+  paint-order: stroke;
+  stroke: #101729;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.map2d .n2d-halo {
+  pointer-events: none;
+}
+
+.map2d-controls {
+  position: absolute;
+  right: 22px;
+  bottom: 20px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.78);
+  color: #e2e8f0;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.map2d-controls button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 9px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #e2e8f0;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.map2d-controls button:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.map2d-zoom {
+  min-width: 42px;
+  color: #cbd5e1;
+  font-size: 10px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.map2d-tip {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  bottom: 68px;
+  max-width: min(300px, calc(100% - 32px));
+  padding: 10px 14px;
+  transform: translateX(-50%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.92);
+  color: #e2e8f0;
+  font-size: 12px;
+  line-height: 1.5;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.view-switch {
+  position: absolute;
+  z-index: 3;
+  left: 28px;
+  top: 99px;
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.view-switch button {
+  padding: 7px 11px;
+  border: 0;
+  border-radius: 99px;
+  background: transparent;
+  color: #aab4ca;
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.view-switch button.active {
+  background: rgba(139, 124, 255, 0.28);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 0 0 1px rgba(170, 155, 255, 0.45);
+}
+
+
+/* Đặt bộ chuyển chế độ cạnh nút Light/Dark */
+.scene-heading .view-switch {
+  left: auto;
+  right: 105px;
+  top: 0;
+}
+
